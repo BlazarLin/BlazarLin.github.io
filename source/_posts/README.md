@@ -1,0 +1,70 @@
+---
+title: 记事本
+date:2023-05-01 14:04:33
+top: true
+---
+# Note Book
+
+逐步将平台转移至Notion～
+
+[Notion Home Page](https://www.notion.so/blazarlin/Personal-Home-eb4a8d5b6c80428eba0b51b05120c271)
+
+## Personal Summary
+
+### Computer Vision
+
+- [Camera Calibration](family/calibration.md)
+
+- [2D Imgprocess](family/imgprocess.md)
+
+- [Digital Image Process](family/数字图像处理要点记录.md)
+
+- [Barcode](family/barcode_detection.md)
+
+- [Visual Servoing](family/visual_servoing.md)
+
+- [3D Vision](family/3dvision.md)
+
+### Programer
+
+- [c++](family/c++_learning.md)
+
+- [python](family/python_skills.md)
+
+### Algorithmic
+
+- [alg](family/algorithm.md)
+
+- [Algorithmic Complexity](family/算法复杂度.md)
+
+- [Fit circle&ellipse](family/fittinggeometry.md)
+
+### SoftWare developer
+
+- [pyqt](family/software_development.md)
+
+### Tools
+
+- [ubuntu基操](family/ubuntu基操.md)
+
+- [git](family/git_skills.md)
+
+- [Docker](family/docker.md)
+
+### Machine Learning
+
+- [my notes](family/machine_learning.md)
+
+- [FasterRcnn实验记录](family/faster_rcnn-exp.md)
+
+- [work record](family/work_record.md)
+
+## Appendix&Help
+
+- [markdown基本语法](family/md新手.md)
+
+- [Markdown 公式指导手册](family/mathjax_cmdeditor.md)
+
+- [数学符号](family/samble.md)
+
+- [Markdown 数学公式](family/pdf/LATEX_Mathematical_Symbols.pdf)
