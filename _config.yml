@@ -103,5 +103,5 @@ theme: landscape
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repository: git@github.com:JockerLin/JockerLin.github.io.git
+  repository: git@github.com:jockerlin/jockerlin.github.io.git
   branch: master
