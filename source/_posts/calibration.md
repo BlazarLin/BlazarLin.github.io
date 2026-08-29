@@ -1,63 +1,18 @@
+---
+title: 相机标定大全
+top_img: /img/eye.jpeg
+mathjax: true
+categories: 
+- 图像处理
+tags: 
+- 标定
+- 坐标系
+---
 # 相机标定大全——平面、单目、双目、眼手
 
 看完这标定总结你还不懂标定就来打我吧！
 
-<!-- TOC -->
 
-- [一、机器视觉几何坐标概论](#一机器视觉几何坐标概论)
-    - [1、世界坐标系](#1世界坐标系)
-    - [2、摄像机坐标系](#2摄像机坐标系)
-    - [3、图像（像素）坐标系](#3图像像素坐标系)
-        - [3.1、图像坐标系](#31图像坐标系)
-        - [3.2、像素坐标系](#32像素坐标系)
-    - [4、坐标系之间的**关系**](#4坐标系之间的关系)
-        - [4.1、图像坐标系与像素坐标系](#41图像坐标系与像素坐标系)
-        - [4.2、相机坐标系与图像坐标系](#42相机坐标系与图像坐标系)
-        - [4.3、世界坐标系与相机坐标系](#43世界坐标系与相机坐标系)
-        - [4.4、从世界坐标到像素坐标](#44从世界坐标到像素坐标)
-- [二、平面标定（Homography变换）](#二平面标定homography变换)
-    - [1、定义](#1定义)
-    - [2、计算推导](#2计算推导)
-    - [3、应用](#3应用)
-        - [1、简单平面的转换](#1简单平面的转换)
-        - [2、在四轴中求取2D点到3D点的转换关系](#2在四轴中求取2d点到3d点的转换关系)
-            - [2.1 相机在手上](#21-相机在手上)
-                - [2.1.1 转换方程](#211-转换方程)
-                - [2.1.2 直接法](#212-直接法)
-                - [2.1.3 旋转法](#213-旋转法)
-            - [2.2 相机不在手上](#22-相机不在手上)
-                - [2.2.1 转换方程](#221-转换方程)
-                - [2.2.2 直接法](#222-直接法)
-                - [2.2.3 圆弧法](#223-圆弧法)
-            - [2.3 直接利用AXXB解决](#23-直接利用axxb解决)
-            - [总结梳理](#总结梳理)
-- [三、单目标定](#三单目标定)
-    - [1、如何进行标定？（理想情况下无畸变）](#1如何进行标定理想情况下无畸变)
-    - [2、实际情况下（有畸变）](#2实际情况下有畸变)
-        - [2.1、径向畸变](#21径向畸变)
-        - [2.2、切向畸变](#22切向畸变)
-        - [2.3、总结](#23总结)
-    - [3、疑问](#3疑问)
-        - [3.1、标定的世界坐标从何而来](#31标定的世界坐标从何而来)
-        - [3.2、一张图像也能得到标定结果](#32一张图像也能得到标定结果)
-    - [4、自动标定](#4自动标定)
-        - [eye in hand](#eye-in-hand)
-        - [eye to hand](#eye-to-hand)
-- [四、双目标定](#四双目标定)
-    - [1、基本概念](#1基本概念)
-        - [1.0、对极几何](#10对极几何)
-        - [1.1、本征矩阵(Essential matrix)](#11本征矩阵essential-matrix)
-        - [1.2、基础矩阵(Fundamental matrix)](#12基础矩阵fundamental-matrix)
-        - [1.3、矩阵Q](#13矩阵q)
-        - [1.4、bouguet极线矫正](#14bouguet极线矫正)
-    - [2、计算](#2计算)
-- [五、眼手标定](#五眼手标定)
-    - [1、相机安装在机械手上](#1相机安装在机械手上)
-    - [2、相机不安装在机械手上](#2相机不安装在机械手上)
-    - [3、四轴tz的计算](#3四轴tz的计算)
-    - [4、AXXB](#4axxb)
-
-<!-- /TOC -->
 
 ## 一、机器视觉几何坐标概论
 
@@ -107,7 +62,8 @@ $$
 
 dx代表一个像素的宽度（x方向），与x同单位，x/dx表示x轴上有多少个像素，同理y/dy表示y轴上的像素个数，(u0，v0)是图像平面中心。
 
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/fixture.png" width="300" align=center />
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fixture.png
+" width="300" align=center />
 
 将上述关系转换为矩阵形式：
 
@@ -139,7 +95,8 @@ $$
 
 从相机坐标系到图像坐标系是一个三维坐标到二维坐标（3D->2D）的过程，称之为透视投影变换。为了求解它们之间的关系，将普通图像坐标（x，y）拓展为齐次坐标（x，y，1）。空间中的某点，投影到图像平面上的点与相机的光心在一条直线上。以光心为原点建立相机坐标系：
 
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/fctofi.png" width="300" align=center />
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fctofi.png
+" width="300" align=center />
 
 根据相似三角形关系可以得到以下：
 
@@ -658,7 +615,7 @@ $$
 
 操作过程：
 
-<div align="center"><img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_dir_flow.png" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_dir_flow.png" /></div>
 
 为什么直接法所需要的数据，机械手poses会比图像坐标多一个呢？
 解答：根据操作流程，先选择一个能够看到标定板的位置，作为基准点。
@@ -676,8 +633,8 @@ $$
 
 操作过程(保持标定板不能动)：
 
-<div align="center"><img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_cam_in_hand_rot_flow.webp" /></div>
-<div align="center"><img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_cam_in_hand_rotation.png" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_in_hand_rot_flow.webp" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_in_hand_rotation.png" /></div>
 
 旋转前后分别记下tool的坐标为
 
@@ -735,7 +692,7 @@ $$
 
 标定过程：
 
-<div align="center"><img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_dir_flow.png" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_dir_flow.png" /></div>
 
 ###### 2.2.3 圆弧法
 
@@ -750,7 +707,7 @@ $$
 因为只是标定两个平面之间的关系，$^rP_o$的xy与$^rT_t$的xy数据相同。
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_cam_to_hand_circle.png" style="zoom:100%" />
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_to_hand_circle.png" style="zoom:100%" />
 </center>
 
 
@@ -758,7 +715,7 @@ $$
 
 操作步骤：
 
-<div align="center"><img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/plane_calibration_4axis_cam_to_hand_circle_flow.png" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_to_hand_circle_flow.png" /></div>
 
 ##### 2.3 直接利用AXXB解决
 
@@ -915,7 +872,7 @@ E --> D
 #### 2.1、径向畸变
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/radialdistortionmodel.jpeg"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/radialdistortionmodel.jpeg"/>
 </center>
 
 
@@ -931,7 +888,7 @@ $$
 #### 2.2、切向畸变
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/tangentialdistortionmodel.jpeg"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/tangentialdistortionmodel.jpeg"/>
 </center>
 
 
@@ -1041,7 +998,7 @@ N的约束4还要保留吗？
 #### eye in hand
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/eye_in_hand.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_in_hand.png"/>
 </center>
 
 
@@ -1066,7 +1023,7 @@ $$
 #### eye to hand
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/eye_to_hand.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_to_hand.png"/>
 </center>
 
 
@@ -1100,7 +1057,7 @@ $$
 ### 1、基本概念
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/stereocam.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/stereocam.png"/>
 </center>
 
 
@@ -1111,7 +1068,7 @@ $$
 #### 1.0、对极几何
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/EpipolarGeometry.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/EpipolarGeometry.png"/>
 </center>
 
 
@@ -1248,7 +1205,7 @@ $$
 此种相机安装方式(Eye in hand)，**标定量为相机与机械手末端之间的关系**。
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/eye_in_hand.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_in_hand.png"/>
 </center>
 
 
@@ -1309,7 +1266,7 @@ $$
 此种相机安装方式(Eye to hand)需要将标定板固定在机械手末端，保持机械手末端(Tool)与物体(Object)的位置关系不变，**标定量为相机到机械手底座之间的关系**。
 
 <center>
-<img src="https://raw.githubusercontent.com/JockerLin/NotesImageLib/master/eye_to_hand.png"/>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_to_hand.png"/>
 </center>
 
 

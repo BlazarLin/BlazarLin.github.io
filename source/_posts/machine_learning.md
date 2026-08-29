@@ -1,17 +1,21 @@
+---
+title: 人工智障瞎学
+categories: 
+- 深度学习
+tags: 
+- CNN
+- YOLO
+---
 # 人工智障瞎学
 
 # 一、环境配置
-
+```bash
 tensorflow-gup==2.0
-
 pytorch==1.3.0
-
 cuda==10.1
-
 cudnn==7.6.4
-
 nvidia-418
-
+```
 **tensorflow2.0 解决pycharm自动补全与应用bug**(reference csy)
 
 注：
@@ -55,7 +59,7 @@ from tensorflow_estimator.python.estimator.api._v2 import estimator
 
 最大似然估计的目的就是：利用已知的样本结果，反推最有可能（最大概率）导致这样结果的参数值。
 
-数据的熵：K-L散度源于信息论。信息论主要研究如何量化数据中的信息。![img](https://gitee.com/BlazarLin/notes-image-library/raw/master/auto-orient.png)
+数据的熵：K-L散度源于信息论。信息论主要研究如何量化数据中的信息。![img](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/auto-orient.png)
 
 **熵**的主要作用是告诉我们最优编码信息方案的理论下界（存储空间），以及度量数据的信息量的一种方式。理解了熵，我们就知道有多少信息蕴含在数据之中，现在我们就可以计算当我们用一个带参数的概率分布来近似替代原始数据分布的时候，到底损失了多少信息。
 
@@ -85,17 +89,17 @@ CNN由输入层、卷积层、激活函数、池化层、全连接层组成。
 
 特征提取，滑窗
 
-![conv](https://gitee.com/BlazarLin/notes-image-library/raw/master/convolve.png)
+![conv](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/convolve.png)
 
 激活函数：
 
-![img](https://gitee.com/BlazarLin/notes-image-library/raw/master/active_function.jpg)
+![img](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/active_function.jpg)
 
 ### 池化层
 
 提取局部均值与最大值，有average pooling 与max pooling
 
-![img](https://gitee.com/BlazarLin/notes-image-library/raw/master/maxpolling.png)
+![img](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/maxpolling.png)
 
 ### 全连接层
 
@@ -103,13 +107,13 @@ CNN由输入层、卷积层、激活函数、池化层、全连接层组成。
 
 怎么样把3x3x5的输出，转换成1x4096的形式？靠的就是全连接层
 
-![fc1](https://gitee.com/BlazarLin/notes-image-library/raw/master/fc1.jpg)
+![fc1](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fc1.jpg)
 
 可以理解为在中间做了一个卷积
 
 用一个3x3x5的filter 去卷积激活函数的输出，得到的结果就是一个fully connected layer 的一个神经元的输出，这个输出就是一个值
 
-![fc2](https://gitee.com/BlazarLin/notes-image-library/raw/master/fc2.jpg)
+![fc2](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fc2.jpg)
 
 全连接层的操作把分布式特征representation映射到样本标记空间(把特征representation整合到一起，输出为一个值),空间结构特性被忽略了，所以全连接层不适合用于在方位上找Pattern的任务，比如segmentation。
 
@@ -125,7 +129,7 @@ CNN由输入层、卷积层、激活函数、池化层、全连接层组成。
 
 过拟合具体表现在：模型在训练数据上损失函数较小，预测准确率较高；但是在测试数据上损失函数比较大，预测准确率较低。
 
-![overfitting](https://gitee.com/BlazarLin/notes-image-library/raw/master/overfitting.jpg)
+![overfitting](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/overfitting.jpg)
 
 Dropout说的简单一点就是：我们在前向传播的时候，让某个神经元的激活值以一定的概率p停止工作，这样可以使模型泛化性更强，因为它不会太依赖某些局部的特征。
 
@@ -170,7 +174,7 @@ BN比较适用的场景是：每个mini-batch比较大，数据分布比较接�
 
 神经元感受野的值越大表示其能接触到的原始图像范围就越大，也意味着他可能蕴含更为全局、语义层次更高的特征；而值越小则表示其所包含的特征越趋向于局部和细节。因此感受野的值可以大致用来判断每一层的抽象层次。
 
-![see_field](https://gitee.com/BlazarLin/notes-image-library/raw/master/see_field.jpg)
+![see_field](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/see_field.jpg)
 
 在Conv1中的每一个单元所能看到的原始图像范围是3*3，而由于Conv2的每个单元都是由2×2范围的Conv1构成，因此回溯到原始图像，其实是能够看到5×5的原始图像范围的。因此我们说Conv1的感受野是3，Conv2的感受野是5. 输入图像的每个单元的感受野被定义为1
 
@@ -182,7 +186,7 @@ BN比较适用的场景是：每个mini-batch比较大，数据分布比较接�
 
 优化目标为:最大化分类间隔。通俗地来讲，区分两堆点用线区分，区分两堆线要用面，总是要使用高一维度的数据来做分类器的判定原则。
 
-![svm](https://gitee.com/BlazarLin/notes-image-library/raw/master//svm.jpg)
+![svm](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com//svm.jpg)
 
 ### 类别
 
@@ -193,7 +197,7 @@ BN比较适用的场景是：每个mini-batch比较大，数据分布比较接�
 什么是支持向量？
 在线性可分的情况下，训练数据集的样本点中与分离超平面距离最近的数据点称为支持向量(support vector)，也即所有在图中虚线上的点。如下图所示:
 
-![svm](https://gitee.com/BlazarLin/notes-image-library/raw/master/svm_support_vector.jpg)
+![svm](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/svm_support_vector.jpg)
 
 在决定最佳超平面时只有支持向量起作用，而其他数据点并不起作用。如果移动非支持向量，甚至删除非支持向量都不会对最优超平面产生任何影响。也即支持向量对模型起着决定性的作用，这也是“支持向量机”名称的由来。
 
@@ -336,9 +340,9 @@ AlexNet的网络结构图：
 
 原始的网络采用上下两个GPU并行运算，在特定的二、四、五层进行数据交互。
 
-![AlexNet_detail](https://gitee.com/BlazarLin/notes-image-library/raw/master/AlexNet_detail.png)
+![AlexNet_detail](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/AlexNet_detail.png)
 
-![AlexNet_struct](https://gitee.com/BlazarLin/notes-image-library/raw/master/AlexNet_struct.jpg)
+![AlexNet_struct](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/AlexNet_struct.jpg)
 
 各层之间的数据传递:
 
@@ -376,7 +380,7 @@ VGG是Oxford的Visual Geometry Group的组提出的，主要有两种结构，�
 
 [vgg高清无码结构](https://dgschwend.github.io/netscope/#/preset/vgg-16)
 
-![vgg_net](https://gitee.com/BlazarLin/notes-image-library/raw/master/vgg_net.jpg)
+![vgg_net](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/vgg_net.jpg)
 
 ### 原理
 
@@ -388,7 +392,7 @@ VGG16相比AlexNet的一个改进是采用连续的几个3x3的卷积核代替Al
 
 5x5卷积看做一个小的全连接网络在5x5区域滑动，我们可以先用一个3x3的卷积滤波器卷积，然后再用一个全连接层连接这个3x3卷积输出，这个全连接层我们也可以看做一个3x3卷积层。这样我们就可以用两个3x3卷积级联（叠加）起来代替一个5x5卷积。
 
-![replace_convolutions](https://gitee.com/BlazarLin/notes-image-library/raw/master/replace_convolutions.jpg)
+![replace_convolutions](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/replace_convolutions.jpg)
 
 ### VGG优缺点
 
@@ -442,7 +446,7 @@ select search 使用felzenszwalb segmentation 生成。
 a、网络结构设计
 选用[Alexnet](#alexnet)，Alexnet特征提取部分包含了5个卷积层、2个全连接层，在Alexnet中p5层神经元个数为9216、f6、f7的神经元个数都是4096，通过这个网络训练完毕后，最后提取特征每个输入候选框图片都能得到一个4096维的特征向量。
 
-![AlexNet.jpg](https://gitee.com/BlazarLin/notes-image-library/raw/master/AlexNet.jpg)
+![AlexNet.jpg](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/AlexNet.jpg)
 
 b、网络有监督预训练分类阶段（图片数据库：ImageNet ILSVC)
 参数初始化部分：物体检测的一个难点在于，物体标签训练数据少，如果要直接采用随机初始化CNN参数的方法，那么目前的训练数据量是远远不够的。这种情况下，最好的是采用某些方法，把参数初始化了，然后在进行有监督的参数微调，这里文献采用的是有监督的预训练。所以paper在设计网络结构的时候，是直接用Alexnet的网络，然后连参数也是直接采用它的参数，作为初始的参数值，然后再fine-tuning训练。网络优化求解时采用随机梯度下降法，学习率大小为0.001；
@@ -531,13 +535,13 @@ R-CNN有一些相当大的缺点（把这些缺点都改掉了，就成了Fast R
 
 [code:faster-rcnn.pytorch](https://github.com/jwyang/faster-rcnn.pytorch)
 
-![faster_rcnn](https://gitee.com/BlazarLin/notes-image-library/raw/master/faster_RCNN_net.jpg)
+![faster_rcnn](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/faster_RCNN_net.jpg)
 
 相比较于fast rcnn,加入一个提取边缘的神经网络，也就说找到候选框的工作也交给神经网络来做了。一个神经网络层所提取到的feature既用于bbox的选择，也用于最后的object detection。
 
 ### PRN(region proposal network)
 
-![rpn_flow](https://gitee.com/BlazarLin/notes-image-library/raw/master/RPN_flow.jpg)
+![rpn_flow](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/RPN_flow.jpg)
 
 上图(rpn_flow)展示了RPN网络的具体结构。
 
@@ -551,7 +555,7 @@ R-CNN有一些相当大的缺点（把这些缺点都改掉了，就成了Fast R
 
 - anchors
 
-![anchors](https://gitee.com/BlazarLin/notes-image-library/raw/master/anchors.jpg)
+![anchors](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/anchors.jpg)
 
 每个feature map的最小单位对应一个anchors，固定面积根据长宽比例生成9个对应的候选框。
 
@@ -591,7 +595,7 @@ RPN网络结构就介绍到这里，总结起来就是：
 
 ### POI Pulling
 
-![roi_polling](https://gitee.com/BlazarLin/notes-image-library/raw/master/roi_polling.jpg)
+![roi_polling](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/roi_polling.jpg)
 
 该层的两个输入：
 
@@ -602,7 +606,7 @@ RPN网络结构就介绍到这里，总结起来就是：
 
 ### Classification
 
-![roi_polling](https://gitee.com/BlazarLin/notes-image-library/raw/master/fasterRCNN_classification.jpg)
+![roi_polling](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fasterRCNN_classification.jpg)
 
 Classification部分利用已经获得的proposal feature maps，通过full connect层与softmax计算每个proposal具体属于那个类别（如人，车，电视等），输出cls_prob概率向量；同时再次利用bounding box regression获得每个proposal的位置偏移量bbox_pred，用于回归更加精确的目标检测框
 
@@ -641,9 +645,9 @@ class,confidence使用Binary Cross Entropy二值交叉熵
 
 训练分析：
 
-![computer device](https://gitee.com/BlazarLin/notes-image-library/raw/master/computer_device.png)
+![computer device](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/computer_device.png)
 
-![yolov3 loss](https://gitee.com/BlazarLin/notes-image-library/raw/master/yolov3_loss.png)
+![yolov3 loss](https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/yolov3_loss.png)
 
 yolov3 网络结构比较大，且输入为416x416，由于显存的限制,训练的时候batch size只能为1。
 

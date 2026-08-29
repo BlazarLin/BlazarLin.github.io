@@ -1,46 +1,13 @@
-# Image Process
+---
+title: 图像处理小记
+mathjax: true
+categories: 
+- 图像处理
+tags: 
+- opencv
+---
 
-<!-- TOC -->
-
-- [分割、识别、缺陷等几个大方向](#分割识别缺陷等几个大方向)
-    - [阈值法](#阈值法)
-    - [OTSU](#otsu)
-    - [卷积算子(高斯、sobel)](#卷积算子高斯sobel)
-    - [区域生长](#区域生长)
-    - [分水岭](#分水岭)
-    - [HOG & DPM](#hog--dpm)
-        - [HOG](#hog)
-            - [具体分析](#具体分析)
-        - [DPM(Deformable part-based model)](#dpmdeformable-part-based-model)
-    - [关键点检测](#关键点检测)
-    - [SIFT(Scale-invariant feature transform 尺度不变特征转换)](#siftscale-invariant-feature-transform-尺度不变特征转换)
-        - [ORB](#orb)
-    - [HOUGH检测](#hough检测)
-        - [直线](#直线)
-            - [霍夫空间](#霍夫空间)
-            - [标准霍夫线变换算法流程](#标准霍夫线变换算法流程)
-            - [统计概率霍夫变换算法流程](#统计概率霍夫变换算法流程)
-        - [圆](#圆)
-            - [经典hough圆](#经典hough圆)
-            - [hough梯度法](#hough梯度法)
-    - [角点检测](#角点检测)
-    - [插值方法](#插值方法)
-    - [直方图](#直方图)
-    - [利用直方图，进行图像识别](#利用直方图进行图像识别)
-        - [KNN](#knn)
-        - [k-平均聚类算法（k -means Clustering）](#k-平均聚类算法k--means-clustering)
-    - [linemod 模板匹配](#linemod-模板匹配)
-    - [神经网络的搭建与原理](#神经网络的搭建与原理)
-        - [基本介绍](#基本介绍)
-        - [利用神经网络对图像HOG特征进行学习,分辨蝾螈的头](#利用神经网络对图像hog特征进行学习分辨蝾螈的头)
-            - [涉及要点](#涉及要点)
-    - [SVM](#svm)
-    - [标定程序设计与接口](#标定程序设计与接口)
-    - [双目成像系统](#双目成像系统)
-        - [行对准图像](#行对准图像)
-        - [生成深度图](#生成深度图)
-
-<!-- /TOC -->
+# 图像处理小记
 
 [github:opencv](https://github.com/opencv/opencv)
 [github:opencv_contrib](https://github.com/opencv/opencv_contrib)
