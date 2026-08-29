@@ -105,4 +105,4 @@ theme: butterfly
 deploy:
   type: git
   repository: https://github.com/BlazarLin/BlazarLin.github.io.git
-  branch: release_page
+  branch: dev
