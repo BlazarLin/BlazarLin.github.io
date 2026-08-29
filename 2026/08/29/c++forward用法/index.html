@@ -1,0 +1,251 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>c++forward用法 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="原理：完美转发 std::forward不是独自运作的，完美转发 &#x3D; std::forward + 万能引用 + 引用折叠。三者合一才能实现完美转发的效果。  基本作用将一个参数的左右值特性原封不动地转发给其他函数。 案例分析逐步分析以下demo函数输出的结果 123456789101112131415161718192021namespace XForward&amp;#123;	void f">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++forward用法">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/c++forward%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="原理：完美转发 std::forward不是独自运作的，完美转发 &#x3D; std::forward + 万能引用 + 引用折叠。三者合一才能实现完美转发的效果。  基本作用将一个参数的左右值特性原封不动地转发给其他函数。 案例分析逐步分析以下demo函数输出的结果 123456789101112131415161718192021namespace XForward&amp;#123;	void f">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.243Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.243Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="STL分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "c++forward用法",
+  "url": "https://blazarlin.github.io/2026/08/29/c++forward%E7%94%A8%E6%B3%95/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.243Z",
+  "dateModified": "2026-08-29T02:19:37.243Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/c++forward%E7%94%A8%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'c++forward用法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">c++forward用法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">c++forward用法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.243Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.243Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="原理：完美转发"><a href="#原理：完美转发" class="headerlink" title="原理：完美转发"></a>原理：完美转发</h2><blockquote>
+<p>std::forward不是独自运作的，完美转发 &#x3D; std::forward + 万能引用 + 引用折叠。三者合一才能实现完美转发的效果。</p>
+</blockquote>
+<h2 id="基本作用"><a href="#基本作用" class="headerlink" title="基本作用"></a>基本作用</h2><p>将一个参数的左右值特性原封不动地转发给其他函数。</p>
+<h2 id="案例分析"><a href="#案例分析" class="headerlink" title="案例分析"></a>案例分析</h2><p>逐步分析以下demo函数输出的结果</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">namespace</span> XForward</span><br><span class="line">&#123;</span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(<span class="type">int</span>&amp; x)</span> </span>&#123;</span><br><span class="line">		<span class="built_in">qInfo</span>() &lt;&lt; <span class="string">&quot;lvalue &quot;</span> &lt;&lt; x ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="type">void</span> <span class="title">func</span><span class="params">(<span class="type">int</span>&amp;&amp; x)</span> </span>&#123;</span><br><span class="line">		<span class="built_in">qInfo</span>() &lt;&lt; <span class="string">&quot;rvalue &quot;</span> &lt;&lt; x ;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function">	<span class="type">void</span> <span class="title">wrapper</span><span class="params">(T&amp;&amp; arg)</span> </span>&#123;</span><br><span class="line">		<span class="built_in">func</span>(arg);	<span class="comment">//arg此时已经是个左值了,永远调用左值版本的func</span></span><br><span class="line">		<span class="built_in">func</span>(std::forward&lt;T&gt;(arg)); <span class="comment">// 具体分析</span></span><br><span class="line">		<span class="built_in">func</span>(std::<span class="built_in">move</span>(arg));<span class="comment">//永远调用右值版本的func</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> x = <span class="number">42</span>;</span><br><span class="line">XForward::<span class="built_in">wrapper</span>(x);	<span class="comment">// lvalue lvalue rvalue</span></span><br><span class="line">XForward::<span class="built_in">wrapper</span>(<span class="number">1</span>);	<span class="comment">// lvalue rvalue rvalue</span></span><br></pre></td></tr></table></figure>
+
+<p>func(arg); 固定为左值变量调用，永远是lvalue</p>
+<p>func(std::move(arg)); 永远调用右值版本的func</p>
+<h3 id="XForward-wrapper-x"><a href="#XForward-wrapper-x" class="headerlink" title="XForward::wrapper(x)"></a>XForward::wrapper(x)</h3><p>实例化wrapper，x输入为左值</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">int</span> &amp;&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(<span class="type">int</span> &amp; &amp;&amp; arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">func</span>(std::forward&lt;<span class="type">int</span> &amp;&gt;(arg));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用折叠 int &amp; &amp;&amp;&#x3D;&gt;int &amp;</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">int</span> &amp;&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(<span class="type">int</span> &amp; arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">func</span>(std::forward&lt;<span class="type">int</span> &amp;&gt;(arg));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>type_traits中std::forward实现</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">_Ty</span>&gt;</span><br><span class="line"><span class="function">_NODISCARD <span class="keyword">constexpr</span> _Ty&amp;&amp; <span class="title">forward</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">remove_reference_t</span>&lt;_Ty&gt;&amp; _Arg)</span> <span class="keyword">noexcept</span> </span>&#123; <span class="comment">// forward an lvalue as either an lvalue or an rvalue</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;_Ty&amp;&amp;&gt;(_Arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>套入参数 <code>_Ty = int &amp;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">int</span> &amp;&gt;</span><br><span class="line"><span class="function">_NODISCARD <span class="keyword">constexpr</span> <span class="type">int</span> &amp; &amp;&amp; <span class="title">forward</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">remove_reference_t</span>&lt;<span class="type">int</span> &amp;&gt;&amp; _Arg)</span> <span class="keyword">noexcept</span> </span>&#123; <span class="comment">// forward an lvalue as either an lvalue or an rvalue</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;<span class="type">int</span> &amp; &amp;&amp;&gt;(_Arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用折叠后</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">int</span> &amp;&gt;</span><br><span class="line"><span class="function">_NODISCARD <span class="keyword">constexpr</span> <span class="type">int</span> &amp; <span class="title">forward</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">remove_reference_t</span>&lt;<span class="type">int</span> &amp;&gt;&amp; _Arg)</span> <span class="keyword">noexcept</span> </span>&#123; <span class="comment">// forward an lvalue as either an lvalue or an rvalue</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;<span class="type">int</span> &amp;&gt;(_Arg);<span class="comment">//最终的输入参数是左值!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>所以最终<code>std::forward&lt;int &amp;&gt;(arg)</code>的作用就是将参数强制转型成<code>int &amp;</code>，而<code>int &amp;</code>为左值。所以，调用左值版本的func。</p>
+<p><code>func(std::forward&lt;int &amp;&gt;(arg));</code> &#x3D;&gt;<code>func(&lt;int &amp;&gt;(arg));</code></p>
+<h3 id="XForward-wrapper-1"><a href="#XForward-wrapper-1" class="headerlink" title="XForward::wrapper(1);"></a>XForward::wrapper(1);</h3><p>与左值相似的推理步骤</p>
+<p>实例化wrapper，1输入为右值 <code>int &amp;&amp;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">int</span> &amp;&amp;&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(<span class="type">int</span> &amp;&amp; &amp;&amp; arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">func</span>(std::forward&lt;<span class="type">int</span> &amp;&amp;&gt;(arg));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用折叠 <code>int &amp;&amp; &amp;&amp;</code>&#x3D;&gt;<code>int &amp;&amp;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> <span class="type">int</span> &amp;&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">wrapper</span><span class="params">(<span class="type">int</span> &amp;&amp; arg)</span> </span>&#123;</span><br><span class="line">    <span class="built_in">func</span>(std::forward&lt;<span class="type">int</span> &amp;&amp;&gt;(arg));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>套入参数 <code>_Ty = int &amp;&amp;</code></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">int</span> &amp;&amp;&gt;</span><br><span class="line"><span class="function">_NODISCARD <span class="keyword">constexpr</span> <span class="type">int</span> &amp;&amp; &amp;&amp; <span class="title">forward</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">remove_reference_t</span>&lt;<span class="type">int</span> &amp;&amp;&gt;&amp; _Arg)</span> <span class="keyword">noexcept</span> </span>&#123; <span class="comment">// forward an lvalue as either an lvalue or an rvalue</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;<span class="type">int</span> &amp;&amp; &amp;&amp;&gt;(_Arg);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>引用折叠后</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">class</span> <span class="title class_">int</span> &amp;&amp;&gt;</span><br><span class="line"><span class="function">_NODISCARD <span class="keyword">constexpr</span> <span class="type">int</span> &amp;&amp; <span class="title">forward</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">remove_reference_t</span>&lt;<span class="type">int</span> &amp;&amp;&gt;&amp; _Arg)</span> <span class="keyword">noexcept</span> </span>&#123; <span class="comment">// forward an lvalue as either an lvalue or an rvalue</span></span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">static_cast</span>&lt;<span class="type">int</span> &amp;&amp;&gt;(_Arg);<span class="comment">//最终的输入参数是左值!!!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最终<code>std::forward&lt;int &amp;&amp;&gt;(arg)</code>的作用就是将参数强制转型成<code>int &amp;&amp;</code>，而<code>int &amp;&amp;</code>为左值。所以，调用右值版本的func。</p>
+<p><code>func(std::forward&lt;int &amp;&amp;&gt;(arg));</code> &#x3D;&gt;<code>func(&lt;int &amp;&amp;&gt;(arg));</code></p>
+<p>一顿操作下来，<strong>保留了参数的左右值属性</strong>，并将其传递给其他函数，实现了forward的基本作用。</p>
+<p>参考</p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/369203981">谈谈完美转发(Perfect Forwarding)：完美转发 &#x3D; 引用折叠 + 万能引用 + std::forward</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/Awesomewan/article/details/129582548">C++编程之 std::forward</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/c++forward%E7%94%A8%E6%B3%95/">https://blazarlin.github.io/2026/08/29/c++forward%E7%94%A8%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c++</a><a class="post-meta__tags" href="/tags/STL%E5%88%86%E6%9E%90/">STL分析</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/c++move%E7%94%A8%E6%B3%95/" title="c++move用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">c++move用法</div></div><div class="info-2"><div class="info-item-1">1、区分左值与右值的区别左值与右值的根本区别在于是否允许取地址&amp;运算符获得对应的内存地址。变量可以取地址，所以是左值，但是常量和临时对象等不可以取地址，所以是右值。 左值是表达式结束后依然存在的持久对象(代表一个在内存中占有确定位置的对象)。右值是表达式结束时不再存在的临时对象(不在内存中占有确定位置的表达式）。 所有的具名变量或者对象都是左值，而右值不具名。 对表达式取地址，如果能，则为左值，否则为右值。 常见的右值：“abc”,123等都是右值。 右值引用，可以延长右值的生命周期 123int&amp;&amp; i = 123;int&amp;&amp; j = std::move(i);int&amp;&amp; k = i;//编译不过，这里i是一个左值，右值引用只能引用右值    2、Move用法1 转移所有权​		将快要销毁的对象转移给其他变量，这样可以继续使用这个对象，而不必再创建一个一样的对象，省去了创建新的一样内容的对象，也就提高了性能。 1234567891011121314151617181920// move example#include &l...</div></div></div></a><a class="pagination-related" href="/2026/08/29/WIN&amp;Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="WIN&amp;Ubuntu双系统使用手册"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">WIN&Ubuntu双系统使用手册</div></div><div class="info-2"><div class="info-item-1">WIN&amp;Ubuntu双系统使用手册一、需要资源 U盘一个（提前备份数据） Ubuntu 20.04 LTS 镜像 Rufus–1008.05kb 启动工具 下载地址：链接: 下载链接 密码: om26    二、window设置1、分区确认硬盘上有空闲区域  若无，则使用一下方法压缩出已有硬盘的空间  压缩硬盘空间   分出一个空的区域给ubuntu系统做存储。   在桌面上，点击计算机图标（右键）–&gt; 管理 –&gt; 找到磁盘管理，之后找一个比较大的硬盘分区点击一下      比如我点了“学习资料”，右键选择压缩卷。      输入需要压缩的空间，就能得到一个对应的空余空间用来当做ubuntu系统盘。   2、启动盘制作打开Rufus制作工具  主要是选择好对应的iso镜像，开始制作启动盘。 如果电脑使用U盘启动无法识别该U盘，设置分区类型MBR改到GPT。 三、ubuntu安装1、进入Bios设置U盘启动 2、进入后选择ubuntu 安装要注意一个点：安装类型选择其他选项。 选择安装类型，这里我们自定义安装，选择其他选项。如果不想折腾也可以简单选择第一个选项。...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="c++智能指针"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++智能指针</div></div><div class="info-2"><div class="info-item-1">c++智能指针std::shared_ptr std::weak_ptr std::unique_ptr 一、shared_ptr最常用的只能指针类，具有自动delete对象，引用计数等功能。 头文件 1#include &lt;memory&gt; 构造方法 123456// 较优auto smart_ptr = std::make_shared&lt;int&gt;();// 不推荐auto p1 = new int;std::shared_ptr&lt;int&gt; smart_ptr2(p1);  返回裸指针 12auto smart_ptr = std::make_shared&lt;int&gt;();auto originPtr = smart_ptr.get();  shared_ptr模板类常用成员方法   成员方法名 功 能    operator&#x3D;() 重载赋值号，使得同一类型的 shared_ptr 智能指针可以相互赋值。   operator*() 重载 * 号，获取当前 shared_ptr 智能指针对象指向的数据。   operator-...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260713-condition_variable%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B/" title="std::condition_variable 使用简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">std::condition_variable 使用简介</div></div><div class="info-2"><div class="info-item-1">std::condition_variable 使用简介 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景下的线程间事件同步原语。   TL;DR（一句话）std::condition_variable 是 线程间”事件通知”原语，必须和 std::mutex 配合使用；核心是 wait(lock, predicate) + notify_one / notify_all；工程铁律是 wait 一律带 predicate，notify 时机先 lock 改状态、解锁、再 notify。  What：它是什么、为什么需要它 让一个或多个线程在条件不满足时阻塞休眠，被通知后再醒过来检查条件。 必须与 std::mutex 搭配：mutex 保护”条件 + 数据”，cv 负责”先放手把锁让出来去睡，被叫醒再回来抢锁”。  三件替代品都做不到的事：  消费者若用 while (!cond) &#123; sleep(1ms); &#125; —— 浪费 CPU，延迟还不可控。 sem_t 没有”条件”语义。 QWaitCondition（Qt）等价...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/" title="c++异常捕获"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++异常捕获</div></div><div class="info-2"><div class="info-item-1">一、try 与__try的区别Release方式下如果选择了编译器代码优化选项，则VC编译器会去搜索try块中的代码， 如果没有找到throw代码， 他就会认为try catch结构是多余的， 给优化掉。 这样造成在Release模式下，上述代码中的异常不能被捕获，从而迫使程序弹出错误提示框退出。 https://stackoverflow.com/questions/7049502/c-try-and-try-catch-finally 二、捕获方法1. 全局捕获A12// 单独用这种方法能捕获到异常，但是程序仍然自行退出!!::SetUnhandledExceptionFilter(unKnownExceptionFilterWrapper);  qt会提示Qt has caught an exception thrown from an event handler. Throwingexceptions from an event handler is not supported in Qt.You must not let any exception whatsoever...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join&#x2F;detach 时机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">std::thread 生命周期管控与 join&#x2F;detach 时机</div></div><div class="info-2"><div class="info-item-1">std::thread 生命周期管控与 join&#x2F;detach 时机 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景常见踩坑项。   TL;DR（一句话） std::thread 构造函数返回的那一刻，OS 线程已经存在并跑着你的 callable，具体何时被调度执行由 OS 决定。 join &#x2F; detach 不是”启动线程”，而是”决定 std::thread 对象在析构时如何处理已经在跑的 OS 线程”。 std::thread 析构时如果 joinable() 仍为 true（既没 join 也没 detach），直接 std::terminate()，整个进程挂掉。   谁管控什么生命周期（分层）std::thread 实际涉及两个独立的”对象”，必须分开看：    层级 对象 谁管控 何时结束    C++ 对象层 std::thread t（栈上 &#x2F; 堆上的 C++ 对象） C++ RAII t 离开作用域、被析构   OS 内核层 内核线程（占着 thread stack） 操作系统 call...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260731%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8B%86%E8%A7%A3%E5%88%86%E6%9E%90/" title="常用正则表达式逐段拆解分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">常用正则表达式逐段拆解分析</div></div><div class="info-2"><div class="info-item-1">常用正则表达式逐段拆解分析 本文档逐段拆解 8 个常用正则表达式，所有”匹配&#x2F;不匹配”示例均经过 Python re 实测验证。适用场景：日志解析、表单校验、数据提取。配套 C++ 原始字符串 R&quot;(...)&quot; 与 Python r&#39;...&#39; 用法说明见末尾。   目录 时间 HH:MM:SS（24 小时制） IPv4 地址 中国大陆手机号 电子邮箱 日期 YYYY-MM-DD URL 身份证号（18 位） 十六进制颜色码 语法速查表 通用坑与最佳实践   1. 时间 HH:MM:SS（24 小时制）正则 1((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)  逐段拆解 12345678910(                          捕获组1：包住整个时间  (?:                      非捕获组：小时部分      [01]\d               00 ~ 19（首位 0 或 1 + 任意数字）      | 2[0-3]             20 ~ 23（首位 2...</div></div></div></a><a class="pagination-related" href="/2026/08/29/QT%E6%BA%90%E7%A0%81%E8%B0%83%E8%AF%95/" title="Qt 源码调试与 PDB 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Qt 源码调试与 PDB 配置指南</div></div><div class="info-2"><div class="info-item-1">Qt 源码调试与 PDB 配置指南 适用环境：Windows + Visual Studio 2019 + Qt 5.14.2 + MSVC 2017 64-bit（msvc2017_64）。目标：在 VS 中单步进入 Qt 源码、查看 Qt 内部变量，并正确对应调用栈行号。  1. Sources、DLL 与 PDB 的关系   名称 作用 能否单独用于 F11 进入 Qt    Qt 预编译库（Qt5Core.dll 等） 运行和链接使用的二进制 否   Qt Sources（5.14.2\Src） 与调用栈对应的源代码 否，只能手动打开源码对照   Debug Information &#x2F; PDB DLL 对应的符号与源码映射信息 是，但还需配置源码路径   仅安装 C:\Qt\Qt5.14.2\5.14.2\Src 不够。要从 DLL 调用栈进入 Qt 源码，必须同时准备与当前 kit 严格匹配的 PDB。 以下三项必须一致：  Qt 小版本，例如 5.14.2，不能混用 5.14.1 的 PDB； 编译器套件，例如 MSVC 2017 64-bit； 构建类型，...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8E%9F%E7%90%86%EF%BC%9A%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91"><span class="toc-number">1.</span> <span class="toc-text">原理：完美转发</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9F%BA%E6%9C%AC%E4%BD%9C%E7%94%A8"><span class="toc-number">2.</span> <span class="toc-text">基本作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A1%88%E4%BE%8B%E5%88%86%E6%9E%90"><span class="toc-number">3.</span> <span class="toc-text">案例分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XForward-wrapper-x"><span class="toc-number">3.1.</span> <span class="toc-text">XForward::wrapper(x)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#XForward-wrapper-1"><span class="toc-number">3.2.</span> <span class="toc-text">XForward::wrapper(1);</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

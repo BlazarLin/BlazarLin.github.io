@@ -1,0 +1,296 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Windows脚本命令 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Windows脚本命令文件夹管理 cd 显示当前目录名或改变当前目录。 md 创建目录。 rd 删除一个目录。 dir 显示目录中的文件和子目录列表。 tree 以图形显示驱动器或路径的文件夹结构。 path 为可执行文件显示或设置一个搜索路径。 xcopy 复制文件和目录树。  文件管理 type 显示文本文件的内容。 copy 将一份或多份文件复制到另一个位置。 del 删除一个或数个文件。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Windows脚本命令">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="Windows脚本命令文件夹管理 cd 显示当前目录名或改变当前目录。 md 创建目录。 rd 删除一个目录。 dir 显示目录中的文件和子目录列表。 tree 以图形显示驱动器或路径的文件夹结构。 path 为可执行文件显示或设置一个搜索路径。 xcopy 复制文件和目录树。  文件管理 type 显示文本文件的内容。 copy 将一份或多份文件复制到另一个位置。 del 删除一个或数个文件。">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.249Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.249Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="命令行">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Windows脚本命令",
+  "url": "https://blazarlin.github.io/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.249Z",
+  "dateModified": "2026-08-29T02:19:37.249Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Windows脚本命令',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">Windows脚本命令</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Windows脚本命令</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.249Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.249Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="Windows脚本命令"><a href="#Windows脚本命令" class="headerlink" title="Windows脚本命令"></a><strong>Windows脚本命令</strong></h2><h4 id="文件夹管理"><a href="#文件夹管理" class="headerlink" title="文件夹管理"></a>文件夹管理</h4><ul>
+<li>cd 显示当前目录名或改变当前目录。</li>
+<li>md 创建目录。</li>
+<li>rd 删除一个目录。</li>
+<li>dir 显示目录中的文件和子目录列表。</li>
+<li>tree 以图形显示驱动器或路径的文件夹结构。</li>
+<li>path 为可执行文件显示或设置一个搜索路径。</li>
+<li>xcopy 复制文件和目录树。</li>
+</ul>
+<h4 id="文件管理"><a href="#文件管理" class="headerlink" title="文件管理"></a><strong>文件管理</strong></h4><ul>
+<li>type 显示文本文件的内容。</li>
+<li>copy 将一份或多份文件复制到另一个位置。</li>
+<li>del 删除一个或数个文件。</li>
+<li>move 移动文件并重命名文件和目录。(Windows XP Home Edition中没有)</li>
+<li>ren 重命名文件。</li>
+<li>replace 替换文件。</li>
+<li>attrib 显示或更改文件属性。</li>
+<li>find 搜索字符串。</li>
+<li>fc 比较两个文件或两个文件集并显示它们之间的不同</li>
+</ul>
+<h4 id=""><a href="#" class="headerlink" title=""></a></h4><h4 id="网络命令"><a href="#网络命令" class="headerlink" title="网络命令"></a><strong>网络命令</strong></h4><ul>
+<li>ping 进行网络连接测试、名称解析</li>
+<li>ftp 文件传输</li>
+<li>net 网络命令集及用户管理</li>
+<li>telnet 远程登陆</li>
+<li>ipconfig显示、修改TCP&#x2F;IP设置</li>
+<li>msg 给用户发送消息</li>
+<li>arp 显示、修改局域网的IP地址-物理地址映射列表</li>
+</ul>
+<h4 id="-1"><a href="#-1" class="headerlink" title=""></a></h4><h4 id="系统管理"><a href="#系统管理" class="headerlink" title="系统管理"></a><strong>系统管理</strong></h4><ul>
+<li>at 安排在特定日期和时间运行命令和程序</li>
+<li>shutdown立即或定时关机或重启</li>
+<li>tskill 结束进程</li>
+<li>taskkill结束进程(比tskill高级，但WinXPHome版中无该命令)</li>
+<li>tasklist显示进程列表(Windows XP Home Edition中没有)</li>
+<li>sc 系统服务设置与控制</li>
+<li>reg 注册表控制台工具</li>
+<li>powercfg控制系统上的电源设置</li>
+</ul>
+<p>对于以上列出的所有命令，在cmd中输入命令+&#x2F;?即可查看该命令的帮助信息。如find &#x2F;?</p>
+<h2 id="Windows-Batch-常用命令"><a href="#Windows-Batch-常用命令" class="headerlink" title="Windows Batch 常用命令"></a><strong>Windows Batch 常用命令</strong></h2><p>1 echo 和 @回显命令</p>
+<p>@           #关闭单行回显</p>
+<p>echo off        #从下一行开始关闭回显<br>@echo off       #从本行开始关闭回显。一般批处理第一行都是这个<br>echo on        #从下一行开始打开回显<br>echo          #显示当前是 echo off 状态还是 echo on 状态<br>echo.         #输出一个”回车换行”，空白行<br>​             #(同echo, echo; echo+ echo[ echo] echo&#x2F; echo)</p>
+<p>2 errorlevelecho %errorlevel%</p>
+<p>每个命令运行结束，可以用这个命令行格式查看返回码</p>
+<p>默认值为0，一般命令执行出错会设 errorlevel 为1</p>
+<p>3 dir显示文件夹内容<br>dir                  #显示当前目录中的文件和子目录<br>dir &#x2F;a               #显示当前目录中的文件和子目录，包括隐藏文件和系统文件<br>dir c: &#x2F;a:d          #显示 C 盘当前目录中的目录<br>dir c: &#x2F;a:-d         #显示 C 盘根目录中的文件<br>dir c: &#x2F;b&#x2F;p         #&#x2F;b只显示文件名，&#x2F;p分页显示<br>dir *.exe &#x2F;s         #显示当前目录和子目录里所有的.exe文件</p>
+<p>4 cd切换目录<br>cd                  #进入根目录<br>cd                   #显示当前目录<br>cd &#x2F;d d:sdk         #可以同时更改盘符和目录</p>
+<p>5 md创建目录<br>md d:abc          #如果 d:a 不存在，将会自动创建中级目录<br>#如果命令扩展名被停用，则需要键入 mkdir abc。</p>
+<p>6 rd删除目录<br>rd abc               #删除当前目录里的 abc 子目录，要求为空目录<br>rd &#x2F;s&#x2F;q d:temp      #删除 d:temp 文件夹及其子文件夹和文件，&#x2F;q安静模式</p>
+<p>7 del删除文件<br>del d:test.txt      #删除指定文件，不能是隐藏、系统、只读文件<br>del &#x2F;q&#x2F;a&#x2F;f d:temp*.*<br>删除 d:temp 文件夹里面的所有文件，包括隐藏、只读、系统文件，不包括子目录<br>del &#x2F;q&#x2F;a&#x2F;f&#x2F;s d:temp*.*<br>删除 d:temp 及子文件夹里面的所有文件，包括隐藏、只读、系统文件，不包括子目录</p>
+<p>8 ren重命名命令<br>ren d:temp tmp      #支持对文件夹的重命名</p>
+<p>9 cls清屏</p>
+<p>10 type显示文件内容<br>type c:boot.ini     #显示指定文件的内容，程序文件一般会显示乱码<br>type *.txt           #显示当前目录里所有.txt文件的内容</p>
+<p>11 copy拷贝文件<br>copy c:test.txt d:test.bak<br>复制 c:test.txt 文件到 d: ，并重命名为 test.bak<br>copy con test.txt<br>从屏幕上等待输入，按 Ctrl+Z 结束输入，输入内容存为test.txt文件<br>con代表屏幕，prn代表打印机，nul代表空设备<br>copy 1.txt + 2.txt 3.txt<br>合并 1.txt 和 2.txt 的内容，保存为 3.txt 文件<br>如果不指定 3.txt ，则保存到 1.txt<br>copy test.txt +<br>复制文件到自己，实际上是修改了文件日期</p>
+<p>12 title设置cmd窗口的标题<br>title 新标题         #可以看到cmd窗口的标题栏变了</p>
+<p>13 ver显示系统版本</p>
+<p>14 label 和 vol设置卷标<br>vol                  #显示卷标<br>label                #显示卷标，同时提示输入新卷标<br>label c:system       #设置C盘的卷标为 system</p>
+<p>15 pause暂停命令</p>
+<p>16 rem 和 ::注释命令<br>注释行不执行操作</p>
+<p>17 date 和 time<br>日期和时间<br>date           #显示当前日期，并提示输入新日期，按”回车”略过输入<br>date&#x2F;t         #只显示当前日期，不提示输入新日期<br>time           #显示当前时间，并提示输入新时间，按”回车”略过输入<br>time&#x2F;t         #只显示当前时间，不提示输入新时间</p>
+<p>18 goto 和 :<br>跳转命令<br>:label         #行首为:表示该行是标签行，标签行不执行操作<br>goto label     #跳转到指定的标签那一行</p>
+<p>19 find (外部命令)<br>查找命令<br>find “abc” c:test.txt<br>在 c:test.txt 文件里查找含 abc 字符串的行<br>如果找不到，将设 errorlevel 返回码为1<br>find &#x2F;i “abc” c:test.txt<br>查找含 abc 的行，忽略大小写<br>find &#x2F;c “abc” c:test.txt<br>显示含 abc 的行的行数</p>
+<p>20 more (外部命令)<br>逐屏显示<br>more c:test.txt     #逐屏显示 c:test.txt 的文件内容</p>
+<p>21 tree<br>显示目录结构<br>tree d:             #显示D盘的文件目录结构</p>
+<p>22 &amp;<br>顺序执行多条命令，而不管命令是否执行成功</p>
+<p>23 &amp;&amp;<br>顺序执行多条命令，当碰到执行出错的命令后将不执行后面的命令<br>find “ok” c:test.txt &amp;&amp; echo 成功<br>如果找到了”ok”字样，就显示”成功”，找不到就不显示</p>
+<p>24 ||<br>顺序执行多条命令，当碰到执行正确的命令后将不执行后面的命令<br>find “ok” c:test.txt || echo 不成功<br>如果找不到”ok”字样，就显示”不成功”，找到了就不显示</p>
+<p>25 |<br>管道命令<br>dir <em>.</em> &#x2F;s&#x2F;a | find &#x2F;c “.exe”<br>管道命令表示先执行 dir 命令，对其输出的结果执行后面的 find 命令<br>该命令行结果：输出当前文件夹及所有子文件夹里的.exe文件的个数<br>type c:test.txt|more<br>这个和 more c:test.txt 的效果是一样的</p>
+<p>26 &gt; 和 &gt;&gt;<br>输出重定向命令</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&gt; 清除文件中原有的内容后再写入</span><br><span class="line">&gt;&gt; 追加内容到文件末尾，而不会清除原有的内容</span><br><span class="line">主要将本来显示在屏幕上的内容输出到指定文件中</span><br><span class="line">指定文件如果不存在，则自动生成该文件</span><br><span class="line">type c:test.txt &gt;prn</span><br><span class="line">屏幕上不显示文件内容，转向输出到打印机</span><br><span class="line">echo hello world&gt;con</span><br><span class="line">在屏幕上显示hello world，实际上所有输出都是默认 &gt;con 的</span><br><span class="line">copy c:test.txt f: &gt;nul</span><br><span class="line">拷贝文件，并且不显示&quot;文件复制成功&quot;的提示信息，但如果f盘不存在，还是会显示出错信息</span><br><span class="line">copy c:test.txt f: &gt;nul 2&gt;nul</span><br><span class="line">不显示”文件复制成功”的提示信息，并且f盘不存在的话，也不显示错误提示信息</span><br><span class="line">echo ^^W ^&gt; ^W&gt;c:test.txt</span><br><span class="line">生成的文件内容为 ^W &gt; W</span><br><span class="line">^ 和 &gt; 是控制命令，要把它们输出到文件，必须在前面加个 ^ 符号</span><br></pre></td></tr></table></figure>
+
+<p>27 &lt;<br>从文件中获得输入信息，而不是从屏幕上<br>一般用于 date time label 等需要等待输入的命令<br>@echo off<br>echo 2005-05-01&gt;temp.txt<br>date &lt;temp.txt<br>del temp.txt<br>这样就可以不等待输入直接修改当前日期</p>
+<p>28 %0 %1 %2 %3 %4 %5 %6 %7 %8 %9 %*<br>命令行传递给批处理的参数<br>%0 批处理文件本身<br>%1 第一个参数<br>%9 第九个参数<br>%* 从第一个参数开始的所有参数</p>
+<p>批参数(%n)的替代已被增强。您可以使用以下语法:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">     %~1          - 删除引号(&quot;)，扩充 %1</span><br><span class="line">     %~f1         - 将 %1 扩充到一个完全合格的路径名</span><br><span class="line">     %~d1         - 仅将 %1 扩充到一个驱动器号</span><br><span class="line">     %~p1         - 仅将 %1 扩充到一个路径</span><br><span class="line">     %~n1         - 仅将 %1 扩充到一个文件名</span><br><span class="line">     %~x1         - 仅将 %1 扩充到一个文件扩展名</span><br><span class="line">     %~s1         - 扩充的路径指含有短名</span><br><span class="line">     %~a1         - 将 %1 扩充到文件属性</span><br><span class="line">     %~t1         - 将 %1 扩充到文件的日期/时间</span><br><span class="line">     %~z1         - 将 %1 扩充到文件的大小</span><br><span class="line">     %~$PATH : 1 - 查找列在 PATH 环境变量的目录，并将 %1</span><br><span class="line">                   扩充到找到的第一个完全合格的名称。如果环境</span><br><span class="line">                   变量名未被定义，或者没有找到文件，此组合键会</span><br><span class="line">                   扩充到空字符串</span><br><span class="line"></span><br><span class="line">可以组合修定符来取得多重结果:</span><br><span class="line"></span><br><span class="line">    %~dp1        - 只将 %1 扩展到驱动器号和路径</span><br><span class="line">    %~nx1        - 只将 %1 扩展到文件名和扩展名</span><br><span class="line">    %~dp$PATH:1 - 在列在 PATH 环境变量中的目录里查找 %1，</span><br><span class="line">                   并扩展到找到的第一个文件的驱动器号和路径。</span><br><span class="line">    %~ftza1      - 将 %1 扩展到类似 DIR 的输出行。</span><br><span class="line">可以参照 call/? 或 for/? 看出每个参数的含意</span><br><span class="line">echo load &quot;%%1&quot; &quot;%%2&quot;&gt;c:test.txt</span><br><span class="line">生成的文件内容为 load &quot;%1&quot; &quot;%2&quot;</span><br><span class="line">批处理文件里，用这个格式把命令行参数输出到文件</span><br></pre></td></tr></table></figure>
+
+<p>29 if<br>判断命令<br>if “%1”&#x3D;&#x3D;”&#x2F;a” echo 第一个参数是&#x2F;a<br>if &#x2F;i “%1” equ “&#x2F;a” echo 第一个参数是&#x2F;a<br>&#x2F;i 表示不区分大小写，equ 和 &#x3D;&#x3D; 是一样的，其它运算符参见 if&#x2F;?<br>if exist c:test.bat echo 存在c:test.bat文件<br>if not exist c:windows (<br>     echo 不存在c:windows文件夹<br>     )<br>if exist c:test.bat (<br>     echo 存在c:test.bat<br>     ) else (<br>     echo 不存在c:test.bat<br>     )</p>
+<p>30 setlocal 和 endlocal<br>设置”命令扩展名”和”延缓环境变量扩充”<br>SETLOCAL ENABLEEXTENSIONS             #启用”命令扩展名”<br>SETLOCAL DISABLEEXTENSIONS            #停用”命令扩展名”<br>SETLOCAL ENABLEDELAYEDEXPANSION       #启用”延缓环境变量扩充”<br>SETLOCAL DISABLEDELAYEDEXPANSION      #停用”延缓环境变量扩充”<br>ENDLOCAL                              #恢复到使用SETLOCAL语句以前的状态<br>“命令扩展名”默认为启用<br>“延缓环境变量扩充”默认为停用<br>批处理结束系统会自动恢复默认值<br>可以修改注册表以禁用”命令扩展名”，详见 cmd &#x2F;? 。所以用到”命令扩展名”的程<br>序，建议在开头和结尾加上 SETLOCAL ENABLEEXTENSIONS 和 ENDLOCAL 语句，以确<br>保程序能在其它系统上正确运行<br>“延缓环境变量扩充”主要用于 if 和 for 的符合语句，在 set 的说明里有其实用例程</p>
+<p>31 set<br>设置变量<br>引用变量可在变量名前后加 % ，即 %变量名%<br>set                     #显示目前所有可用的变量，包括系统变量和自定义的变量<br>echo %SystemDrive%      #显示系统盘盘符。系统变量可以直接引用<br>set p                   #显示所有以p开头的变量，要是一个也没有就设errorlevel&#x3D;1<br>set p&#x3D;aa1bb1aa2bb2      #设置变量p，并赋值为 &#x3D; 后面的字符串，即aa1bb1aa2bb2<br>echo %p%                #显示变量p代表的字符串，即aa1bb1aa2bb2<br>echo %p:<del>6%             #显示变量p中第6个字符以后的所有字符，即aa2bb2<br>echo %p:</del>6,3%           #显示第6个字符以后的3个字符，即aa2<br>echo %p:<del>0,3%           #显示前3个字符，即aa1<br>echo %p:</del>-2%            #显示最后面的2个字符，即b2<br>echo %p:<del>0,-2%          #显示除了最后2个字符以外的其它字符，即aa1bb1aa2b<br>echo %p:aa&#x3D;c%           #用c替换变量p中所有的aa，即显示c1bb1c2bb2<br>echo %p:aa&#x3D;%            #将变量p中的所有aa字符串置换为空，即显示1bb12bb2<br>echo %p:*bb&#x3D;c%          #第一个bb及其之前的所有字符被替换为c，即显示c1aa2bb2<br>set p&#x3D;%p:*bb&#x3D;c%         #设置变量p，赋值为 %p:*bb&#x3D;c% ，即c1aa2bb2<br>set &#x2F;a p&#x3D;39             #设置p为数值型变量，值为39<br>set &#x2F;a p&#x3D;39&#x2F;10          #支持运算符，有小数时用去尾法，39&#x2F;10&#x3D;3.9，去尾得3，p&#x3D;3<br>set &#x2F;a p&#x3D;p&#x2F;10           #用 &#x2F;a 参数时，在 &#x3D; 后面的变量可以不加%直接引用<br>set &#x2F;a p&#x3D;”1&amp;0″          #”与”运算，要加引号。其它支持的运算符参见set&#x2F;?<br>set p&#x3D;                  #取消p变量<br>set &#x2F;p p&#x3D;请输入<br>屏幕上显示”请输入”，并会将输入的字符串赋值给变量p<br>注意这条可以用来取代 choice 命令<br>注意变量在 if 和 for 的复合语句里是一次性全部替换的，如<br>@echo off<br>set p&#x3D;aaa<br>if %p%&#x3D;&#x3D;aaa (<br>     echo %p%<br>     set p&#x3D;bbb<br>     echo %p%<br>     )<br>结果将显示<br>aaa<br>aaa<br>因为在读取 if 语句时已经将所有 %p% 替换为aaa<br>这里的”替换”，在 &#x2F;? 帮助里就是指”扩充”、”环境变量扩充”<br>可以启用”延缓环境变量扩充”，用 ! 来引用变量，即 !变量名!<br>@echo off<br>SETLOCAL ENABLEDELAYEDEXPANSION<br>set p&#x3D;aaa<br>if %p%&#x3D;&#x3D;aaa (<br>     echo %p%<br>     set p&#x3D;bbb<br>     echo !p!<br>     )<br>ENDLOCAL<br>结果将显示<br>aaa<br>bbb<br>还有几个动态变量，运行 set 看不到<br>%CD%                   #代表当前目录的字符串<br>%DATE%                 #当前日期<br>%TIME%                 #当前时间<br>%RANDOM%               #随机整数，介于0</del>32767<br>%ERRORLEVEL%           #当前 ERRORLEVEL 值<br>%CMDEXTVERSION%        #当前命令处理器扩展名版本号<br>%CMDCMDLINE%           #调用命令处理器的原始命令行<br>可以用echo命令查看每个变量值，如 echo %time%<br>注意 %time% 精确到毫秒，在批处理需要延时处理时可以用到</p>
+<p>32 start<br>批处理中调用外部程序的命令，否则等外部程序完成后才继续执行剩下的指令</p>
+<p>33 call<br>批处理中调用另外一个批处理的命令，否则剩下的批处理指令将不会被执行<br>有时有的应用程序用start调用出错的，也可以call调用</p>
+<p>34 choice (外部命令)<br>选择命令<br>让用户输入一个字符，从而选择运行不同的命令，返回码errorlevel为1234……<br>win98里是choice.com<br>win2000pro里没有，可以从win98里拷过来<br>win2003里是choice.exe<br>choice &#x2F;N &#x2F;C y &#x2F;T 5 &#x2F;D y&gt;nul<br>延时5秒</p>
+<p>35 assoc 和 ftype<br>文件关联<br>assoc 设置’文件扩展名’关联，关联到’文件类型’<br>ftype 设置’文件类型’关联，关联到’执行程序和参数’<br>当你双击一个.txt文件时，windows并不是根据.txt直接判断用 notepad.exe 打开<br>而是先判断.txt属于 txtfile ‘文件类型’<br>再调用 txtfile 关联的命令行 txtfile&#x3D;%SystemRoot%system32NOTEPAD.EXE %1<br>可以在”文件夹选项”→”文件类型”里修改这2种关联<br>assoc            #显示所有’文件扩展名’关联<br>assoc .txt       #显示.txt代表的’文件类型’，结果显示 .txt&#x3D;txtfile<br>assoc .doc       #显示.doc代表的’文件类型’，结果显示 .doc&#x3D;Word.Document.8<br>assoc .exe       #显示.exe代表的’文件类型’，结果显示 .exe&#x3D;exefile<br>ftype            #显示所有’文件类型’关联<br>ftype exefile    #显示exefile类型关联的命令行，结果显示 exefile&#x3D;”%1” %*<br>assoc .txt&#x3D;Word.Document.8<br>设置.txt为word类型的文档，可以看到.txt文件的图标都变了<br>assoc .txt&#x3D;txtfile<br>恢复.txt的正确关联<br>ftype exefile&#x3D;”%1” %*<br>恢复 exefile 的正确关联<br>如果该关联已经被破坏，可以运行 command.com ，再输入这条命令</p>
+<p>36 pushd 和 popd<br>切换当前目录<br>@echo off<br>c: &amp; cd &amp; md mp3        #在 C: 建立 mp3 文件夹<br>md d:mp4                #在 D: 建立 mp4 文件夹<br>cd &#x2F;d d:mp4             #更改当前目录为 d:mp4<br>pushd c:mp3             #保存当前目录，并切换当前目录为 c:mp3<br>popd                     #恢复当前目录为刚才保存的 d:mp4</p>
+<p>37 for<br>循环命令<br>这个比较复杂，请对照 for&#x2F;? 来看<br>for %%i in (c: d: e: f:) do echo %%i<br>依次调用小括号里的每个字符串，执行 do 后面的命令<br>注意%%i，在批处理中 for 语句调用参数用2个%<br>默认的字符串分隔符是”空格键”，”Tab键”，”回车键”<br>for %%i in (<em>.txt) do find “abc” %%i<br>对当前目录里所有的txt文件执行 find 命令<br>for &#x2F;r . %%i in (</em>.txt) do find “abc” %%i<br>在当前目录和子目录里所有的.txt文件中搜索包含 abc 字符串的行<br>for &#x2F;r . %%i in (.) do echo %%~pni<br>显示当前目录名和所有子目录名，包括路径，不包括盘符<br>for &#x2F;r d:mp3 %%i in (<em>.mp3) do echo %%i&gt;&gt;d:mp3.txt<br>把 d:mp3 及其子目录里的mp3文件的文件名都存到 d:mp3.txt 里去<br>for &#x2F;l %%i in (2,1,8) do echo %%i<br>生成2345678的一串数字，2是数字序列的开头，8是结尾，1表示每次加1<br>for &#x2F;f %%i in (‘set’) do echo %%i<br>对 set 命令的输出结果循环调用，每行一个<br>for &#x2F;f “eol&#x3D;P” %%i in (‘set’) do echo %%i<br>取 set 命令的输出结果，忽略以 P 开头的那几行<br>for &#x2F;f %%i in (d:mp3.txt) do echo %%i<br>显示 d:mp3.txt 里的每个文件名，每行一个，不支持带空格的名称<br>for &#x2F;f “delims&#x3D;” %%i in (d:mp3.txt) do echo %%i<br>显示 d:mp3.txt 里的每个文件名，每行一个，支持带空格的名称<br>for &#x2F;f “skip&#x3D;5 tokens&#x3D;4” %%a in (‘dir’) do echo %%a<br>对 dir 命令的结果，跳过前面5行，余下的每行取第4列<br>每列之间的分隔符为默认的”空格”<br>可以注意到 dir 命令输出的前5行是没有文件名的<br>for &#x2F;f “tokens&#x3D;1,2,3 delims&#x3D;- “ %%a in (‘date &#x2F;t’) do (<br>     echo %%a<br>     echo %%b<br>     echo %%c<br>     )<br>对 date &#x2F;t 的输出结果，每行取1、2、3列<br>第一列对应指定的 %%a ，后面的 %%b 和 %%c 是派生出来的，对应其它列<br>分隔符指定为 - 和”空格”，注意 delims&#x3D;- 后面有个”空格”<br>其中 tokens&#x3D;1,2,3 若用 tokens&#x3D;1-3 替换，效果是一样的<br>for &#x2F;f “tokens&#x3D;2</em> delims&#x3D;- “ %%a in (‘date &#x2F;t’) do echo %%b<br>取第2列给 %%a ，其后的列都给 %%b</p>
+<p>38 subst (外部命令)<br>映射磁盘。<br>subst z: serverd      #这样输入z:就可以访问serverd了<br>subst z: &#x2F;d              #取消该映射<br>subst                    #显示目前所有的映时</p>
+<p>39 xcopy (外部命令)文件拷贝<br>xcopy d:mp3 e:mp3 &#x2F;s&#x2F;e&#x2F;i&#x2F;y<br>复制 d:mp3 文件夹、所有子文件夹和文件到 e: ，覆盖已有文件<br>加 &#x2F;i 表示如果 e: 没有 mp3 文件夹就自动新建一个，否则会有询问</p>
+<p>参考</p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lsgxeva/p/10694546.html">https://www.cnblogs.com/lsgxeva/p/10694546.html</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/">https://blazarlin.github.io/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/windows/">windows</a><a class="post-meta__tags" href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/">命令行</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5/" title="命令行速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">命令行速查</div></div><div class="info-2"><div class="info-item-1">virtualenvs虚拟环境配置安装虚拟环境依赖先安装虚拟环境的依赖库： 123sudo pip install virtualenvsudo pip install virtualenvwrapper(virtualenvwrapper-win  创建虚拟环境管理目录： 1mkdir ~/.virtualenvssudo vim ~/.bashrc#在.bashrc的末尾增加下面两行内容export WORKON_HOME=$HOME/.virtualenvs  # 所有虚拟环境存储的目录source /usr/local/bin/virtualenvwrapper.sh #激活虚拟环境source ~/.bashrc #激活  创建虚拟环境123456789&gt;&gt;&gt;mkvirtualenv new_vir --python=python3#创建新的虚拟环境为new_vir# todo&gt;&gt;&gt;mkvirtualenv -p /usr/bin/python3 new_vir #制定虚拟环境的python为local的python3&gt;&gt;...</div></div></div></a><a class="pagination-related" href="/2026/08/29/machine_learning/" title="人工智障瞎学"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">人工智障瞎学</div></div><div class="info-2"><div class="info-item-1">人工智障瞎学一、环境配置12345tensorflow-gup==2.0pytorch==1.3.0cuda==10.1cudnn==7.6.4nvidia-418 tensorflow2.0 解决pycharm自动补全与应用bug(reference csy) 注：修改里我们仅仅修改了keras的import路径，所以keras需要使用from tensorflow import keras;而import keras中其他的包例如layers，需要写成from tensorflow.python.keras import xxxx; Go to the dir &#x2F;python3&#x2F;site-packages&#x2F; and change the name of &#x2F;tensorflow&#x2F; to &#x2F;tensorflow_back&#x2F;, then change the name of &#x2F;tensorflow_core&#x2F; to &#x2F;tensorflow&#x2F; Go to the file &...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">robocopy 与 xcopy 参数及常用操作对比参考</div></div><div class="info-2"><div class="info-item-1">robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRORLEVEL）说明 实战部署模板   1. robocopy 完整参数速查表1.1 源 &#x2F; 目标 &#x2F; 文件筛选   参数 含义    &lt;source&gt; 源目录路径（必填）   &lt;destination&gt; 目标目录路径（必填）   &lt;file&gt; 要操作的文件名或通配符（如 *.dll、config.ini），可选   /S 复制非空子目录   /E 复制子目录，包括空的（推荐替代 /S）   /A 只复制带存档属性的文件，并保留存档属性   /M 只复制带存档属性的文件，复制完后清除存档属性（适合增量备份）   /LEV:n 只复制源...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pi Agent Windows 使用指南（含火山引擎模型配置）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Pi Agent Windows 使用指南（含火山引擎模型配置）</div></div><div class="info-2"><div class="info-item-1">Pi Agent Windows 使用指南（含火山引擎模型配置） 本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。Pi 官方文档：https://pi.dev ｜ npm 包：@earendil-works/pi-coding-agent   目录 一、Pi Agent 是什么 二、Windows 环境准备 三、安装 Pi 四、配置目录结构 五、配置火山引擎模型（核心） 5.1 准备工作 5.2 模型对照表 5.3 让另一个 Pi Agent 自动配置   六、日常使用 七、开启思考模式（可选） 八、常见问题排查   一、Pi Agent 是什么Pi 是一个极简的终端编程智能体框架（terminal coding agent harness）。它默认提供 read、write、edit、bash 四个工具，让大模型在你的本地完成读写文件、执行命令等开发任务。 它的特点是：  极简内核 + 强扩展：通过 Skills、Extensions、Prompt Templates、Themes 自定义工作流。 多 Pro...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4"><span class="toc-number">1.</span> <span class="toc-text">Windows脚本命令</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E5%A4%B9%E7%AE%A1%E7%90%86"><span class="toc-number">1.0.1.</span> <span class="toc-text">文件夹管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%96%87%E4%BB%B6%E7%AE%A1%E7%90%86"><span class="toc-number">1.0.2.</span> <span class="toc-text">文件管理</span></a></li><li class="toc-item toc-level-4"><a class="toc-link"><span class="toc-number">1.0.3.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%BD%91%E7%BB%9C%E5%91%BD%E4%BB%A4"><span class="toc-number">1.0.4.</span> <span class="toc-text">网络命令</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#-1"><span class="toc-number">1.0.5.</span> <span class="toc-text"></span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F%E7%AE%A1%E7%90%86"><span class="toc-number">1.0.6.</span> <span class="toc-text">系统管理</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Windows-Batch-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">2.</span> <span class="toc-text">Windows Batch 常用命令</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

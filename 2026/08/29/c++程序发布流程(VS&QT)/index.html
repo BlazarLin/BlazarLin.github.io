@@ -1,0 +1,219 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>c++程序发布流程(VS&amp;QT) | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="一、QT环境  打开终端Qt 5.11.1 64-bit for Desktop (MSVC 2017)或系统的cmd 切换到程序运行盘符:E，cd到要打包exe的目录下 执行命令 windeployqt XXX.exe，则会生成QT环境；  在程序运行目录下 二、其他环境  打开终端适用于 VS 2017 的 x64 本机工具命令提示 切换到程序目录，执行命令dumpbin &#x2F;IMPORTS X">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++程序发布流程(VS&amp;QT)">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&QT)/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="一、QT环境  打开终端Qt 5.11.1 64-bit for Desktop (MSVC 2017)或系统的cmd 切换到程序运行盘符:E，cd到要打包exe的目录下 执行命令 windeployqt XXX.exe，则会生成QT环境；  在程序运行目录下 二、其他环境  打开终端适用于 VS 2017 的 x64 本机工具命令提示 切换到程序目录，执行命令dumpbin &#x2F;IMPORTS X">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.246Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.246Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="部署配置">
+<meta property="article:tag" content="QT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "c++程序发布流程(VS&QT)",
+  "url": "https://blazarlin.github.io/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&QT)/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.246Z",
+  "dateModified": "2026-08-29T02:19:37.246Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&amp;QT)/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'c++程序发布流程(VS&QT)',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">c++程序发布流程(VS&amp;QT)</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">c++程序发布流程(VS&amp;QT)</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.246Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.246Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>一、QT环境</p>
+<ul>
+<li>打开终端<code>Qt 5.11.1 64-bit for Desktop (MSVC 2017)</code>或系统的<code>cmd</code></li>
+<li>切换到程序运行盘符<code>:E</code>，cd到要打包exe的目录下</li>
+<li>执行命令 <code>windeployqt XXX.exe</code>，则会生成QT环境；</li>
+</ul>
+<p>在程序运行目录下</p>
+<p>二、其他环境</p>
+<ul>
+<li>打开终端<code>适用于 VS 2017 的 x64 本机工具命令提示</code></li>
+<li>切换到程序目录，执行命令<code>dumpbin /IMPORTS XXX.exe&gt;output.txt</code>导出依赖；</li>
+<li>使用<code>everything</code>将查找到的*.dll拷贝到程序目录</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&amp;QT)/">https://blazarlin.github.io/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&amp;QT)/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE/">部署配置</a><a class="post-meta__tags" href="/tags/QT/">QT</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/c++%E7%BA%BF%E7%A8%8B%E7%94%A8%E6%B3%95/" title="c++线程用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">c++线程用法</div></div><div class="info-2"><div class="info-item-1">当前最常用的几个线程库1、c++官方&lt;thread&gt;，使用的函数类std::thread2、QT的QThread类3、Windows API ::CreateThread std::threadlambda写法1234567891011121314int nInputValue1 = 10;//输入的形参1int nInputValue2 = 20;//输入的形参2// 线程函数声明std::thread testCppThread([&amp;](int nVal1,int nVal2) &#123;    // 逻辑代码    for (int i = 0; i &lt; nVal1; i++)    &#123;        std::this_thread::sleep_for(std::chrono::milliseconds(100));    &#125;    &#125;, nInputValue1, nInputValue1);testCppThread.detach();		// 后台执行，立即执行后续代码// testCppThread.jo...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="c++智能指针"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">c++智能指针</div></div><div class="info-2"><div class="info-item-1">c++智能指针std::shared_ptr std::weak_ptr std::unique_ptr 一、shared_ptr最常用的只能指针类，具有自动delete对象，引用计数等功能。 头文件 1#include &lt;memory&gt; 构造方法 123456// 较优auto smart_ptr = std::make_shared&lt;int&gt;();// 不推荐auto p1 = new int;std::shared_ptr&lt;int&gt; smart_ptr2(p1);  返回裸指针 12auto smart_ptr = std::make_shared&lt;int&gt;();auto originPtr = smart_ptr.get();  shared_ptr模板类常用成员方法   成员方法名 功 能    operator&#x3D;() 重载赋值号，使得同一类型的 shared_ptr 智能指针可以相互赋值。   operator*() 重载 * 号，获取当前 shared_ptr 智能指针对象指向的数据。   operator-...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/PC%E8%B0%83%E7%94%A8NVIDIA%E6%98%BE%E5%8D%A1%E7%9B%B8%E5%85%B3%E8%AE%BE%E7%BD%AE/" title="PC调用NVIDIA显卡相关设置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">PC调用NVIDIA显卡相关设置</div></div><div class="info-2"><div class="info-item-1">一、操作步骤1、 移动依赖文件至&lt;C:\Windows\System32&gt; 2、 安装显卡驱动 3、 解压视觉软件至&lt;C:\PA\Release&gt; 4、 设置页面文件大小与显卡高性能设置 二、设置页面文件大小在自主训练软件下需要虚拟内存，需要进行以下设置。 1、 右击此电脑，点击高级系统设置； 2、 在弹出的系统属性中，选择高级，(性能)设置； 3、 在弹出的性能选项中，选择高级，点击(虚拟内存)更改； 4、 不勾选自动管理所有驱动器的分页大小，依次点击每个盘符，选择为系统管理的大小，并单击设置，最后点击确认。若提示电脑需要重启则重新启动。 三、安装显卡驱动，设置显卡高性能要求系统在固定时间内实时响应，但是当前win10系统下，会自动根据负载调整CPU和GPU运行频率，导致算法执行时间波动非常大。 5、 点击win，搜索NVIDIA Control Panel 6、 通过预览调整图像设置 - 使用我的优先选择 - 侧重于 - 性能 - 应用，保存设置 7、 管理 3D 设置：将电源管理模式设置为最高性能优先，点击“应用”保存设置生效。 8、 验证方式：通过...</div></div></div></a><a class="pagination-related" href="/2026/08/29/QT%E6%BA%90%E7%A0%81%E8%B0%83%E8%AF%95/" title="Qt 源码调试与 PDB 配置指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Qt 源码调试与 PDB 配置指南</div></div><div class="info-2"><div class="info-item-1">Qt 源码调试与 PDB 配置指南 适用环境：Windows + Visual Studio 2019 + Qt 5.14.2 + MSVC 2017 64-bit（msvc2017_64）。目标：在 VS 中单步进入 Qt 源码、查看 Qt 内部变量，并正确对应调用栈行号。  1. Sources、DLL 与 PDB 的关系   名称 作用 能否单独用于 F11 进入 Qt    Qt 预编译库（Qt5Core.dll 等） 运行和链接使用的二进制 否   Qt Sources（5.14.2\Src） 与调用栈对应的源代码 否，只能手动打开源码对照   Debug Information &#x2F; PDB DLL 对应的符号与源码映射信息 是，但还需配置源码路径   仅安装 C:\Qt\Qt5.14.2\5.14.2\Src 不够。要从 DLL 调用栈进入 Qt 源码，必须同时准备与当前 kit 严格匹配的 PDB。 以下三项必须一致：  Qt 小版本，例如 5.14.2，不能混用 5.14.1 的 PDB； 编译器套件，例如 MSVC 2017 64-bit； 构建类型，...</div></div></div></a><a class="pagination-related" href="/2026/08/29/QT%E6%A0%B7%E5%BC%8F%E8%AE%BE%E7%BD%AE%E5%A4%87%E5%BF%98qss/" title="QT样式qss设置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">QT样式qss设置</div></div><div class="info-2"><div class="info-item-1">QT样式qss设置QLineEdit12345678910111213141516171819202122232425262728293031323334353637QLineEdit &#123;	border: 1px solid #A0A0A0; /* 边框宽度为1px，颜色为#A0A0A0 */	border-radius: 3px; /* 边框圆角 */	padding-left: 5px; /* 文本距离左边界有5px */	background-color: #F2F2F2; /* 背景颜色 */	color: #A0A0A0; /* 文本颜色 */	selection-background-color: #A0A0A0; /* 选中文本的背景颜色 */	selection-color: #F2F2F2; /* 选中文本的颜色 */	font-family: &quot;Microsoft YaHei&quot;; /* 文本字体族 */	font-size: 20pt; /* 文本字体大小 */&#125;QLineEdit:hover &#123; /* 鼠标悬...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

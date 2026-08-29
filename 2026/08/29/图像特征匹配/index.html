@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>图像特征匹配 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="模板匹配、特征点匹配、相位法 一、模板匹配 二、 特征点匹配 特征点检测：SIFT、ORB、SURF  SIFT（尺度不变）：精度高，计算量大。 ORB（二进制）：速度快，适合实时应用。 SURF（加速版SIFT）：平衡速度与精度。  匹配方法：暴力匹配、FLANN  暴力匹配（Brute-Force）：逐对比较，精度高但速度慢。 FLANN（近似最近邻）：适合大规模数据，需根据描述子类型调整参数">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像特征匹配">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="模板匹配、特征点匹配、相位法 一、模板匹配 二、 特征点匹配 特征点检测：SIFT、ORB、SURF  SIFT（尺度不变）：精度高，计算量大。 ORB（二进制）：速度快，适合实时应用。 SURF（加速版SIFT）：平衡速度与精度。  匹配方法：暴力匹配、FLANN  暴力匹配（Brute-Force）：逐对比较，精度高但速度慢。 FLANN（近似最近邻）：适合大规模数据，需根据描述子类型调整参数">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.250Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.250Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="图像处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "图像特征匹配",
+  "url": "https://blazarlin.github.io/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.250Z",
+  "dateModified": "2026-08-29T02:19:37.250Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '图像特征匹配',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">图像特征匹配</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">图像特征匹配</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.250Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.250Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>模板匹配、特征点匹配、相位法</p>
+<p>一、模板匹配</p>
+<p>二、 特征点匹配</p>
+<p>特征点检测：SIFT、ORB、SURF</p>
+<ul>
+<li><strong>SIFT</strong>（尺度不变）：精度高，计算量大。</li>
+<li><strong>ORB</strong>（二进制）：速度快，适合实时应用。</li>
+<li><strong>SURF</strong>（加速版SIFT）：平衡速度与精度。</li>
+</ul>
+<p>匹配方法：暴力匹配、FLANN</p>
+<ul>
+<li><strong>暴力匹配（Brute-Force）</strong>：逐对比较，精度高但速度慢。</li>
+<li><strong>FLANN</strong>（近似最近邻）：适合大规模数据，需根据描述子类型调整参数（如KD树用于浮点，LSH用于二进制）。</li>
+</ul>
+<p>SIFT描述子是基于梯度的方向直方图，而ORB用的是二进制描述子，比如BRIEF。二进制描述子的优势是计算速度快，因为比较的是二进制位的差异，可以用汉明距离来衡量相似性。而像SIFT这样的浮点型描述子，则用欧氏距离。这可能影响匹配的速度和准确性。</p>
+<p>三、相位法</p>
+<p>两幅图像在空域的平移对应频域的相位差，通过计算两幅傅里叶图像的互功率谱（Cross Power Spectrum），相位差会表现为一个脉冲峰值，其位置即为位移量。</p>
+<p>输入2张刚性平移的图像：<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/phase_img.png" alt="phase_img"></p>
+<p>输出偏移坐标：(-0.27,4.89)</p>
+<p>WIKI解释：<a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Phase_correlation">https://en.wikipedia.org/wiki/Phase_correlation</a></p>
+<p>CV源码分析phasecorr.cpp</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">cv::Point2d <span class="title">cv::phaseCorrelate</span><span class="params">(InputArray _src1, InputArray _src2, InputArray _window, <span class="type">double</span>* response)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">CV_INSTRUMENT_REGION</span>();</span><br><span class="line"></span><br><span class="line">    Mat src1 = _src1.<span class="built_in">getMat</span>();</span><br><span class="line">    Mat src2 = _src2.<span class="built_in">getMat</span>();</span><br><span class="line">    Mat window = _window.<span class="built_in">getMat</span>();</span><br><span class="line"></span><br><span class="line">    <span class="built_in">CV_Assert</span>( src1.<span class="built_in">type</span>() == src2.<span class="built_in">type</span>());</span><br><span class="line">    <span class="built_in">CV_Assert</span>( src1.<span class="built_in">type</span>() == CV_32FC1 || src1.<span class="built_in">type</span>() == CV_64FC1 );</span><br><span class="line">    <span class="built_in">CV_Assert</span>( src1.size == src2.size);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(!window.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">CV_Assert</span>( src1.<span class="built_in">type</span>() == window.<span class="built_in">type</span>());</span><br><span class="line">        <span class="built_in">CV_Assert</span>( src1.size == window.size);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> M = <span class="built_in">getOptimalDFTSize</span>(src1.rows);</span><br><span class="line">    <span class="type">int</span> N = <span class="built_in">getOptimalDFTSize</span>(src1.cols);</span><br><span class="line"></span><br><span class="line">    Mat padded1, padded2, paddedWin;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(M != src1.rows || N != src1.cols)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">copyMakeBorder</span>(src1, padded1, <span class="number">0</span>, M - src1.rows, <span class="number">0</span>, N - src1.cols, BORDER_CONSTANT, Scalar::<span class="built_in">all</span>(<span class="number">0</span>));</span><br><span class="line">        <span class="built_in">copyMakeBorder</span>(src2, padded2, <span class="number">0</span>, M - src2.rows, <span class="number">0</span>, N - src2.cols, BORDER_CONSTANT, Scalar::<span class="built_in">all</span>(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(!window.<span class="built_in">empty</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">copyMakeBorder</span>(window, paddedWin, <span class="number">0</span>, M - window.rows, <span class="number">0</span>, N - window.cols, BORDER_CONSTANT, Scalar::<span class="built_in">all</span>(<span class="number">0</span>));</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        padded1 = src1;</span><br><span class="line">        padded2 = src2;</span><br><span class="line">        paddedWin = window;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    Mat FFT1, FFT2, P, Pm, C;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// perform window multiplication if available</span></span><br><span class="line">    <span class="keyword">if</span>(!paddedWin.<span class="built_in">empty</span>())</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// apply window to both images before proceeding...</span></span><br><span class="line">        <span class="built_in">multiply</span>(paddedWin, padded1, padded1);</span><br><span class="line">        <span class="built_in">multiply</span>(paddedWin, padded2, padded2);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// execute phase correlation equation</span></span><br><span class="line">    <span class="comment">// Reference: http://en.wikipedia.org/wiki/Phase_correlation</span></span><br><span class="line">    <span class="built_in">dft</span>(padded1, FFT1, DFT_REAL_OUTPUT);</span><br><span class="line">    <span class="built_in">dft</span>(padded2, FFT2, DFT_REAL_OUTPUT);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">mulSpectrums</span>(FFT1, FFT2, P, <span class="number">0</span>, <span class="literal">true</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">magSpectrums</span>(P, Pm);</span><br><span class="line">    <span class="built_in">divSpectrums</span>(P, Pm, C, <span class="number">0</span>, <span class="literal">false</span>); <span class="comment">// FF* / |FF*| (phase correlation equation completed here...)</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">idft</span>(C, C); <span class="comment">// gives us the nice peak shift location...</span></span><br><span class="line"></span><br><span class="line">    <span class="built_in">fftShift</span>(C); <span class="comment">// shift the energy to the center of the frame.</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// locate the highest peak</span></span><br><span class="line">    Point peakLoc;</span><br><span class="line">    <span class="built_in">minMaxLoc</span>(C, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="literal">NULL</span>, &amp;peakLoc);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get the phase shift with sub-pixel accuracy, 5x5 window seems about right here...</span></span><br><span class="line">    Point2d t;</span><br><span class="line">    t = <span class="built_in">weightedCentroid</span>(C, peakLoc, <span class="built_in">Size</span>(<span class="number">5</span>, <span class="number">5</span>), response);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// max response is M*N (not exactly, might be slightly larger due to rounding errors)</span></span><br><span class="line">    <span class="keyword">if</span>(response)</span><br><span class="line">        *response /= M*N;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// adjust shift relative to image center...</span></span><br><span class="line">    <span class="function">Point2d <span class="title">center</span><span class="params">((<span class="type">double</span>)padded1.cols / <span class="number">2.0</span>, (<span class="type">double</span>)padded1.rows / <span class="number">2.0</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> (center - t);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>注意上述源码中的<code>fftShift(C); // shift the energy to the center of the frame.</code>，同时也在halcon demo(phase_correlation_fft)中发现对反傅里叶变换之后的图像进行平移cyclic_shift_image，略有困惑对其展开分析</p>
+<p>平移前后对比度（对角线上的像素区域互换了）</p>
+<p><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/cpmpare_phase.png" alt="cpmpare_phase"></p>
+<p>halcon解释cyclic shift image做的原因：<br>Since the phase correlation is cyclic, negative translations result in peaks in lower or right part of the image. If the translation is close 0 in one or two directions, the interpolation in local_max_sub_pix would therefore access wrong values because of its border treatment (which is not cyclic). To obtain a translation that is correct in all cases, we shift the phase correlation cyclically so that a zero translation corresponds to the center of the image. We then correct the coordinates returned by local_max_sub_pix.</p>
+<h3 id="1-相位相关的循环性"><a href="#1-相位相关的循环性" class="headerlink" title="1. 相位相关的循环性"></a>1. <strong>相位相关的循环性</strong></h3><p>相位相关法通过傅里叶变换计算图像的平移量。由于傅里叶变换的<strong>周期性</strong>，相位相关结果（峰值位置）是<strong>循环的</strong>。例如：</p>
+<ul>
+<li><strong>负平移</strong>（如向左或向上移动）会表现为峰值出现在图像的<strong>右侧或底部</strong>（即循环移位后的等效位置）。</li>
+<li><strong>零平移</strong>对应的峰值本应在原点（如左上角），但直接处理可能导致边界问题。</li>
+</ul>
+<h3 id="2-local-max-sub-pix的边界问题"><a href="#2-local-max-sub-pix的边界问题" class="headerlink" title="2. local_max_sub_pix的边界问题"></a>2. <strong>local_max_sub_pix的边界问题</strong></h3><p><code>local_max_sub_pix</code>用于亚像素级峰值定位，但其默认的<strong>边界处理方式（如补零或镜像）不是循环的</strong>。当峰值靠近图像边缘时（如平移接近0），插值会访问无效的边界外像素，导致错误。</p>
+<h3 id="3-Halcon的解决方案：循环移位相位相关图"><a href="#3-Halcon的解决方案：循环移位相位相关图" class="headerlink" title="3. Halcon的解决方案：循环移位相位相关图"></a>3. Halcon的解决方案：循环移位相位相关图</h3><ul>
+<li><strong>步骤1：将相位相关结果循环移位</strong><br>将零平移对应的峰值从原点（如左上角）移到图像<strong>中心</strong>。例如，通过<code>fftshift</code>操作，使得零平移的峰值位于<code>(width/2, height/2)</code>。</li>
+<li><strong>步骤2：在移位后的图中定位峰值</strong><br>此时，无论实际平移是正负，峰值都会远离边缘。例如，平移<code>(-10, -5)</code>的峰值会出现在中心附近的<code>(width/2-10, height/2-5)</code>，而非靠近边界的<code>(width-10, height-5)</code>。</li>
+<li><strong>步骤3：修正坐标</strong><br>将<code>local_max_sub_pix</code>返回的中心坐标系下的峰值坐标，转换为原始坐标系下的实际平移量。例如，若中心为<code>(Cx, Cy)</code>，找到的峰值为<code>(Px, Py)</code>，实际平移为<code>(Px - Cx, Py - Cy)</code>。</li>
+</ul>
+<h3 id="4-关键操作示例"><a href="#4-关键操作示例" class="headerlink" title="4. 关键操作示例"></a>4. <strong>关键操作示例</strong></h3><p>假设图像尺寸为<code>512x512</code>：</p>
+<ul>
+<li><strong>原始相位相关图</strong>：零平移峰值在<code>(0,0)</code>。</li>
+<li><strong>循环移位后</strong>：零平移峰值移至中心<code>(256,256)</code>。</li>
+<li><strong>平移</strong><code>(-10, -5)</code>的峰值：移位后位于<code>(256-10, 256-5) = (246,251)</code>。</li>
+<li><strong>修正坐标</strong>：平移量为<code>(246-256, 251-256) = (-10, -5)</code>。</li>
+</ul>
+<h3 id="5-总结"><a href="#5-总结" class="headerlink" title="5. 总结"></a>5. <strong>总结</strong></h3><ul>
+<li><strong>循环移位</strong>：避免峰值靠近边界，确保插值有效。</li>
+<li><strong>坐标修正</strong>：将中心坐标系转换回实际平移量。</li>
+</ul>
+<p>通过这种方式，Halcon确保了在所有情况下（包括零平移附近）都能正确计算平移量。</p>
+<p>时效性：50*50：3ms i7-9700k</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/">https://blazarlin.github.io/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c++</a><a class="post-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/%E6%95%B0%E6%8D%AE%E6%8B%9F%E5%90%88%E6%96%B9%E6%B3%95/" title="数据拟合方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">数据拟合方法</div></div><div class="info-2"><div class="info-item-1">以拟合直线为例，分析总结几种方法，有最小二乘法、Ransac、Tukey、Huber。  最小二乘法(Least Squares Method)一种常用的参数估计方法，用于拟合数据点集到一个数学模型。它的目标是找到最优参数，使得模型预测值与实际观测值之间的残差平方和最小化。在直线拟合问题中，最小二乘法可以用于找到最优的斜率和截距，使得直线与数据点的残差平方和最小化。最小二乘法的优点是简单直观，但对异常值敏感。demo1 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;cmath&gt;// 直线结构体，包含斜率和截距struct Line &#123;    double slope;    double intercept;&#125;;// 最小二乘法直线拟合Line leastSquaresRegression...</div></div></div></a><a class="pagination-related" href="/2026/08/29/%E5%91%BD%E4%BB%A4%E8%A1%8C%E9%80%9F%E6%9F%A5/" title="命令行速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">命令行速查</div></div><div class="info-2"><div class="info-item-1">virtualenvs虚拟环境配置安装虚拟环境依赖先安装虚拟环境的依赖库： 123sudo pip install virtualenvsudo pip install virtualenvwrapper(virtualenvwrapper-win  创建虚拟环境管理目录： 1mkdir ~/.virtualenvssudo vim ~/.bashrc#在.bashrc的末尾增加下面两行内容export WORKON_HOME=$HOME/.virtualenvs  # 所有虚拟环境存储的目录source /usr/local/bin/virtualenvwrapper.sh #激活虚拟环境source ~/.bashrc #激活  创建虚拟环境123456789&gt;&gt;&gt;mkvirtualenv new_vir --python=python3#创建新的虚拟环境为new_vir# todo&gt;&gt;&gt;mkvirtualenv -p /usr/bin/python3 new_vir #制定虚拟环境的python为local的python3&gt;&gt;...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/260731%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8B%86%E8%A7%A3%E5%88%86%E6%9E%90/" title="常用正则表达式逐段拆解分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">常用正则表达式逐段拆解分析</div></div><div class="info-2"><div class="info-item-1">常用正则表达式逐段拆解分析 本文档逐段拆解 8 个常用正则表达式，所有”匹配&#x2F;不匹配”示例均经过 Python re 实测验证。适用场景：日志解析、表单校验、数据提取。配套 C++ 原始字符串 R&quot;(...)&quot; 与 Python r&#39;...&#39; 用法说明见末尾。   目录 时间 HH:MM:SS（24 小时制） IPv4 地址 中国大陆手机号 电子邮箱 日期 YYYY-MM-DD URL 身份证号（18 位） 十六进制颜色码 语法速查表 通用坑与最佳实践   1. 时间 HH:MM:SS（24 小时制）正则 1((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)  逐段拆解 12345678910(                          捕获组1：包住整个时间  (?:                      非捕获组：小时部分      [01]\d               00 ~ 19（首位 0 或 1 + 任意数字）      | 2[0-3]             20 ~ 23（首位 2...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++move%E7%94%A8%E6%B3%95/" title="c++move用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++move用法</div></div><div class="info-2"><div class="info-item-1">1、区分左值与右值的区别左值与右值的根本区别在于是否允许取地址&amp;运算符获得对应的内存地址。变量可以取地址，所以是左值，但是常量和临时对象等不可以取地址，所以是右值。 左值是表达式结束后依然存在的持久对象(代表一个在内存中占有确定位置的对象)。右值是表达式结束时不再存在的临时对象(不在内存中占有确定位置的表达式）。 所有的具名变量或者对象都是左值，而右值不具名。 对表达式取地址，如果能，则为左值，否则为右值。 常见的右值：“abc”,123等都是右值。 右值引用，可以延长右值的生命周期 123int&amp;&amp; i = 123;int&amp;&amp; j = std::move(i);int&amp;&amp; k = i;//编译不过，这里i是一个左值，右值引用只能引用右值    2、Move用法1 转移所有权​		将快要销毁的对象转移给其他变量，这样可以继续使用这个对象，而不必再创建一个一样的对象，省去了创建新的一样内容的对象，也就提高了性能。 1234567891011121314151617181920// move example#include &l...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E4%BD%BF%E7%94%A8pdb%E4%BF%A1%E6%81%AF%E5%A4%8D%E7%8E%B0%E5%B4%A9%E6%BA%83%E4%BD%8D%E7%BD%AE/" title="c++使用pdb信息复现崩溃位置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++使用pdb信息复现崩溃位置</div></div><div class="info-2"><div class="info-item-1">c++使用pdb信息复现崩溃位置条件：发布程序时保留对应版本的pdb文件 复现步骤： 1、拷贝崩溃产生的dmp文件  2、使用vs2017打开dmp，这里能够大致看到崩溃信息  3、在设置符号调试内，勾选Microsoft符号调试器与软甲同版本的pdb文件列表，且要加载排除模块外的所有模块，配置好后点击确认  4、创建崩溃程序的同路径同版本程序，在右侧操作栏，点击使用仅限本机进行调试； 工程建立新分支回退到崩溃程序的相同版本(若不进行此操作，复现的崩溃位置不正确)； (首次加载符号需要从微软自动下载pdb文件，科学上网加快速度)等待后就可以看到崩溃位置源码与堆栈信息； </div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E7%BA%BF%E7%A8%8B%E7%94%A8%E6%B3%95/" title="c++线程用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++线程用法</div></div><div class="info-2"><div class="info-item-1">当前最常用的几个线程库1、c++官方&lt;thread&gt;，使用的函数类std::thread2、QT的QThread类3、Windows API ::CreateThread std::threadlambda写法1234567891011121314int nInputValue1 = 10;//输入的形参1int nInputValue2 = 20;//输入的形参2// 线程函数声明std::thread testCppThread([&amp;](int nVal1,int nVal2) &#123;    // 逻辑代码    for (int i = 0; i &lt; nVal1; i++)    &#123;        std::this_thread::sleep_for(std::chrono::milliseconds(100));    &#125;    &#125;, nInputValue1, nInputValue1);testCppThread.detach();		// 后台执行，立即执行后续代码// testCppThread.jo...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260713-condition_variable%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B/" title="std::condition_variable 使用简介"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">std::condition_variable 使用简介</div></div><div class="info-2"><div class="info-item-1">std::condition_variable 使用简介 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景下的线程间事件同步原语。   TL;DR（一句话）std::condition_variable 是 线程间”事件通知”原语，必须和 std::mutex 配合使用；核心是 wait(lock, predicate) + notify_one / notify_all；工程铁律是 wait 一律带 predicate，notify 时机先 lock 改状态、解锁、再 notify。  What：它是什么、为什么需要它 让一个或多个线程在条件不满足时阻塞休眠，被通知后再醒过来检查条件。 必须与 std::mutex 搭配：mutex 保护”条件 + 数据”，cv 负责”先放手把锁让出来去睡，被叫醒再回来抢锁”。  三件替代品都做不到的事：  消费者若用 while (!cond) &#123; sleep(1ms); &#125; —— 浪费 CPU，延迟还不可控。 sem_t 没有”条件”语义。 QWaitCondition（Qt）等价...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="c++智能指针"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++智能指针</div></div><div class="info-2"><div class="info-item-1">c++智能指针std::shared_ptr std::weak_ptr std::unique_ptr 一、shared_ptr最常用的只能指针类，具有自动delete对象，引用计数等功能。 头文件 1#include &lt;memory&gt; 构造方法 123456// 较优auto smart_ptr = std::make_shared&lt;int&gt;();// 不推荐auto p1 = new int;std::shared_ptr&lt;int&gt; smart_ptr2(p1);  返回裸指针 12auto smart_ptr = std::make_shared&lt;int&gt;();auto originPtr = smart_ptr.get();  shared_ptr模板类常用成员方法   成员方法名 功 能    operator&#x3D;() 重载赋值号，使得同一类型的 shared_ptr 智能指针可以相互赋值。   operator*() 重载 * 号，获取当前 shared_ptr 智能指针对象指向的数据。   operator-...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%85%B3%E7%9A%84%E5%BE%AA%E7%8E%AF%E6%80%A7"><span class="toc-number">1.</span> <span class="toc-text">1. 相位相关的循环性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-local-max-sub-pix%E7%9A%84%E8%BE%B9%E7%95%8C%E9%97%AE%E9%A2%98"><span class="toc-number">2.</span> <span class="toc-text">2. local_max_sub_pix的边界问题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-Halcon%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%9A%E5%BE%AA%E7%8E%AF%E7%A7%BB%E4%BD%8D%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%85%B3%E5%9B%BE"><span class="toc-number">3.</span> <span class="toc-text">3. Halcon的解决方案：循环移位相位相关图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-%E5%85%B3%E9%94%AE%E6%93%8D%E4%BD%9C%E7%A4%BA%E4%BE%8B"><span class="toc-number">4.</span> <span class="toc-text">4. 关键操作示例</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-%E6%80%BB%E7%BB%93"><span class="toc-number">5.</span> <span class="toc-text">5. 总结</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

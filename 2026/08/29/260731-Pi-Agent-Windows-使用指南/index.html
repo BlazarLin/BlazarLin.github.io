@@ -1,0 +1,577 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Pi Agent Windows 使用指南（含火山引擎模型配置） | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Pi Agent Windows 使用指南（含火山引擎模型配置） 本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。Pi 官方文档：https:&#x2F;&#x2F;pi.dev ｜ npm 包：@earendil-works&#x2F;pi-coding-agent   目录 一、Pi Agent 是什么 二、Windows 环境准备 三、安装 Pi 四、">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Pi Agent Windows 使用指南（含火山引擎模型配置）">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="Pi Agent Windows 使用指南（含火山引擎模型配置） 本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。Pi 官方文档：https:&#x2F;&#x2F;pi.dev ｜ npm 包：@earendil-works&#x2F;pi-coding-agent   目录 一、Pi Agent 是什么 二、Windows 环境准备 三、安装 Pi 四、">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:26:57.815Z">
+<meta property="article:modified_time" content="2026-08-29T03:06:57.865Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="AI编程工具">
+<meta property="article:tag" content="Pi Agent">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Pi Agent Windows 使用指南（含火山引擎模型配置）",
+  "url": "https://blazarlin.github.io/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:26:57.815Z",
+  "dateModified": "2026-08-29T03:06:57.865Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Pi Agent Windows 使用指南（含火山引擎模型配置）',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">Pi Agent Windows 使用指南（含火山引擎模型配置）</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Pi Agent Windows 使用指南（含火山引擎模型配置）</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:26:57.815Z" title="Created 2026-08-29 10:26:57">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T03:06:57.865Z" title="Updated 2026-08-29 11:06:57">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/Agent/">Agent</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Pi-Agent-Windows-使用指南（含火山引擎模型配置）"><a href="#Pi-Agent-Windows-使用指南（含火山引擎模型配置）" class="headerlink" title="Pi Agent Windows 使用指南（含火山引擎模型配置）"></a>Pi Agent Windows 使用指南（含火山引擎模型配置）</h1><blockquote>
+<p>本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。<br>Pi 官方文档：<a target="_blank" rel="noopener" href="https://pi.dev/">https://pi.dev</a> ｜ npm 包：<code>@earendil-works/pi-coding-agent</code></p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ul>
+<li><a href="#%E4%B8%80pi-agent-%E6%98%AF%E4%BB%80%E4%B9%88">一、Pi Agent 是什么</a></li>
+<li><a href="#%E4%BA%8Cwindows-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87">二、Windows 环境准备</a></li>
+<li><a href="#%E4%B8%89%E5%AE%89%E8%A3%85-pi">三、安装 Pi</a></li>
+<li><a href="#%E5%9B%9B%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84">四、配置目录结构</a></li>
+<li><a href="#%E4%BA%94%E9%85%8D%E7%BD%AE%E7%81%AB%E5%B1%B1%E5%BC%95%E6%93%8E%E6%A8%A1%E5%9E%8B%E6%A0%B8%E5%BF%83">五、配置火山引擎模型（核心）</a><ul>
+<li><a href="#51-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C">5.1 准备工作</a></li>
+<li><a href="#52-%E6%A8%A1%E5%9E%8B%E5%AF%B9%E7%85%A7%E8%A1%A8">5.2 模型对照表</a></li>
+<li><a href="#53-%E8%AE%A9%E5%8F%A6%E4%B8%80%E4%B8%AA-pi-agent-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE">5.3 让另一个 Pi Agent 自动配置</a></li>
+</ul>
+</li>
+<li><a href="#%E5%85%AD%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8">六、日常使用</a></li>
+<li><a href="#%E4%B8%83%E5%BC%80%E5%90%AF%E6%80%9D%E8%80%83%E6%A8%A1%E5%BC%8F%E5%8F%AF%E9%80%89">七、开启思考模式（可选）</a></li>
+<li><a href="#%E5%85%AB%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5">八、常见问题排查</a></li>
+</ul>
+<hr>
+<h2 id="一、Pi-Agent-是什么"><a href="#一、Pi-Agent-是什么" class="headerlink" title="一、Pi Agent 是什么"></a>一、Pi Agent 是什么</h2><p>Pi 是一个极简的终端编程智能体框架（terminal coding agent harness）。它默认提供 <code>read</code>、<code>write</code>、<code>edit</code>、<code>bash</code> 四个工具，让大模型在你的本地完成读写文件、执行命令等开发任务。</p>
+<p>它的特点是：</p>
+<ul>
+<li><strong>极简内核 + 强扩展</strong>：通过 Skills、Extensions、Prompt Templates、Themes 自定义工作流。</li>
+<li><strong>多 Provider 支持</strong>：内置 Anthropic、OpenAI、DeepSeek、Google、Kimi、MiniMax 等几十家；不内置的（如火山引擎）可用 <code>models.json</code> 自定义接入。</li>
+<li><strong>多模式运行</strong>：交互模式（默认）、打印模式 <code>-p</code>、JSON 模式、RPC 模式、SDK 嵌入。</li>
+<li><strong>会话管理</strong>：自动保存、分支、压缩、恢复。</li>
+</ul>
+<hr>
+<h2 id="二、Windows-环境准备"><a href="#二、Windows-环境准备" class="headerlink" title="二、Windows 环境准备"></a>二、Windows 环境准备</h2><p>Pi 在 Windows 上需要一个 <strong>bash shell</strong> 来运行 <code>bash</code> 工具。推荐安装 <strong>Git for Windows</strong>（自带 Git Bash）。</p>
+<h3 id="2-1-安装-Node-js（必需，-18）"><a href="#2-1-安装-Node-js（必需，-18）" class="headerlink" title="2.1 安装 Node.js（必需，&gt;&#x3D; 18）"></a>2.1 安装 Node.js（必需，&gt;&#x3D; 18）</h3><ol>
+<li><p>前往 <a target="_blank" rel="noopener" href="https://nodejs.org/">https://nodejs.org</a> 下载 LTS 版本（建议 20+）。</p>
+</li>
+<li><p>安装时勾选 “Add to PATH”。</p>
+</li>
+<li><p>验证：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node <span class="literal">-v</span></span><br><span class="line">npm <span class="literal">-v</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h3 id="2-2-安装-Git-for-Windows（提供-bash）"><a href="#2-2-安装-Git-for-Windows（提供-bash）" class="headerlink" title="2.2 安装 Git for Windows（提供 bash）"></a>2.2 安装 Git for Windows（提供 bash）</h3><ol>
+<li><p>前往 <a target="_blank" rel="noopener" href="https://git-scm.com/download/win">https://git-scm.com/download/win</a> 下载并安装。</p>
+</li>
+<li><p>Pi 会自动检测 <code>C:\Program Files\Git\bin\bash.exe</code>。</p>
+</li>
+<li><p>验证 bash 可用：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash <span class="literal">--version</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<blockquote>
+<p>若你用 Cygwin &#x2F; MSYS2 &#x2F; WSL，也可在 <code>settings.json</code> 里指定：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span> <span class="attr">&quot;shellPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C:\\cygwin64\\bin\\bash.exe&quot;</span> <span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure></blockquote>
+<h3 id="2-3-推荐终端"><a href="#2-3-推荐终端" class="headerlink" title="2.3 推荐终端"></a>2.3 推荐终端</h3><p>建议使用 <strong>Windows Terminal</strong>（Win11 默认自带，Win10 可从 Microsoft Store 安装），对颜色、图片、快捷键支持最好。</p>
+<hr>
+<h2 id="三、安装-Pi"><a href="#三、安装-Pi" class="headerlink" title="三、安装 Pi"></a>三、安装 Pi</h2><p>打开 PowerShell 或 Windows Terminal，执行全局安装：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install <span class="literal">-g</span> <span class="literal">--ignore-scripts</span> @earendil<span class="literal">-works</span>/pi<span class="literal">-coding-agent</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>--ignore-scripts</code> 关闭依赖的安装期生命周期脚本，Pi 正常使用不需要它们。</p>
+</blockquote>
+<p>安装完成后验证：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pi <span class="literal">--version</span></span><br><span class="line">pi <span class="literal">--help</span></span><br></pre></td></tr></table></figure>
+
+<p>能看到版本号和帮助说明，即安装成功。</p>
+<p>升级 Pi：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pi update <span class="literal">--self</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="四、配置目录结构"><a href="#四、配置目录结构" class="headerlink" title="四、配置目录结构"></a>四、配置目录结构</h2><p>Pi 的配置默认存放在用户主目录下的 <code>~/.pi/agent/</code>，在 Windows 上即：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">C:\Users\&lt;你的用户名&gt;\.pi\agent\</span><br></pre></td></tr></table></figure>
+
+<p>核心文件：</p>
+<table>
+<thead>
+<tr>
+<th>文件</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>settings.json</code></td>
+<td>全局设置（默认模型、主题、思考等级、重试、压缩等）</td>
+</tr>
+<tr>
+<td><code>models.json</code></td>
+<td><strong>自定义 Provider 与模型</strong>（火山引擎就在这里配）</td>
+</tr>
+<tr>
+<td><code>auth.json</code></td>
+<td>存放 API Key &#x2F; OAuth 凭据（由 <code>/login</code> 写入，也可手写）</td>
+</tr>
+<tr>
+<td><code>keybindings.json</code></td>
+<td>自定义快捷键</td>
+</tr>
+<tr>
+<td><code>sessions/</code></td>
+<td>会话 JSONL 文件目录</td>
+</tr>
+<tr>
+<td><code>extensions/</code>、<code>skills/</code>、<code>prompts/</code>、<code>themes/</code></td>
+<td>扩展、技能、提示模板、主题</td>
+</tr>
+</tbody></table>
+<p>项目级配置可放在项目根目录的 <code>.pi/settings.json</code>，会覆盖全局设置。</p>
+<hr>
+<h2 id="五、配置火山引擎模型（核心）"><a href="#五、配置火山引擎模型（核心）" class="headerlink" title="五、配置火山引擎模型（核心）"></a>五、配置火山引擎模型（核心）</h2><p>火山引擎「方舟 Agent Plan」不是 Pi 的内置 Provider，通过 <code>~/.pi/agent/models.json</code> 自定义接入。支持两种兼容协议，<strong>任选其一</strong>：</p>
+<table>
+<thead>
+<tr>
+<th>协议</th>
+<th>Base URL</th>
+<th>Pi <code>api</code> 值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI 兼容（推荐）</td>
+<td><code>https://ark.cn-beijing.volces.com/api/coding/v3</code></td>
+<td><code>openai-completions</code></td>
+</tr>
+<tr>
+<td>Anthropic 兼容</td>
+<td><code>https://ark.cn-beijing.volces.com/api/coding</code></td>
+<td><code>anthropic-messages</code></td>
+</tr>
+</tbody></table>
+<h3 id="5-1-准备工作"><a href="#5-1-准备工作" class="headerlink" title="5.1 准备工作"></a>5.1 准备工作</h3><ol>
+<li>在 <a target="_blank" rel="noopener" href="https://console.volcengine.com/ark">火山引擎方舟控制台</a> 开通 Agent Plan，创建 API Key（形如 <code>xxxx-xxxx-xxxx</code>）。</li>
+<li>设置环境变量（避免硬编码进配置文件）：<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">setx ARK_API_KEY <span class="string">&quot;你的火山引擎API Key&quot;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><code>setx</code> 后需<strong>新开终端</strong>生效。</p>
+</blockquote>
+</li>
+</ol>
+<h3 id="5-2-模型对照表"><a href="#5-2-模型对照表" class="headerlink" title="5.2 模型对照表"></a>5.2 模型对照表</h3><blockquote>
+<p>参数来自「方舟 Agent Plan」官方文档（doc 2366394），并已与本机 pi 实际配置核对：上下文窗口按 1k&#x3D;1024 换算；最大输出 token 以 pi models.json 实际值为准（doubao-seed-2.0-lite &#x2F; minimax-m2.7 &#x2F; minimax-m3 &#x2F; glm-5.2 为 128000）。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Model Name</th>
+<th>说明</th>
+<th>上下文窗口</th>
+<th>最大输出</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>doubao-seed-2.1-turbo</code></td>
+<td>豆包 Seed 2.1 Turbo（进阶）</td>
+<td>262144 (256k)</td>
+<td>262144 (256k)</td>
+</tr>
+<tr>
+<td><code>doubao-seed-2.0-lite</code></td>
+<td>豆包 Seed 2.0 Lite（标准）</td>
+<td>262144 (256k)</td>
+<td>128000 (128k)</td>
+</tr>
+<tr>
+<td><code>minimax-m2.7</code></td>
+<td>MiniMax M2.7（进阶）</td>
+<td>204800 (200k)</td>
+<td>128000 (128k)</td>
+</tr>
+<tr>
+<td><code>minimax-m3</code></td>
+<td>MiniMax M3（进阶）</td>
+<td>524288 (512k)</td>
+<td>128000 (128k)</td>
+</tr>
+<tr>
+<td><code>glm-5.2</code>（别名 <code>glm-latest</code>）</td>
+<td>智谱 GLM 5.2（进阶）</td>
+<td>1048576 (1024k)</td>
+<td>128000 (128k)</td>
+</tr>
+<tr>
+<td><code>deepseek-v4-flash</code></td>
+<td>DeepSeek V4 Flash（标准）</td>
+<td>1048576 (1024k)</td>
+<td>393216 (384k)</td>
+</tr>
+<tr>
+<td><code>deepseek-v4-pro</code></td>
+<td>DeepSeek V4 Pro（进阶）</td>
+<td>1048576 (1024k)</td>
+<td>393216 (384k)</td>
+</tr>
+<tr>
+<td><code>kimi-k2.6</code></td>
+<td>Kimi K2.6（进阶）</td>
+<td>262144 (256k)</td>
+<td>32768 (32k)</td>
+</tr>
+<tr>
+<td><code>kimi-k2.7-code</code></td>
+<td>Kimi K2.7 Code（进阶）</td>
+<td>262144 (256k)</td>
+<td>32768 (32k)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ <strong>合规红线</strong>：Agent Plan 的 Key <strong>仅限在 AI 工具（Pi&#x2F;Claude Code&#x2F;Codex 等）中使用</strong>，裸 API 调用会被判滥用、封号。<br>ℹ️ <code>glm-5.2</code>、<code>deepseek-v4-*</code>、<code>kimi-k3</code> 支持 1M 上下文，但需在工具中按官方指引开启。官方还有 <code>doubao-seed-2.0-mini</code>、<code>doubao-seed-evolving</code>、<code>kimi-k3</code> 等模型，需要可自行加入。</p>
+</blockquote>
+<h3 id="5-3-让另一个-Pi-Agent-自动配置"><a href="#5-3-让另一个-Pi-Agent-自动配置" class="headerlink" title="5.3 让另一个 Pi Agent 自动配置"></a>5.3 让另一个 Pi Agent 自动配置</h3><p>把下面这段提示词发给另一台机器上的 Pi Agent，它就能自动完成 <code>models.json</code> + <code>settings.json</code> 的写入与验证：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">你是 Pi Agent 配置助手。请按以下步骤为本机配置火山引擎方舟 Agent Plan 模型：</span><br><span class="line"></span><br><span class="line">1. 读取环境变量 ARK_API_KEY；若未设置，提示用户先执行 `setx ARK_API_KEY &quot;你的Key&quot;` 并重开终端。</span><br><span class="line">2. 写入 ~/.pi/agent/models.json（Windows 下即 C:\Users\&lt;用户名&gt;\.pi\agent\models.json），provider key 用 volcano，baseUrl 为 https://ark.cn-beijing.volces.com/api/coding/v3，api 为 openai-completions，apiKey 用 &quot;$ARK_API_KEY&quot; 引用环境变量。</span><br><span class="line">3. models 数组按下表填入。每个模型对象完整结构如下（以 reasoning=true 模型为例）：</span><br><span class="line">   &#123;</span><br><span class="line">     &quot;id&quot;: &quot;&lt;id&gt;&quot;,</span><br><span class="line">     &quot;name&quot;: &quot;&lt;人类可读名&gt;&quot;,</span><br><span class="line">     &quot;reasoning&quot;: true,</span><br><span class="line">     &quot;input&quot;: [&quot;text&quot;],</span><br><span class="line">     &quot;contextWindow&quot;: &lt;ctx&gt;,</span><br><span class="line">     &quot;maxTokens&quot;: &lt;max&gt;,</span><br><span class="line">     &quot;cost&quot;: &#123; &quot;input&quot;: 0, &quot;output&quot;: 0, &quot;cacheRead&quot;: 0, &quot;cacheWrite&quot;: 0 &#125;,</span><br><span class="line">     &quot;compat&quot;: &#123; &quot;supportsDeveloperRole&quot;: false, &quot;thinkingFormat&quot;: &quot;deepseek&quot; &#125;,</span><br><span class="line">     &quot;thinkingLevelMap&quot;: &#123; &quot;minimal&quot;: null, &quot;low&quot;: null, &quot;medium&quot;: null, &quot;high&quot;: &quot;high&quot;, &quot;max&quot;: &quot;max&quot; &#125;</span><br><span class="line">   &#125;</span><br><span class="line">   各模型的 id / contextWindow / maxTokens / reasoning 按下表填入（name 自取可读名，如 Doubao Seed 2.1 Turbo）：</span><br><span class="line">   doubao-seed-2.1-turbo  262144  / 262144  / true</span><br><span class="line">   doubao-seed-2.0-lite   262144  / 128000  / false</span><br><span class="line">   minimax-m2.7           204800  / 128000  / true</span><br><span class="line">   minimax-m3             524288  / 128000  / true</span><br><span class="line">   glm-5.2                1048576 / 128000  / true</span><br><span class="line">   deepseek-v4-flash      1048576 / 393216  / true</span><br><span class="line">   deepseek-v4-pro        1048576 / 393216  / true</span><br><span class="line">   kimi-k2.6              262144  / 32768   / true</span><br><span class="line">   kimi-k2.7-code         262144  / 32768   / true</span><br><span class="line">   注意：doubao-seed-2.0-lite 为 reasoning=false，去掉 compat.thinkingFormat 与 thinkingLevelMap（compat 仅保留 supportsDeveloperRole:false）；其余 8 个模型保持 reasoning=true 并含上述完整字段。thinkingLevelMap 中 medium 映射为 null（不发送思考参数），仅 high→high、max→max 会启用思考。</span><br><span class="line">4. 写入 ~/.pi/agent/settings.json，设 defaultProvider=volcano、defaultModel=doubao-seed-2.1-turbo、defaultThinkingLevel=medium。</span><br><span class="line">5. 执行 `pi --list-models volcano` 验证模型已加载；再执行 `pi --provider volcano --model doubao-seed-2.1-turbo -p &quot;用一句话介绍你自己&quot;` 验证连通。</span><br><span class="line">6. 若第 5 步报未授权，检查 ARK_API_KEY 是否生效（需新开终端）；若报模型不存在，核对 id 拼写。</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>提示词给出完整模型对象模板 + 一张精确取值表（id&#x2F;上下文&#x2F;输出&#x2F;reasoning），公共字段（input&#x2F;cost&#x2F;compat&#x2F;thinkingLevelMap）只声明一次，Agent 据此即可生成与本机 pi 一致的 models.json。配置文件每次打开 <code>/model</code> 时自动重载，改完无需重启 Pi。</p>
+</blockquote>
+<hr>
+<h2 id="六、日常使用"><a href="#六、日常使用" class="headerlink" title="六、日常使用"></a>六、日常使用</h2><h3 id="6-1-启动方式"><a href="#6-1-启动方式" class="headerlink" title="6.1 启动方式"></a>6.1 启动方式</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">pi                      <span class="comment"># 交互模式（默认）</span></span><br><span class="line">pi <span class="string">&quot;列出 src 下的所有 ts 文件&quot;</span>   <span class="comment"># 带初始提示启动</span></span><br><span class="line">pi <span class="literal">-c</span>                   <span class="comment"># 继续最近一次会话</span></span><br><span class="line">pi <span class="literal">-r</span>                   <span class="comment"># 浏览并选择历史会话</span></span><br><span class="line">pi <span class="literal">-p</span> <span class="string">&quot;总结这个仓库&quot;</span>     <span class="comment"># 非交互，打印结果后退出</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="6-2-常用斜杠命令"><a href="#6-2-常用斜杠命令" class="headerlink" title="6.2 常用斜杠命令"></a>6.2 常用斜杠命令</h3><table>
+<thead>
+<tr>
+<th>命令</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/model</code></td>
+<td>切换模型（火山引擎的模型会出现在列表中）</td>
+</tr>
+<tr>
+<td><code>/login</code> <code>/logout</code></td>
+<td>管理凭据</td>
+</tr>
+<tr>
+<td><code>/settings</code></td>
+<td>调整思考等级、主题、传输方式等</td>
+</tr>
+<tr>
+<td><code>/new</code></td>
+<td>新建会话</td>
+</tr>
+<tr>
+<td><code>/resume</code></td>
+<td>恢复历史会话</td>
+</tr>
+<tr>
+<td><code>/tree</code></td>
+<td>会话树导航&#x2F;分支</td>
+</tr>
+<tr>
+<td><code>/compact</code></td>
+<td>手动压缩上下文</td>
+</tr>
+<tr>
+<td><code>/session</code></td>
+<td>查看当前会话信息（ID、token、花费）</td>
+</tr>
+<tr>
+<td><code>/hotkeys</code></td>
+<td>查看所有快捷键</td>
+</tr>
+<tr>
+<td><code>/quit</code></td>
+<td>退出</td>
+</tr>
+</tbody></table>
+<h3 id="6-3-常用快捷键"><a href="#6-3-常用快捷键" class="headerlink" title="6.3 常用快捷键"></a>6.3 常用快捷键</h3><table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>Ctrl+L</code></td>
+<td>打开模型选择器</td>
+</tr>
+<tr>
+<td><code>Ctrl+P</code> &#x2F; <code>Shift+Ctrl+P</code></td>
+<td>在限定模型间循环切换</td>
+</tr>
+<tr>
+<td><code>Shift+Tab</code></td>
+<td>切换思考等级</td>
+</tr>
+<tr>
+<td><code>Ctrl+C</code></td>
+<td>清空编辑器（连按两次退出）</td>
+</tr>
+<tr>
+<td><code>Esc</code></td>
+<td>取消&#x2F;中止（连按两次打开 <code>/tree</code>）</td>
+</tr>
+<tr>
+<td><code>Shift+Enter</code></td>
+<td>换行（Windows Terminal 下用 <code>Ctrl+Enter</code>）</td>
+</tr>
+<tr>
+<td><code>Ctrl+G</code></td>
+<td>打开外部编辑器（默认 Notepad）</td>
+</tr>
+<tr>
+<td><code>Ctrl+O</code></td>
+<td>折叠&#x2F;展开工具输出</td>
+</tr>
+<tr>
+<td><code>Ctrl+X</code></td>
+<td>复制上一条助手消息</td>
+</tr>
+</tbody></table>
+<h3 id="6-4-编辑器技巧"><a href="#6-4-编辑器技巧" class="headerlink" title="6.4 编辑器技巧"></a>6.4 编辑器技巧</h3><ul>
+<li>输入 <code>@</code> 模糊搜索并引用项目文件。</li>
+<li><code>Tab</code> 补全路径。</li>
+<li><code>!命令</code> 执行 bash 命令并把输出发给模型；<code>!!命令</code> 执行但不发送。</li>
+<li><code>Ctrl+V</code>（Windows 上用 <code>Alt+V</code>）粘贴文本或图片，也可把图片拖到终端。</li>
+</ul>
+<h3 id="6-5-上下文文件"><a href="#6-5-上下文文件" class="headerlink" title="6.5 上下文文件"></a>6.5 上下文文件</h3><p>在项目根目录放 <code>AGENTS.md</code>（或 <code>CLAUDE.md</code>），Pi 启动时会自动加载，用于写项目约定、常用命令等。也可放全局的 <code>~/.pi/agent/AGENTS.md</code>。</p>
+<hr>
+<h2 id="七、开启思考模式（可选）"><a href="#七、开启思考模式（可选）" class="headerlink" title="七、开启思考模式（可选）"></a>七、开启思考模式（可选）</h2><p>火山引擎的 DeepSeek V4 Pro、豆包 Seed 系列等支持「深度思考」。若要让 Pi 给这些模型发送思考参数，在 <code>models.json</code> 对应模型上加 <code>&quot;reasoning&quot;: true</code>：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;id&quot;</span><span class="punctuation">:</span> <span class="string">&quot;deepseek-v4-pro&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;DeepSeek V4 Pro&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;reasoning&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;input&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;text&quot;</span><span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;contextWindow&quot;</span><span class="punctuation">:</span> <span class="number">1048576</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;maxTokens&quot;</span><span class="punctuation">:</span> <span class="number">393216</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后用 <code>Shift+Tab</code> 切换思考等级（off &#x2F; minimal &#x2F; low &#x2F; medium &#x2F; high）。</p>
+<blockquote>
+<p><strong>注意</strong>：思考参数的具体格式取决于火山引擎接口的实现。若开启后出现参数不被接受的报错，可：</p>
+<ul>
+<li>保持 <code>reasoning: true</code>，并在模型上添加 <code>compat</code> 字段微调（OpenAI 协议下常用 <code>thinkingFormat</code>，例如 <code>&quot;deepseek&quot;</code>、<code>&quot;qwen&quot;</code> 等，详见 Pi 文档 <a target="_blank" rel="noopener" href="https://pi.dev/docs/models">models.md</a> 的 <em>OpenAI Compatibility</em> 一节）；</li>
+<li>或暂时去掉 <code>reasoning</code>，先保证基本对话&#x2F;工具调用可用。</li>
+</ul>
+<p>具体兼容性以火山引擎编程智能体官方文档为准。</p>
+</blockquote>
+<hr>
+<h2 id="八、常见问题排查"><a href="#八、常见问题排查" class="headerlink" title="八、常见问题排查"></a>八、常见问题排查</h2><p><strong>Q1：<code>pi --list-models volcano</code> 列不出模型 &#x2F; 提示未授权？</strong></p>
+<ul>
+<li>确认环境变量 <code>ARK_API_KEY</code> 已设置：<code>echo $env:ARK_API_KEY</code>（PowerShell）。</li>
+<li>用 <code>setx</code> 设置后必须<strong>新开终端</strong>。</li>
+<li>也可临时用 <code>--api-key</code> 覆盖测试：<code>pi --api-key &quot;你的key&quot; --provider volcano --model doubao-seed-2.1-turbo -p &quot;hi&quot;</code>。</li>
+</ul>
+<p><strong>Q2：请求报 401 &#x2F; 鉴权失败？</strong></p>
+<ul>
+<li>API Key 是否在火山引擎控制台已创建且未失效。</li>
+<li>是否已开通对应模型（开通管理页面）。</li>
+<li><code>models.json</code> 里 <code>apiKey</code> 是否写成 <code>&quot;$ARK_API_KEY&quot;</code>（带 <code>$</code> 才会读环境变量；不带 <code>$</code> 会被当字面量）。</li>
+</ul>
+<p><strong>Q3：Anthropic 兼容方案报 404 &#x2F; 路径不对？</strong></p>
+<ul>
+<li>Pi 的 <code>anthropic-messages</code> 会在 <code>baseUrl</code> 后拼接 <code>/v1/messages</code>。若火山引擎该端点路径不同，可尝试把 <code>baseUrl</code> 调整为带或不带末尾斜杠的形式，或改用 OpenAI 兼容方案。</li>
+</ul>
+<p><strong>Q4：<code>bash</code> 工具无法执行 &#x2F; 提示找不到 bash？</strong></p>
+<ul>
+<li>安装 Git for Windows，或 在 <code>settings.json</code> 设置 <code>&quot;shellPath&quot;: &quot;C:\\Program Files\\Git\\bin\\bash.exe&quot;</code>。</li>
+</ul>
+<p><strong>Q5：Windows Terminal 里 <code>Alt+Enter</code> 是全屏，没法用作「追加消息」？</strong></p>
+<ul>
+<li>这是 Windows Terminal 的默认行为。可在 Windows Terminal 设置里取消 “Alt+Enter 切换全屏” 绑定，或参考 Pi 文档 <a target="_blank" rel="noopener" href="https://pi.dev/docs/terminal-setup">terminal-setup.md</a> 重新映射。</li>
+</ul>
+<p><strong>Q6：如何关闭启动时的版本检查 &#x2F; 遥测？</strong></p>
+<ul>
+<li>设环境变量 <code>PI_SKIP_VERSION_CHECK=1</code> 跳过版本检查；<code>PI_OFFLINE=1</code> 关闭所有启动期网络请求。</li>
+<li>在 <code>settings.json</code> 设 <code>&quot;enableInstallTelemetry&quot;: false</code> 关闭安装遥测。</li>
+</ul>
+<p><strong>Q7：如何让某个项目用不同的模型&#x2F;设置？</strong></p>
+<ul>
+<li>在项目根目录建 <code>.pi/settings.json</code>，写项目级覆盖配置（如不同的 <code>defaultModel</code>），会与全局设置合并。</li>
+</ul>
+<p><strong>Q8：密钥安全？</strong></p>
+<ul>
+<li>切勿把含真实 Key 的 <code>models.json</code> &#x2F; <code>auth.json</code> 提交到 Git。建议始终用 <code>$ARK_API_KEY</code> 环境变量引用，并把 <code>~/.pi/agent/</code> 排除在版本控制之外。</li>
+</ul>
+<hr>
+<h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><ul>
+<li>Pi 官方 README：<a target="_blank" rel="noopener" href="https://pi.dev/">https://pi.dev</a></li>
+<li>自定义模型 <code>models.json</code>：<a target="_blank" rel="noopener" href="https://pi.dev/docs/models">https://pi.dev/docs/models</a></li>
+<li>自定义 Provider（扩展）：<a target="_blank" rel="noopener" href="https://pi.dev/docs/custom-provider">https://pi.dev/docs/custom-provider</a></li>
+<li>Providers 与鉴权：<a target="_blank" rel="noopener" href="https://pi.dev/docs/providers">https://pi.dev/docs/providers</a></li>
+<li>设置项 <code>settings.json</code>：<a target="_blank" rel="noopener" href="https://pi.dev/docs/settings">https://pi.dev/docs/settings</a></li>
+<li>Windows 安装：<a target="_blank" rel="noopener" href="https://pi.dev/docs/windows">https://pi.dev/docs/windows</a></li>
+<li>快捷键：<a target="_blank" rel="noopener" href="https://pi.dev/docs/keybindings">https://pi.dev/docs/keybindings</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">https://blazarlin.github.io/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/windows/">windows</a><a class="post-meta__tags" href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">AI编程工具</a><a class="post-meta__tags" href="/tags/Pi-Agent/">Pi Agent</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/260731%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8B%86%E8%A7%A3%E5%88%86%E6%9E%90/" title="常用正则表达式逐段拆解分析"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">常用正则表达式逐段拆解分析</div></div><div class="info-2"><div class="info-item-1">常用正则表达式逐段拆解分析 本文档逐段拆解 8 个常用正则表达式，所有”匹配&#x2F;不匹配”示例均经过 Python re 实测验证。适用场景：日志解析、表单校验、数据提取。配套 C++ 原始字符串 R&quot;(...)&quot; 与 Python r&#39;...&#39; 用法说明见末尾。   目录 时间 HH:MM:SS（24 小时制） IPv4 地址 中国大陆手机号 电子邮箱 日期 YYYY-MM-DD URL 身份证号（18 位） 十六进制颜色码 语法速查表 通用坑与最佳实践   1. 时间 HH:MM:SS（24 小时制）正则 1((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)  逐段拆解 12345678910(                          捕获组1：包住整个时间  (?:                      非捕获组：小时部分      [01]\d               00 ~ 19（首位 0 或 1 + 任意数字）      | 2[0-3]             20 ~ 23（首位 2...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260815pi%E5%9B%BE%E5%83%8F%E9%98%85%E8%AF%BB%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/" title="pi 图像阅读工具（GLM-4V）配置说明"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">pi 图像阅读工具（GLM-4V）配置说明</div></div><div class="info-2"><div class="info-item-1">pi 图像阅读工具（GLM-4V）配置说明 创建日期：2026-08-15 工具类型：pi extension（非标准 MCP，见下文说明） 状态：已部署并测试通过（2026-08-15，字符测试图验证）   一、工具概述（What &#x2F; Why）功能：在 pi 中输入本地图像路径，通过智谱视觉语言模型 GLM-4V 理解图像内容，返回认知描述文字（主体、场景、字符&#x2F;文字、明显异常等）。 为什么不是标准 MCP：pi 官方不支持 MCP 协议（无 MCP client），其原生等价方案是 extension + registerTool() 注册自定义工具供 LLM 调用。本工具按 pi extension 实现，效果等同。 能力边界（重要）：  ✅ 适用：图像内容描述、印刷字符&#x2F;文字提取、主体&#x2F;场景&#x2F;状态识别、明显异常辅助判断 ❌ 不适用：产线细小瑕疵检测（污点&#x2F;蚊虫&#x2F;黑胶布&#x2F;微小破口等）——精度远不如专用 OpenCV&#x2F;HALCON 算法，不可替代瑕疵检测  二、文件组成与位置123C:\...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/260731-Pi-Agent-%E9%AB%98%E9%98%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pi Agent 高阶使用指南：四组件协同与工具链集成"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Pi Agent 高阶使用指南：四组件协同与工具链集成</div></div><div class="info-2"><div class="info-item-1">Pi Agent 高阶使用指南：四组件协同与工具链集成 上一篇《Pi-Agent-Windows-使用指南.md》解决「装好、配上火山引擎模型、能对话」。本篇解决「把 Pi 当成一个可编程的 Agent 平台来用」：理解四个官方组件如何分层协同，并通过 Extensions &#x2F; SDK &#x2F; RPC 三条路线把 Pi 嵌入你现有的工具链（Git、tmux、Docker、SSH、CI、IDE、Slack……）。 官方仓库：https://github.com/earendil-works/pi ｜ 文档：https://pi.dev/docs/latest   目录 一、四组件架构总览 二、四组件详解与协同 三、Extensions：在进程内重塑 Pi 四、SDK：把 Pi 嵌入你自己的应用 五、RPC 模式：跨语言 &#x2F; IDE &#x2F; 子进程集成 六、安全与沙箱 七、实战配方：配合其他工具 八、高阶配置技巧 附录 A：扩展开发速查表 附录 B：官方资源与参考   一、四组件架构总览Pi 官方仓库（earendil-works/pi）是一个 mon...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">robocopy 与 xcopy 参数及常用操作对比参考</div></div><div class="info-2"><div class="info-item-1">robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRORLEVEL）说明 实战部署模板   1. robocopy 完整参数速查表1.1 源 &#x2F; 目标 &#x2F; 文件筛选   参数 含义    &lt;source&gt; 源目录路径（必填）   &lt;destination&gt; 目标目录路径（必填）   &lt;file&gt; 要操作的文件名或通配符（如 *.dll、config.ini），可选   /S 复制非空子目录   /E 复制子目录，包括空的（推荐替代 /S）   /A 只复制带存档属性的文件，并保留存档属性   /M 只复制带存档属性的文件，复制完后清除存档属性（适合增量备份）   /LEV:n 只复制源...</div></div></div></a><a class="pagination-related" href="/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" title="Windows脚本命令"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Windows脚本命令</div></div><div class="info-2"><div class="info-item-1">Windows脚本命令文件夹管理 cd 显示当前目录名或改变当前目录。 md 创建目录。 rd 删除一个目录。 dir 显示目录中的文件和子目录列表。 tree 以图形显示驱动器或路径的文件夹结构。 path 为可执行文件显示或设置一个搜索路径。 xcopy 复制文件和目录树。  文件管理 type 显示文本文件的内容。 copy 将一份或多份文件复制到另一个位置。 del 删除一个或数个文件。 move 移动文件并重命名文件和目录。(Windows XP Home Edition中没有) ren 重命名文件。 replace 替换文件。 attrib 显示或更改文件属性。 find 搜索字符串。 fc 比较两个文件或两个文件集并显示它们之间的不同  网络命令 ping 进行网络连接测试、名称解析 ftp 文件传输 net 网络命令集及用户管理 telnet 远程登陆 ipconfig显示、修改TCP&#x2F;IP设置 msg 给用户发送消息 arp 显示、修改局域网的IP地址-物理地址映射列表  系统管理 at 安排在特定日期和时间运行命令和程序 shutdown立即或定时关...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260815pi%E5%9B%BE%E5%83%8F%E9%98%85%E8%AF%BB%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/" title="pi 图像阅读工具（GLM-4V）配置说明"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">pi 图像阅读工具（GLM-4V）配置说明</div></div><div class="info-2"><div class="info-item-1">pi 图像阅读工具（GLM-4V）配置说明 创建日期：2026-08-15 工具类型：pi extension（非标准 MCP，见下文说明） 状态：已部署并测试通过（2026-08-15，字符测试图验证）   一、工具概述（What &#x2F; Why）功能：在 pi 中输入本地图像路径，通过智谱视觉语言模型 GLM-4V 理解图像内容，返回认知描述文字（主体、场景、字符&#x2F;文字、明显异常等）。 为什么不是标准 MCP：pi 官方不支持 MCP 协议（无 MCP client），其原生等价方案是 extension + registerTool() 注册自定义工具供 LLM 调用。本工具按 pi extension 实现，效果等同。 能力边界（重要）：  ✅ 适用：图像内容描述、印刷字符&#x2F;文字提取、主体&#x2F;场景&#x2F;状态识别、明显异常辅助判断 ❌ 不适用：产线细小瑕疵检测（污点&#x2F;蚊虫&#x2F;黑胶布&#x2F;微小破口等）——精度远不如专用 OpenCV&#x2F;HALCON 算法，不可替代瑕疵检测  二、文件组成与位置123C:\...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260721npx-skills%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5/" title="npx skills 命令速查"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">npx skills 命令速查</div></div><div class="info-2"><div class="info-item-1">npx skills 命令速查   一行速记：npx skills@latest &lt;command&gt; [options]官网: https://skills.sh/帮助: npx skills@latest --help &#x2F; npx skills@latest add --help   一、最常用命令（先记这些）安装12345678# 全局装某仓库全部 skill 到 codex，无人值守npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -g -a codex --skill &quot;*&quot; -y# 项目级装（仅当前项目）npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -a codex --skill &quot;*&quot; -y# 先看仓库里有哪些 skill，不安装npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -l  查看12npx skills@latest ls -g -a codex ...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97%EF%BC%88%E5%90%AB%E7%81%AB%E5%B1%B1%E5%BC%95%E6%93%8E%E6%A8%A1%E5%9E%8B%E9%85%8D%E7%BD%AE%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Pi Agent Windows 使用指南（含火山引擎模型配置）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81Pi-Agent-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="toc-number">1.2.</span> <span class="toc-text">一、Pi Agent 是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81Windows-%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="toc-number">1.3.</span> <span class="toc-text">二、Windows 环境准备</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#2-1-%E5%AE%89%E8%A3%85-Node-js%EF%BC%88%E5%BF%85%E9%9C%80%EF%BC%8C-18%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">2.1 安装 Node.js（必需，&gt;&#x3D; 18）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-2-%E5%AE%89%E8%A3%85-Git-for-Windows%EF%BC%88%E6%8F%90%E4%BE%9B-bash%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">2.2 安装 Git for Windows（提供 bash）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-3-%E6%8E%A8%E8%8D%90%E7%BB%88%E7%AB%AF"><span class="toc-number">1.3.3.</span> <span class="toc-text">2.3 推荐终端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%AE%89%E8%A3%85-Pi"><span class="toc-number">1.4.</span> <span class="toc-text">三、安装 Pi</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E9%85%8D%E7%BD%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">1.5.</span> <span class="toc-text">四、配置目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E9%85%8D%E7%BD%AE%E7%81%AB%E5%B1%B1%E5%BC%95%E6%93%8E%E6%A8%A1%E5%9E%8B%EF%BC%88%E6%A0%B8%E5%BF%83%EF%BC%89"><span class="toc-number">1.6.</span> <span class="toc-text">五、配置火山引擎模型（核心）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 准备工作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-%E6%A8%A1%E5%9E%8B%E5%AF%B9%E7%85%A7%E8%A1%A8"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 模型对照表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E8%AE%A9%E5%8F%A6%E4%B8%80%E4%B8%AA-Pi-Agent-%E8%87%AA%E5%8A%A8%E9%85%8D%E7%BD%AE"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 让另一个 Pi Agent 自动配置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E6%97%A5%E5%B8%B8%E4%BD%BF%E7%94%A8"><span class="toc-number">1.7.</span> <span class="toc-text">六、日常使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1-%E5%90%AF%E5%8A%A8%E6%96%B9%E5%BC%8F"><span class="toc-number">1.7.1.</span> <span class="toc-text">6.1 启动方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-%E5%B8%B8%E7%94%A8%E6%96%9C%E6%9D%A0%E5%91%BD%E4%BB%A4"><span class="toc-number">1.7.2.</span> <span class="toc-text">6.2 常用斜杠命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-3-%E5%B8%B8%E7%94%A8%E5%BF%AB%E6%8D%B7%E9%94%AE"><span class="toc-number">1.7.3.</span> <span class="toc-text">6.3 常用快捷键</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-4-%E7%BC%96%E8%BE%91%E5%99%A8%E6%8A%80%E5%B7%A7"><span class="toc-number">1.7.4.</span> <span class="toc-text">6.4 编辑器技巧</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-5-%E4%B8%8A%E4%B8%8B%E6%96%87%E6%96%87%E4%BB%B6"><span class="toc-number">1.7.5.</span> <span class="toc-text">6.5 上下文文件</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E5%BC%80%E5%90%AF%E6%80%9D%E8%80%83%E6%A8%A1%E5%BC%8F%EF%BC%88%E5%8F%AF%E9%80%89%EF%BC%89"><span class="toc-number">1.8.</span> <span class="toc-text">七、开启思考模式（可选）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5"><span class="toc-number">1.9.</span> <span class="toc-text">八、常见问题排查</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8F%82%E8%80%83%E6%96%87%E6%A1%A3"><span class="toc-number">1.10.</span> <span class="toc-text">参考文档</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

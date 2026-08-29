@@ -1,0 +1,265 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Note Book | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Note Book大类 编程工具C++编程Python编程界面编程深度学习图像处理 逐步将平台转移至Notion～ Notion Home Page Personal SummaryComputer Vision Camera Calibration  2D Imgprocess  Digital Image Process  Barcode  Visual Servoing  3D Vision">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Note Book">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/%E6%95%B4%E5%90%88/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="Note Book大类 编程工具C++编程Python编程界面编程深度学习图像处理 逐步将平台转移至Notion～ Notion Home Page Personal SummaryComputer Vision Camera Calibration  2D Imgprocess  Digital Image Process  Barcode  Visual Servoing  3D Vision">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.251Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.251Z">
+<meta property="article:author" content="Blazar">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Note Book",
+  "url": "https://blazarlin.github.io/2026/08/29/%E6%95%B4%E5%90%88/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.251Z",
+  "dateModified": "2026-08-29T02:19:37.251Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/%E6%95%B4%E5%90%88/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Note Book',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">Note Book</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">Note Book</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.251Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.251Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%80%BB%E7%BB%93%E6%95%B4%E5%90%88/">总结整合</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="Note-Book"><a href="#Note-Book" class="headerlink" title="Note Book"></a>Note Book</h1><p>大类</p>
+<p>编程工具<br>C++编程<br>Python编程<br>界面编程<br>深度学习<br>图像处理</p>
+<p>逐步将平台转移至Notion～</p>
+<p><a target="_blank" rel="noopener" href="https://www.notion.so/blazarlin/Personal-Home-eb4a8d5b6c80428eba0b51b05120c271">Notion Home Page</a></p>
+<h2 id="Personal-Summary"><a href="#Personal-Summary" class="headerlink" title="Personal Summary"></a>Personal Summary</h2><h3 id="Computer-Vision"><a href="#Computer-Vision" class="headerlink" title="Computer Vision"></a>Computer Vision</h3><ul>
+<li><p><a href="family/calibration.md">Camera Calibration</a></p>
+</li>
+<li><p><a href="family/imgprocess.md">2D Imgprocess</a></p>
+</li>
+<li><p><a href="family/%E6%95%B0%E5%AD%97%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86%E8%A6%81%E7%82%B9%E8%AE%B0%E5%BD%95.md">Digital Image Process</a></p>
+</li>
+<li><p><a href="family/barcode_detection.md">Barcode</a></p>
+</li>
+<li><p><a href="family/visual_servoing.md">Visual Servoing</a></p>
+</li>
+<li><p><a href="family/3dvision.md">3D Vision</a></p>
+</li>
+</ul>
+<h3 id="Programer"><a href="#Programer" class="headerlink" title="Programer"></a>Programer</h3><ul>
+<li><p><a href="family/c++_learning.md">c++</a></p>
+</li>
+<li><p><a href="family/python_skills.md">python</a></p>
+</li>
+</ul>
+<h3 id="Algorithmic"><a href="#Algorithmic" class="headerlink" title="Algorithmic"></a>Algorithmic</h3><ul>
+<li><p><a href="family/algorithm.md">alg</a></p>
+</li>
+<li><p><a href="family/%E7%AE%97%E6%B3%95%E5%A4%8D%E6%9D%82%E5%BA%A6.md">Algorithmic Complexity</a></p>
+</li>
+<li><p><a href="family/fittinggeometry.md">Fit circle&amp;ellipse</a></p>
+</li>
+</ul>
+<h3 id="SoftWare-developer"><a href="#SoftWare-developer" class="headerlink" title="SoftWare developer"></a>SoftWare developer</h3><ul>
+<li><a href="family/software_development.md">pyqt</a></li>
+</ul>
+<h3 id="Tools"><a href="#Tools" class="headerlink" title="Tools"></a>Tools</h3><ul>
+<li><p><a href="family/ubuntu%E5%9F%BA%E6%93%8D.md">ubuntu基操</a></p>
+</li>
+<li><p><a href="family/git_skills.md">git</a></p>
+</li>
+<li><p><a href="family/docker.md">Docker</a></p>
+</li>
+</ul>
+<h3 id="Machine-Learning"><a href="#Machine-Learning" class="headerlink" title="Machine Learning"></a>Machine Learning</h3><ul>
+<li><p><a href="family/machine_learning.md">my notes</a></p>
+</li>
+<li><p><a href="family/faster_rcnn-exp.md">FasterRcnn实验记录</a></p>
+</li>
+<li><p><a href="family/work_record.md">work record</a></p>
+</li>
+</ul>
+<h2 id="Appendix-Help"><a href="#Appendix-Help" class="headerlink" title="Appendix&amp;Help"></a>Appendix&amp;Help</h2><ul>
+<li><p><a href="family/md%E6%96%B0%E6%89%8B.md">markdown基本语法</a></p>
+</li>
+<li><p><a href="family/mathjax_cmdeditor.md">Markdown 公式指导手册</a></p>
+</li>
+<li><p><a href="family/samble.md">数学符号</a></p>
+</li>
+<li><p><a href="family/pdf/LATEX_Mathematical_Symbols.pdf">Markdown 数学公式</a></p>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/%E6%95%B4%E5%90%88/">https://blazarlin.github.io/2026/08/29/%E6%95%B4%E5%90%88/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/260815pi%E5%9B%BE%E5%83%8F%E9%98%85%E8%AF%BB%E5%B7%A5%E5%85%B7%E9%85%8D%E7%BD%AE%E8%AF%B4%E6%98%8E/" title="pi 图像阅读工具（GLM-4V）配置说明"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">pi 图像阅读工具（GLM-4V）配置说明</div></div><div class="info-2"><div class="info-item-1">pi 图像阅读工具（GLM-4V）配置说明 创建日期：2026-08-15 工具类型：pi extension（非标准 MCP，见下文说明） 状态：已部署并测试通过（2026-08-15，字符测试图验证）   一、工具概述（What &#x2F; Why）功能：在 pi 中输入本地图像路径，通过智谱视觉语言模型 GLM-4V 理解图像内容，返回认知描述文字（主体、场景、字符&#x2F;文字、明显异常等）。 为什么不是标准 MCP：pi 官方不支持 MCP 协议（无 MCP client），其原生等价方案是 extension + registerTool() 注册自定义工具供 LLM 调用。本工具按 pi extension 实现，效果等同。 能力边界（重要）：  ✅ 适用：图像内容描述、印刷字符&#x2F;文字提取、主体&#x2F;场景&#x2F;状态识别、明显异常辅助判断 ❌ 不适用：产线细小瑕疵检测（污点&#x2F;蚊虫&#x2F;黑胶布&#x2F;微小破口等）——精度远不如专用 OpenCV&#x2F;HALCON 算法，不可替代瑕疵检测  二、文件组成与位置123C:\...</div></div></div></a><a class="pagination-related" href="/2026/08/29/%E6%95%B0%E6%8D%AE%E6%8B%9F%E5%90%88%E6%96%B9%E6%B3%95/" title="数据拟合方法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">数据拟合方法</div></div><div class="info-2"><div class="info-item-1">以拟合直线为例，分析总结几种方法，有最小二乘法、Ransac、Tukey、Huber。  最小二乘法(Least Squares Method)一种常用的参数估计方法，用于拟合数据点集到一个数学模型。它的目标是找到最优参数，使得模型预测值与实际观测值之间的残差平方和最小化。在直线拟合问题中，最小二乘法可以用于找到最优的斜率和截距，使得直线与数据点的残差平方和最小化。最小二乘法的优点是简单直观，但对异常值敏感。demo1 1234567891011121314151617181920212223242526272829303132333435363738394041424344454647484950515253#include &lt;iostream&gt;#include &lt;vector&gt;#include &lt;cmath&gt;// 直线结构体，包含斜率和截距struct Line &#123;    double slope;    double intercept;&#125;;// 最小二乘法直线拟合Line leastSquaresRegression...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Note-Book"><span class="toc-number">1.</span> <span class="toc-text">Note Book</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#Personal-Summary"><span class="toc-number">1.1.</span> <span class="toc-text">Personal Summary</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Computer-Vision"><span class="toc-number">1.1.1.</span> <span class="toc-text">Computer Vision</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Programer"><span class="toc-number">1.1.2.</span> <span class="toc-text">Programer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Algorithmic"><span class="toc-number">1.1.3.</span> <span class="toc-text">Algorithmic</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#SoftWare-developer"><span class="toc-number">1.1.4.</span> <span class="toc-text">SoftWare developer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tools"><span class="toc-number">1.1.5.</span> <span class="toc-text">Tools</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Machine-Learning"><span class="toc-number">1.1.6.</span> <span class="toc-text">Machine Learning</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Appendix-Help"><span class="toc-number">1.2.</span> <span class="toc-text">Appendix&amp;Help</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

@@ -1,0 +1,498 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>相机标定大全 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="相机标定大全——平面、单目、双目、眼手看完这标定总结你还不懂标定就来打我吧！ 一、机器视觉几何坐标概论机器视觉系统有三大坐标系，分别是：1、世界坐标系，2、摄像机坐标系，3、图像（像素）坐标系； 1、世界坐标系世界坐标系（Xw，Yw，Zw）是目标物体位置的参考系，根据运算方便自由设置圆点位置，可以位于机器手底座或者机器手前端执行器上。 其主要作用有 (1)盛放物体的三维坐标； (2)标定的时候根据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="相机标定大全">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/calibration/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="相机标定大全——平面、单目、双目、眼手看完这标定总结你还不懂标定就来打我吧！ 一、机器视觉几何坐标概论机器视觉系统有三大坐标系，分别是：1、世界坐标系，2、摄像机坐标系，3、图像（像素）坐标系； 1、世界坐标系世界坐标系（Xw，Yw，Zw）是目标物体位置的参考系，根据运算方便自由设置圆点位置，可以位于机器手底座或者机器手前端执行器上。 其主要作用有 (1)盛放物体的三维坐标； (2)标定的时候根据">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.248Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.248Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="标定">
+<meta property="article:tag" content="坐标系">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "相机标定大全",
+  "url": "https://blazarlin.github.io/2026/08/29/calibration/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.248Z",
+  "dateModified": "2026-08-29T02:19:37.248Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/calibration/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '相机标定大全',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/eye.jpeg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">相机标定大全</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">相机标定大全</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.248Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.248Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="相机标定大全——平面、单目、双目、眼手"><a href="#相机标定大全——平面、单目、双目、眼手" class="headerlink" title="相机标定大全——平面、单目、双目、眼手"></a>相机标定大全——平面、单目、双目、眼手</h1><p>看完这标定总结你还不懂标定就来打我吧！</p>
+<h2 id="一、机器视觉几何坐标概论"><a href="#一、机器视觉几何坐标概论" class="headerlink" title="一、机器视觉几何坐标概论"></a>一、机器视觉几何坐标概论</h2><p>机器视觉系统有三大坐标系，分别是：1、世界坐标系，2、摄像机坐标系，3、图像（像素）坐标系；</p>
+<h3 id="1、世界坐标系"><a href="#1、世界坐标系" class="headerlink" title="1、世界坐标系"></a>1、世界坐标系</h3><p>世界坐标系（Xw，Yw，Zw）是目标物体位置的参考系，根据运算方便自由设置圆点位置，可以位于机器手底座或者机器手前端执行器上。</p>
+<p>其主要作用有</p>
+<p>(1)盛放物体的三维坐标；</p>
+<p>(2)标定的时候根据原点确定标定物的位置；</p>
+<p>(3)给定出两个摄像机相对于世界坐标系的位置，从而求出两个或多个相机之间的坐标关系；</p>
+<h3 id="2、摄像机坐标系"><a href="#2、摄像机坐标系" class="headerlink" title="2、摄像机坐标系"></a>2、摄像机坐标系</h3><p>摄像机坐标系（Xc，Yc，Zc）是摄像机在自己角度上的坐标系，原点在摄像机的光心上，Z轴与摄像机光轴平行，即摄像机的镜头拍摄方向。</p>
+<h3 id="3、图像（像素）坐标系"><a href="#3、图像（像素）坐标系" class="headerlink" title="3、图像（像素）坐标系"></a>3、图像（像素）坐标系</h3><h4 id="3-1、图像坐标系"><a href="#3-1、图像坐标系" class="headerlink" title="3.1、图像坐标系"></a>3.1、图像坐标系</h4><p>图像坐标系（x，y）单位米或毫米，是连续图像坐标或者空间坐标，以图片对角线交点作为基准原点建立的坐标系。</p>
+<h4 id="3-2、像素坐标系"><a href="#3-2、像素坐标系" class="headerlink" title="3.2、像素坐标系"></a>3.2、像素坐标系</h4><p>像素坐标系（u，v）单位尺度为一个pixel，是离散图像坐标或像素坐标，原点在图片的左上角。</p>
+<h3 id="4、坐标系之间的关系"><a href="#4、坐标系之间的关系" class="headerlink" title="4、坐标系之间的关系"></a>4、坐标系之间的<strong>关系</strong></h3><p>当我们在图片中确定了某个物体的位置，如何让机器手去到空间中的实际位置进行抓取呢？这就需要对坐标进行转换。而从像素点到空间点的转换与空间点到像素点的转换是相反的，我们先将后者的推导过程。</p>
+<h4 id="4-1、图像坐标系与像素坐标系"><a href="#4-1、图像坐标系与像素坐标系" class="headerlink" title="4.1、图像坐标系与像素坐标系"></a>4.1、图像坐标系与像素坐标系</h4><p>图像坐标系与像素坐标系的关系为：</p>
+<p>$$<br>f(x)&#x3D;<br>\begin{cases}<br>u &#x3D; \frac{x}{dx} + u0 \<br>v &#x3D; \frac{y}{dy} + v0<br>\end{cases}<br>$$</p>
+<p>dx代表一个像素的宽度（x方向），与x同单位，x&#x2F;dx表示x轴上有多少个像素，同理y&#x2F;dy表示y轴上的像素个数，(u0，v0)是图像平面中心。</p>
+<p><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fixture.png
+" width="300" align=center /></p>
+<p>将上述关系转换为矩阵形式：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   u\<br>   v\<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{1}{dx} &amp; 0 &amp; u0\<br>   0 &amp; \frac{1}{dy} &amp; v0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x\<br>   y\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<h4 id="4-2、相机坐标系与图像坐标系"><a href="#4-2、相机坐标系与图像坐标系" class="headerlink" title="4.2、相机坐标系与图像坐标系"></a>4.2、相机坐标系与图像坐标系</h4><p>从相机坐标系到图像坐标系是一个三维坐标到二维坐标（3D-&gt;2D）的过程，称之为透视投影变换。为了求解它们之间的关系，将普通图像坐标（x，y）拓展为齐次坐标（x，y，1）。空间中的某点，投影到图像平面上的点与相机的光心在一条直线上。以光心为原点建立相机坐标系：</p>
+<p><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/fctofi.png
+" width="300" align=center /></p>
+<p>根据相似三角形关系可以得到以下：</p>
+<p>△ABO_c ~ △oCO_c</p>
+<p>△PBO_c ~ △pCO_c</p>
+<p>$$<br>\frac{AB}{oC} &#x3D; \frac{AO_c}{oO_c} &#x3D; \frac{PB}{pC} &#x3D; \frac{X_c}{x} &#x3D; \frac{Z_c}{f} &#x3D;\frac{Y_c}{y}<br>$$</p>
+<p>$$<br>x &#x3D; f \cdot \frac{X_c}{Z_c},<br>y &#x3D; f \cdot \frac{Y_c}{Z_c}<br>$$</p>
+<p>f为相机焦距（相机光心到成像平面的距离）</p>
+<p>用矩阵形式表示为：</p>
+<p>$$<br>Zc<br>\left[<br> \begin{matrix}<br>   x\<br>   y \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   f &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; f &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xc\<br>   Yc\<br>   Zc\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>统一将成像平面上的点用(u,v)表示：</p>
+<p>$$<br>Z<br>\left[<br> \begin{matrix}<br>   u \<br>   v \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   f &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; f &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xc\<br>   Yc\<br>   Z\<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   f \cdot Xc\<br>   f \cdot Yc\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>得图像点与空间点的关系为：</p>
+<p>$$<br>u &#x3D;\frac {f \cdot X_c}{Z},<br>v &#x3D;\frac {f \cdot Y_c}{Z}<br>$$</p>
+<h4 id="4-3、世界坐标系与相机坐标系"><a href="#4-3、世界坐标系与相机坐标系" class="headerlink" title="4.3、世界坐标系与相机坐标系"></a>4.3、世界坐标系与相机坐标系</h4><p>世界坐标（Xw，Yw，Zw）与相机坐标（Xc，Yc，Zc）同为三维坐标（右手系，三轴互相垂直），两个坐标系的关系为刚体变换（刚体变换：当物体不发生形变时，对一个几何物体作旋转，平移的运动）。可以先凭空想象下，有两个坐标系A与B，如何将A坐标系下的坐标转换到B坐标系表示，首先将A坐标系以原点为基准任意旋转，使其x轴，y轴，z轴与B坐标轴平行且同方向，接着平移AB坐标系原点的直线距离，就可以将A坐标系下的坐标转换到B坐标系，这个旋转Rotation与平移Transport就是需要求得的两个三维坐标之间的关系。</p>
+<p>用以下等式表示两个坐标系之间的关系：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   Xc\<br>   Yc \<br>   Zc<br>  \end{matrix}<br>\right]&#x3D;<br>R<br>\left[<br> \begin{matrix}<br>   Xw\<br>   Yw\<br>   Zw<br>  \end{matrix}<br>\right]<br>+T<br>$$</p>
+<p>其中旋转矩阵R可以看成空间坐标分别沿着X，Y，Z轴的三个旋转矩阵点乘得到的结果。</p>
+<p>当绕Z轴旋转$\theta$角度，新旧坐标的关系为：</p>
+<p>$$<br>\begin{cases}<br>x &#x3D; x’cos\theta - y’sin\theta \<br>y &#x3D; x’sin\theta + y’cos\theta \<br>z &#x3D; z’<br>\end{cases}<br>$$</p>
+<p>用矩阵表示为：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x\<br>   y \<br>   z<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   cos\theta &amp; -sin\theta &amp; 0\<br>   sin\theta &amp; cos\theta &amp; 0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’\<br>   z’<br>  \end{matrix}<br>\right]&#x3D;<br>R1<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’ \<br>   z’<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>同理，绕X轴，Y轴旋转$\delta$和$\omega$角度，可以得到：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x\<br>   y \<br>   z<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   1 &amp; 0 &amp; 0\<br>   0 &amp; cos\delta &amp; sin\delta<br>\<br>   0 &amp; -sin\delta<br> &amp; cos\delta<br>\<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’\<br>   z’<br>  \end{matrix}<br>\right]&#x3D;<br>R2<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’ \<br>   z’<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x\<br>   y\<br>   z<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   cos\omega &amp; 0 &amp; -sin\omega\<br>   0 &amp; 1 &amp; 0\<br>   sin\omega &amp; 0 &amp; cos\omega<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’\<br>   z’<br>  \end{matrix}<br>\right]&#x3D;<br>R3<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’ \<br>   z’<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>于是，得到旋转矩阵R &#x3D; R1*R2*R3，维度为3X3，T为平移矩阵，维度为3X1。</p>
+<p>拓展为其次坐标：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   Xc\<br>   Yc \<br>   Zc \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   R &amp; T\<br>   0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xw\<br>   Yw\<br>   Zw\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<h4 id="4-4、从世界坐标到像素坐标"><a href="#4-4、从世界坐标到像素坐标" class="headerlink" title="4.4、从世界坐标到像素坐标"></a>4.4、从世界坐标到像素坐标</h4><p>综合上面推导的过程，</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">graph LR</span><br><span class="line">A[世界坐标] --&gt; B[相机坐标]</span><br><span class="line">B --&gt; C[理想图像坐标]</span><br><span class="line">C -- 不考虑畸变--&gt; D[像素坐标]</span><br></pre></td></tr></table></figure>
+
+<p>以上顺序用矩阵表示为不断左乘下一步，即：</p>
+<p>$$<br>Zc<br>\left[<br> \begin{matrix}<br>   u\<br>   v \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{1}{dx} &amp; 0 &amp; u0\<br>   0 &amp; \frac{1}{dy} &amp; v0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   f &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; f &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   R &amp; T\<br>   0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xw\<br>   Yw\<br>   Zw\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>等式右边的前两个矩阵称的乘积为相机内参，第三个矩阵称为相机外参(Toc)，后面的单目相机标定，就是为了求解相机的内外参数。</p>
+<p>至此，机器视觉几何坐标概论记录完了，接下来会陆续记录我所参与的项目中包含标定的内容。</p>
+<h2 id="二、平面标定（Homography变换）"><a href="#二、平面标定（Homography变换）" class="headerlink" title="二、平面标定（Homography变换）"></a>二、平面标定（Homography变换）</h2><h3 id="1、定义"><a href="#1、定义" class="headerlink" title="1、定义"></a>1、定义</h3><p>单应性(homography)变换用来描述物体在两个平面之间的转换关系，是对应齐次坐标下的线性变换，可以通过矩阵表示：</p>
+<p>$$<br>X’ &#x3D; H·X<br>$$</p>
+<h3 id="2、计算推导"><a href="#2、计算推导" class="headerlink" title="2、计算推导"></a>2、计算推导</h3><p>带入数据（x,y）为图片上的点位置：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x’\<br>   y’\<br>   w<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   h1 &amp; h2 &amp; h3\<br>   h4 &amp; h5 &amp; h6\<br>   h7 &amp; h8 &amp; h9<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x\<br>   y\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>因为是齐次坐标系，方程左右同时除h9</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x1’\<br>   y1’\<br>   w’<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{x’}{h9}\<br>   \frac{y’}{h9}\<br>   \frac{z’}{h9}<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   h1’ &amp; h2’ &amp; h3’\<br>   h4’ &amp; h5’ &amp; h6’\<br>   h7’ &amp; h8’ &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   x\<br>   y\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>将矩阵展开得到：</p>
+<p>公式①：<br>$$<br>\begin{cases}<br>x1’ &#x3D; h1’x+h2’y+h3’ \<br>y1’ &#x3D; h4’x+h5’y+h6’ \<br>w’ &#x3D; h7’x+h8’y+h9’<br>\end{cases}<br>$$<br>将下面的矩阵用已知的观测值代替：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x1’\<br>   y1’\<br>   w’<br>  \end{matrix}<br>\right]<br>&#x3D;&#x3D;&gt;(x^R, y^R)<br>$$</p>
+<p>根据齐次坐标的齐次性质：</p>
+<p>公式②：<br>$$<br>\frac{x1’}{w’}&#x3D;x^R,\frac{y1’}{w’}&#x3D;y^R<br>$$</p>
+<p>结合公式①②：</p>
+<p>公式③：<br>$$<br>\begin{cases}<br>x^R &#x3D;  \frac{h1’x+h2’y+h3’}{h7’+h8’+1}\<br>y^R &#x3D;  \frac{h4’x+h5’y+h6’}{h7’+h8’+1}<br>\end{cases}<br>$$<br>在公式③中</p>
+<p>$$<br>(x, y)，(x^R, y^R)<br>$$<br>为观测到的已知参数，未知参数有h1’<del>h8’共8个，一对点能够产生两个方程，则求解公式③至少需要四组点对，才能求出h1’</del>h8’。一般的数据会多于4组点对，用最小二乘法或ransac来获取最优参数。</p>
+<p>求解过后，h1’~h8’为已知，</p>
+<p>$$<br>H’&#x3D;<br>\left[<br> \begin{matrix}<br>   h1’ &amp; h2’ &amp; h3’\<br>   h4’ &amp; h5’ &amp; h6’\<br>   h7’ &amp; h8’ &amp; 1<br>  \end{matrix}<br>\right]<br>$$<br>可用于单应性变换的计算。</p>
+<h3 id="3、应用"><a href="#3、应用" class="headerlink" title="3、应用"></a>3、应用</h3><h4 id="1、简单平面的转换"><a href="#1、简单平面的转换" class="headerlink" title="1、简单平面的转换"></a>1、简单平面的转换</h4><p>图片A中的点P为(x,y)，求对应在另外一个视角的图片B点P’(x’,y’)？</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x2\<br>   y2\<br>   z2<br>  \end{matrix}<br>\right]&#x3D;<br>H’<br>\left[<br> \begin{matrix}<br>   x\<br>   y\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>$$<br>P’(x’,y’) &#x3D; (\frac{x2}{z2},\frac{y2}{z2})<br>$$</p>
+<p>——————————————————–2020更新 华丽的分割线——————————————————–</p>
+<h4 id="2、在四轴中求取2D点到3D点的转换关系"><a href="#2、在四轴中求取2D点到3D点的转换关系" class="headerlink" title="2、在四轴中求取2D点到3D点的转换关系"></a>2、在四轴中求取2D点到3D点的转换关系</h4><h5 id="2-1-相机在手上"><a href="#2-1-相机在手上" class="headerlink" title="2.1 相机在手上"></a>2.1 相机在手上</h5><p>求取</p>
+<p>$$<br>{^r}H{_c}<br>$$</p>
+<h6 id="2-1-1-转换方程"><a href="#2-1-1-转换方程" class="headerlink" title="2.1.1 转换方程"></a>2.1.1 转换方程</h6><p>$$<br>{^rP_o &#x3D;  ^rT_t \cdot ^tH_C \cdot ^CP_o}<br>$$</p>
+<p>参数解释：</p>
+<p>$^rP_o$(4×1)：object在Robot坐标系下的表示</p>
+<p>$^rT_t$(4×4)：Tool到Robot的转换矩阵，即机械手示教器上读回的数值</p>
+<p>$^tH_C$(3×3)：图像平面h1到Tool平面转换矩阵</p>
+<p>$^CP_o$(2×1&#x3D;&#x3D;齐次变化&#x3D;&#x3D;&gt;3×1)：图像中的点</p>
+<h6 id="2-1-2-直接法"><a href="#2-1-2-直接法" class="headerlink" title="2.1.2 直接法"></a>2.1.2 直接法</h6><p>计算：delta pos 与图像点平面的关系</p>
+<p>$$<br>^tT_r \cdot ^{ri}P_o &#x3D;  ^tH_C \cdot ^{Ci}P_o<br>$$</p>
+<p>参数解释：$^tT_r$保持不变，$^tH_C$为所求的参数，$^{Ci}P_o$与$^{ri}P_o$一一对应。</p>
+<p>适用条件：u轴不变的情况，末端执行器与机械手只存在x、y的偏移量。</p>
+<p>(提示：机械手位姿数目&#x3D;&#x3D;图像数目+1)</p>
+<p>该方法得到的H矩阵是图像点与△Pos (△Pos &#x3D; $P_i - P_{origin}$) 之间的关系，所以在后期的使用中，需要先确定一个$P_{origin}$，再利用图像与Homo关系得到△Pos，再叠加上$P_{origin}$，得到新的一个$^rP_i$。</p>
+<p>操作过程：</p>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_dir_flow.png" /></div>
+
+<p>为什么直接法所需要的数据，机械手poses会比图像坐标多一个呢？<br>解答：根据操作流程，先选择一个能够看到标定板的位置，作为基准点。<br>采集数据过程：手动更换标定板位置依旧在视野中$img_i$，控制机械手末端到标定板上点$pose_i$，循环往复多次采集。</p>
+<h6 id="2-1-3-旋转法"><a href="#2-1-3-旋转法" class="headerlink" title="2.1.3 旋转法"></a>2.1.3 旋转法</h6><p>计算:Pot 与 图像点平面的关系</p>
+<p>$$<br>^{ti}T_r \cdot ^rP_o &#x3D;  ^tH_C \cdot ^{Ci}P_o<br>$$</p>
+<p>参数解释：$^rP_o$为旋转法所求量，保持不变，$^tH_C$为所求的参数，$^{Ci}P_o$与$^{ti}T_r$一一对应。</p>
+<p>操作过程(保持标定板不能动)：</p>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_in_hand_rot_flow.webp" /></div>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_in_hand_rotation.png" /></div>
+
+<p>旋转前后分别记下tool的坐标为</p>
+<p>$$<br>^rP_1;<br>^rP_2<br>$$</p>
+<p>则可以求得object在robot下的坐标：</p>
+<p>$$<br>^rP_o &#x3D; (^rP_1+^rP_2)&#x2F;2<br>$$</p>
+<!-- $$
+^rP{_o}=\frac{^rP_1+^rP_2}{2}
+$$ -->
+
+<p>标定过程：在标定板与相机视野内的前提下移动机械手(xy平面，z,u,v,w保持不变)并拍摄图片，存储每个位置与每张图片，采集9组数据，将采集的数据连入PlaneCalibration工具，计算标定结果。</p>
+<p>产生的数据为：旋转法对应的两张图片与两个机械手位姿，九点标定对应的九张图片与九个机械手位姿数据。将图像整合在一个文件夹里，机械手位姿整合在一份文件里，按顺序保存，注意数据的对应关系。</p>
+<p>标定过程只用到了标定板上的某个点作为object，当选定了某个点A，你的旋转法就需要保持点A在图像中位置不变。用标定板的作用是为了在视野中更好地识别点A，当你的目标够明显，也可以不适用标定板(一般不采用)。</p>
+<p>使用如上方法，根据图像中object的点，能得到它在Robot坐标系(xy平面，z,u,v,w保持不变)的位置，就可以将坐标发给机械手执行，该方法不用求取相机的内外参数，不考虑图像的畸变，可以用于对精度要求不高的项目。</p>
+<h5 id="2-2-相机不在手上"><a href="#2-2-相机不在手上" class="headerlink" title="2.2 相机不在手上"></a>2.2 相机不在手上</h5><p>求取相机坐标系与机械手的底座坐标系的变换关系</p>
+<p>$$<br>{^r}H{_c}<br>$$</p>
+<h6 id="2-2-1-转换方程"><a href="#2-2-1-转换方程" class="headerlink" title="2.2.1 转换方程"></a>2.2.1 转换方程</h6><p>$$<br>^rT_t\cdot ^tP_o &#x3D; ^rP_o &#x3D; ^rH_c \cdot ^cP_o<br>$$</p>
+<p>参数解释：</p>
+<p>$^rT_t$(4×4)：Tool到Robot的转换矩阵，即机械手示教器上读回的数值</p>
+<p>${^r}P{_o}$(3×1)：object在robot下的位置</p>
+<p>${^r}H{_c}$(3×3)：图像平面h1到Tool平面转换矩阵</p>
+<p>${^c}P{_t}$(2×1&#x3D;&#x3D;齐次变化&#x3D;&#x3D;&gt;3×1)：tool在图像中的点</p>
+<h6 id="2-2-2-直接法"><a href="#2-2-2-直接法" class="headerlink" title="2.2.2 直接法"></a>2.2.2 直接法</h6><p>$$<br>^rP_o &#x3D; ^rH_c \cdot ^cP_o<br>$$</p>
+<p>标定过程：</p>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_dir_flow.png" /></div>
+
+<h6 id="2-2-3-圆弧法"><a href="#2-2-3-圆弧法" class="headerlink" title="2.2.3 圆弧法"></a>2.2.3 圆弧法</h6><p>$$<br>^rP_o &#x3D; ^rH_c \cdot ^cP_o<br>$$</p>
+<p>圆弧法需要将标定板绑在机械手上，该方法也是为了找到$^rP_o$与$^cP_o$两个数据集间的转换关系。每个Poc都需要由3张相同xy(robot base)坐标下相机拍得的图像，用拟合圆心的方法得到。<strong>object定义为拟合得到的圆心</strong>，即机械手最末端。</p>
+<p>(3张图像拟合的圆心是在本软件中使用的默认图像张数，所以该方法所需要的机械手位姿点数与图像张数必须相等，且是3的倍数。)</p>
+<p>因为只是标定两个平面之间的关系，$^rP_o$的xy与$^rT_t$的xy数据相同。</p>
+<center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_to_hand_circle.png" style="zoom:100%" />
+</center>
+
+
+<p>用圆弧法需要将标定板绑在机械手上，该方法也是为了找到$^rP_o$与$^cP_o$两个数据集间的转换关系</p>
+<p>操作步骤：</p>
+<div align="center"><img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/plane_calibration_4axis_cam_to_hand_circle_flow.png" /></div>
+
+<h5 id="2-3-直接利用AXXB解决"><a href="#2-3-直接利用AXXB解决" class="headerlink" title="2.3 直接利用AXXB解决"></a>2.3 直接利用AXXB解决</h5><p>eye in hand：</p>
+<p>$$<br>^rT_o&#x3D;^rT_t \cdot ^tT_c \cdot ^cT_o<br>$$</p>
+<p>列两个方程：<br>$$<br>^rT_o&#x3D;^rT_t^{1} \cdot ^tT_c \cdot ^cT_o^{1}<br>$$<br>$$<br>^rT_o&#x3D;^rT_t^{2} \cdot ^tT_c \cdot ^cT_o^{2}<br>$$</p>
+<p>列出方程：<br>$$<br>^rT_t^{1} \cdot ^tT_c \cdot ^cT_o^{1}&#x3D;^rT_t^{2} \cdot ^tT_c \cdot ^cT_o^{2}<br>$$</p>
+<p>化简得:<br>$$<br>^tT_r^{1} \cdot ^rT_t^{2} \cdot ^tT_c&#x3D;^tT_c \cdot ^cT_o^{1} \cdot ^oT_c^{2}<br>$$</p>
+<p>$$<br>AX&#x3D;XB<br>$$</p>
+<p>eye to hand:</p>
+<p>标定板绑在手末端</p>
+<p>$$<br>^tT_o&#x3D;^tT_r \cdot ^rT_c \cdot ^cT_o<br>$$</p>
+<p>列两个方程：<br>$$<br>^tT_o&#x3D;^tT_r^{1} \cdot ^rT_c \cdot ^cT_o^{1}<br>$$</p>
+<p>$$<br>^tT_o&#x3D;^tT_r^{2} \cdot ^rT_c \cdot ^cT_o^{2}<br>$$</p>
+<p>$$<br>^tT_r^{1} \cdot ^rT_c \cdot ^cT_o^{1}&#x3D;^tT_r^{2} \cdot ^rT_c \cdot ^cT_o^{2}<br>$$</p>
+<p>化简得:<br>$$<br>^rT_t^{2} \cdot ^tT_r^{1} \cdot ^rT_c &#x3D; ^rT_c \cdot ^cT_o^{2} \cdot ^oT_c^{1}<br>$$</p>
+<p>$$<br>AX&#x3D;XB<br>$$</p>
+<h5 id="总结梳理"><a href="#总结梳理" class="headerlink" title="总结梳理"></a>总结梳理</h5><p>眼在手上，通过图像点Poc与Pot的关系，平面标定出Tct。</p>
+<p>建模版子来,图像点Poc与标定量Tct,得到Pot, Pot与Ttr得到Por，就是现在图像点在Robot下的3d位置，多个图像点计算多个Por</p>
+<p>实际板子来，同上一步骤，计算新的多个Por，与建模的Por计算homo关系，应用到示教点，得到新的电胶点，over～</p>
+<h2 id="三、单目标定"><a href="#三、单目标定" class="headerlink" title="三、单目标定"></a>三、单目标定</h2><p>从之前的<br><a href="#####4.4%E3%80%81%E4%BB%8E%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E5%88%B0%E5%83%8F%E7%B4%A0%E5%9D%90%E6%A0%87">从世界坐标到像素坐标</a>可以得到：</p>
+<p>$$<br>Zc<br>\left[<br> \begin{matrix}<br>   u\<br>   v \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{1}{dx} &amp; 0 &amp; u0\<br>   0 &amp; \frac{1}{dy} &amp; v0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   f &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; f &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   R &amp; T\<br>   0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xw\<br>   Yw\<br>   Zw\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>相机标定也是利用了上面这个公式，等式右边前两个矩阵乘积为相机内参，第三为相机外参(也成为Toc)。</p>
+<p>各个参数的含义：dx代表一个像素的宽度（x方向），与x同单位，x&#x2F;dx表示x轴上有多少个像素，同理y&#x2F;dy表示y轴上的像素个数，(u0，v0)是图像平面中心。相机模型类似小孔成像模型，自行百度，也可参考前面的坐标转换关系<a href="#####4.2%E3%80%81%E7%9B%B8%E6%9C%BA%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8E%E5%9B%BE%E5%83%8F%E5%9D%90%E6%A0%87%E7%B3%BB">相机坐标系与图像坐标系</a>与<a href="#####4.3%E3%80%81%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8E%E7%9B%B8%E6%9C%BA%E5%9D%90%E6%A0%87%E7%B3%BB">世界坐标系与相机坐标系</a>。</p>
+<p>举个实际的例子,相机内参为：</p>
+<p>$$<br>K &#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{f}{dx} &amp; 0 &amp; u0\<br>   0 &amp; \frac{f}{dy} &amp; v0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>$$</p>
+<h3 id="1、如何进行标定？（理想情况下无畸变）"><a href="#1、如何进行标定？（理想情况下无畸变）" class="headerlink" title="1、如何进行标定？（理想情况下无畸变）"></a>1、如何进行标定？（理想情况下无畸变）</h3><p>单目标定的目的就是为了得到<strong>dx,dy,f,R,T</strong>这几个参数（暂时不考虑畸变参数）。而最开始接触标定只是按照不同姿势地摆放标定板，前提当然要固定相机位置，为什么要这么做呢。</p>
+<p>设有N个角点，K个棋盘，则可以列出2NK个方程，未知参数有4+6K个，所以从理论上来说，方程组数大于未知数个数就能解出未知数，即2NK&gt;&#x3D;6K+4，即(N-3)K&gt;&#x3D;2，但对于同一个平面来说，4个角点确定了一个与投影平面共面的四边形，在四个方向同时延伸就可以变成任意四边形，所以N的约束即为4，那么就只有K&gt;&#x3D;2这个条件，理论上至少需要两个视场列得到的2×4×2&#x3D;16个方程才能求得4+6×2&#x3D;16个参数。但是考虑噪声和数值稳定性，图片上的角点可以取多后采用最小二乘法、ransac或其他方法取最优参数。一般标定取10幅7×7或7×8角度不同的图片。到此为止，求出了<strong>dx,dy,f,R,T</strong>这几个参数。  </p>
+<p>当然，标定还有另外一种方式，对于eye in hand 这种case，可以固定标定板，相机在机械手上，随着机械手变化位置，去不同的点位拍照，(当硬件结构确定情况下的大批量生产情况采用这种自动标定方式可以节约人力成本，)提前预设好几个位置，让机械手随机在附近进行拍照，完成内外参的标定。</p>
+<h3 id="2、实际情况下（有畸变）"><a href="#2、实际情况下（有畸变）" class="headerlink" title="2、实际情况下（有畸变）"></a>2、实际情况下（有畸变）</h3><p>理想的针孔模型透过小孔的光线少，导致了相机的曝光时间慢，实际中为了加快图像的生成使用透镜，但同时也引入了畸变。所以畸变发生在相机内部，所需要增加的相应计算多了几个畸变参数(会在下面定义),计算方法参照的方程式仍然是从世界坐标系到像素坐标的转换Tpw，常见的畸变有(1)径向畸变，(2)切向畸变。  </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">graph RL</span><br><span class="line">A[世界坐标] --&gt; B[相机坐标]</span><br><span class="line">B --&gt; C[理想图像坐标]</span><br><span class="line">C -- 不考虑畸变--&gt; D[像素坐标]</span><br><span class="line">C -- 畸变 --&gt; E[实际图像坐标]</span><br><span class="line">E --&gt; D</span><br></pre></td></tr></table></figure>
+
+<p>如果你用opencv的接口，会有最多(k1,k2,p1,p2[,k3[,k4,k5,k6[,s1,s2,s3,s4[,τx,τy]]]])这么多个畸变参数。</p>
+<h4 id="2-1、径向畸变"><a href="#2-1、径向畸变" class="headerlink" title="2.1、径向畸变"></a>2.1、径向畸变</h4><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/radialdistortionmodel.jpeg"/>
+</center>
+
+
+<p>径向畸变的现象有桶形失真与枕形失真。在成像仪光轴中心的畸变为0，沿着镜头半径方向向边缘移动，径向位移增大，畸变越来越严重。畸变的数学模型用参数<strong>k1,k2,k3,k4,k5,k6</strong>（或更多）描述，用主点的泰勒级数展开式前三项（或更多）表示：</p>
+<p>$$<br>\begin{cases}<br>x_{correct} &#x3D;  x(1+k_1r^2+k_2r^4+k_3r^6+…)\<br>y_{correct} &#x3D;  y(1+k_1r^2+k_2r^4+k_3r^6+…)<br>\end{cases}<br>$$</p>
+<h4 id="2-2、切向畸变"><a href="#2-2、切向畸变" class="headerlink" title="2.2、切向畸变"></a>2.2、切向畸变</h4><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/tangentialdistortionmodel.jpeg"/>
+</center>
+
+
+<p>切向畸变是由于透镜的安装偏差产生，导致透镜本身与相机成像平面不平行。切向畸变模型用参数<strong>p1,p2</strong>描述：</p>
+<p>$$<br>\begin{cases}<br>x_{correct} &#x3D;  x+[2p_1xy+p_2(r^2+2x^2)]\<br>y_{correct} &#x3D;  y+[2p_2xy+p_1(r^2+2y^2)]<br>\end{cases}<br>$$<br>(r为该点距离成像中心距离)</p>
+<h4 id="2-3、总结"><a href="#2-3、总结" class="headerlink" title="2.3、总结"></a>2.3、总结</h4><p>综合以上两种畸变，得到畸变矫正前后的坐标对应（理想图像坐标到实际图像坐标）关系：</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   x_c\<br>   y_c<br>  \end{matrix}<br>\right]&#x3D;<br>(1+k_1r^2+k_2r^4+k_3r^6)<br>\left[<br> \begin{matrix}<br>   x_p\<br>   y_p<br>  \end{matrix}<br>\right]<br>+<br>\left[<br> \begin{matrix}<br>   2p_1xy+p_2(r^2+2x^2)\<br>   2p_2xy+p_1(r^2+2y^2)<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>此时，世界坐标系到像素坐标系的关系就多了一个畸变转换：</p>
+<p>$$<br>Zc<br>\left[<br> \begin{matrix}<br>   u\<br>   v \<br>   1<br>  \end{matrix}<br>\right]&#x3D;<br>\left[<br> \begin{matrix}<br>   \frac{1}{dx} &amp; 0 &amp; u0\<br>   0 &amp; \frac{1}{dy} &amp; v0\<br>   0 &amp; 0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   distor transform<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   f &amp; 0 &amp; 0 &amp; 0\<br>   0 &amp; f &amp; 0 &amp; 0\<br>   0 &amp; 0 &amp; 1 &amp; 0<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   R &amp; T\<br>   0 &amp; 1<br>  \end{matrix}<br>\right]<br>\left[<br> \begin{matrix}<br>   Xw\<br>   Yw\<br>   Zw\<br>   1<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>畸变转换至少包含五个参数<strong>k1,k2,k3,p1,p2</strong>,标定需要求得的未知数就有4+5+6K个，所以，为了标定结果的准确性，前面提到的标定取10幅7×7或7×8角度不同的图片是很有必要的。</p>
+<h3 id="3、疑问"><a href="#3、疑问" class="headerlink" title="3、疑问"></a>3、疑问</h3><h4 id="3-1、标定的世界坐标从何而来"><a href="#3-1、标定的世界坐标从何而来" class="headerlink" title="3.1、标定的世界坐标从何而来"></a>3.1、标定的世界坐标从何而来</h4><p>给予标定板的建立世界坐标的xy轴，z轴垂直标定板射出，原点位置定义为标定板的圆孔的第一个点。</p>
+<h4 id="3-2、一张图像也能得到标定结果"><a href="#3-2、一张图像也能得到标定结果" class="headerlink" title="3.2、一张图像也能得到标定结果"></a>3.2、一张图像也能得到标定结果</h4><p>N的约束4还要保留吗？</p>
+<p>一张图片确实可以得到标定结果，会有很多解。</p>
+<h3 id="4、自动标定"><a href="#4、自动标定" class="headerlink" title="4、自动标定"></a>4、自动标定</h3><p>由于标定过程比较繁杂，无非就是尽可能多的在工作平面附近拍摄标定板的图片进行计算。使用机械手自动走点位进行拍照的方法较为节省人力成本。(球面)</p>
+<p>本次分析参考：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34193345/article/details/104631302">自动标定分析</a></p>
+<h4 id="eye-in-hand"><a href="#eye-in-hand" class="headerlink" title="eye in hand"></a>eye in hand</h4><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_in_hand.png"/>
+</center>
+
+
+<p>原始位置:<br>$$<br>^rT_o &#x3D; ^rT_t \cdot ^tT_c \cdot ^cT_o<br>$$<br>新位置:<br>$$<br>^rT_o &#x3D; ^rT_t^{‘} \cdot ^tT_c \cdot ^cT_o^{‘}<br>$$</p>
+<p>$$<br>^cT_o^{‘} &#x3D; ^cT_o \cdot T<br>$$</p>
+<p>结合以上两个公式，移项化简得：<br>$$<br>^rT_t^{‘} &#x3D; ^rT_o \cdot  T^{-1} \cdot ^oT_t<br>$$</p>
+<h4 id="eye-to-hand"><a href="#eye-to-hand" class="headerlink" title="eye to hand"></a>eye to hand</h4><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_to_hand.png"/>
+</center>
+
+
+<p>与eye in hand同理<br>原始位置:<br>$$<br>^rT_c &#x3D; ^rT_t \cdot ^tT_o \cdot ^oT_c<br>$$<br>新位置:<br>$$<br>^rT_c &#x3D; ^rT_t^{‘} \cdot ^tT_o \cdot ^oT_c^{‘}<br>$$</p>
+<p>$$<br>^oT_c^{‘} &#x3D; T^{-1} \cdot ^oT_c<br>$$</p>
+<p>结合以上两个公式，移项化简得：<br>$$<br>^rT_t^{‘} &#x3D; ^rT_o \cdot  T \cdot ^oT_t<br>$$</p>
+<p>以上的T均假设移动的object的偏移量。</p>
+<h2 id="四、双目标定"><a href="#四、双目标定" class="headerlink" title="四、双目标定"></a>四、双目标定</h2><p>为了得到图片中物体的深度信息，引入双目视觉。</p>
+<p>双目标定在<a href="##%E4%B8%89%E3%80%81%E5%8D%95%E7%9B%AE%E6%A0%87%E5%AE%9A">单目标定</a>的基础上，标定出左右摄像机坐标系之间的相对关系。</p>
+<h3 id="1、基本概念"><a href="#1、基本概念" class="headerlink" title="1、基本概念"></a>1、基本概念</h3><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/stereocam.png"/>
+</center>
+
+
+<p>所涉及的专业名词有对极几何，本征矩阵，基础矩阵。</p>
+<p>双目相机基于对极几何的理论，本征矩阵E(essential_matrix)包含在物理空间两个摄像机相关的旋转与平移信息，基础矩阵F(fundamental_matrix)除了包含E的信息还包括两个相机的内参数。E是几何意义上的，与成像仪无关，将左相机观测到的点P的坐标与右相机观测到的相同点的坐标关联起来(<strong>相机坐标系下</strong>)，F则是将左相机的像平面上的点与右相机观测到的像平面上相同点关联起来(<strong>像素坐标系</strong>)。</p>
+<h4 id="1-0、对极几何"><a href="#1-0、对极几何" class="headerlink" title="1.0、对极几何"></a>1.0、对极几何</h4><center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/EpipolarGeometry.png"/>
+</center>
+
+
+<p>立体成像系统的几何基础被称作“对极几何”</p>
+<p>投影点：XL，XR</p>
+<p>极点：相机光心投影到另一个相机的像平面上，eL，eR。</p>
+<p>基线:两摄像机光心之间的距离</p>
+<p>极线：直线Ol-XL因为与左相机的光学中心对其，所以在左相机被视为一个点（直线上的任意一点都投影到像平面上的XL点），但是，右侧相机会将此视为图像平面的一条线（图中红线），这条在右侧相机像平面上的直线eR-XR称为极线，同理，左相机像平面上的直线XL-eL也称为极线。</p>
+<p>极线平面：XL-eL-eR-XR构成的平面</p>
+<p>主点：主光线和相平面的相交位置OL，OR，两对极点与主点在同一3D直线上。</p>
+<p>摄像机视图中的每一个三维点都被包含在与每个图像相交的极面中，二者相交产生的直线是极线。<br>给定一幅图像的特征，在另一图像的匹配视图一定位于对应极线。这称为“极线约束” 。<br>极限约束意味着，一旦我们知道立体实验设备之间的对极几何，在两幅图像中匹配的二维搜索可以转变为沿着极线的一维搜索。</p>
+<h4 id="1-1、本征矩阵-Essential-matrix"><a href="#1-1、本征矩阵-Essential-matrix" class="headerlink" title="1.1、本征矩阵(Essential matrix)"></a>1.1、本征矩阵(Essential matrix)</h4><p>本征矩阵用字母E来表示，物理意义是左右相机坐标系相互转换的矩阵,表示几何意义，与单成像仪无关，用来描述左右相机图像平面上对应点<strong>在各自相机坐标系</strong>之间的关系。</p>
+<p>特性：<br>1）本质矩阵是由对极约束定义的。由于对极约束是等式为0的约束，所以对E乘以任何非零常数后，对极约束依然满足。这一点被称为E在不同尺度下是等价的。<br>2）根据E&#x3D;t∧R，可以证明，本质矩阵E的奇异值必定式[σ,σ,0]T。这称为本质矩阵的内在性质。可以理解为：一个3×3的矩阵是本征矩阵的充要条件是对它奇异值分解后，它有两个相等的奇异值，并且第三个奇异值为0。<br>3）由于平移和旋转各有3个自由度，所以t∧R共有6个自由度。但由于尺度等价性，故E实际上只有5个自由度。</p>
+<h4 id="1-2、基础矩阵-Fundamental-matrix"><a href="#1-2、基础矩阵-Fundamental-matrix" class="headerlink" title="1.2、基础矩阵(Fundamental matrix)"></a>1.2、基础矩阵(Fundamental matrix)</h4><p>给本征矩阵E增加相机内参矩阵M的相关信息，就能得到描述同一个物理点在左右相机图像平面上对应点<strong>在各自像素坐标系</strong>下的关系。</p>
+<p>参考: <a target="_blank" rel="noopener" href="https://docs.opencv.org/4.0.0/d9/d0c/group__calib3d.html#gae420abc34eaa03d0c6a67359609d8429">opencv官方文档</a></p>
+<p>极线模型(两像素点关系)：</p>
+<p>$$<br>[P_2:1]^T \cdot F \cdot[P_1:1] &#x3D; 0<br>$$</p>
+<h4 id="1-3、矩阵Q"><a href="#1-3、矩阵Q" class="headerlink" title="1.3、矩阵Q"></a>1.3、矩阵Q</h4><p>矩阵Q实现了视差图$disparity(x,y)$到3D世界坐标$(X,Y,Z,W)$</p>
+<h1 id="left-begin-matrix-X-Y-Z-W-end-matrix-right-T"><a href="#left-begin-matrix-X-Y-Z-W-end-matrix-right-T" class="headerlink" title="$$\left[ \begin{matrix}   X &amp; Y &amp; Z &amp;W  \end{matrix}\right]^T"></a>$$<br>\left[<br> \begin{matrix}<br>   X &amp; Y &amp; Z &amp;W<br>  \end{matrix}<br>\right]^T</h1><p>Q*<br>\left[<br> \begin{matrix}<br>   x &amp; y &amp; disparity(x,y) &amp; 1<br>  \end{matrix}<br>\right]^T<br>$$</p>
+<p>$$<br>\left[<br> \begin{matrix}<br>   1 &amp; 0 &amp; 0 &amp; -c_x\<br>   0 &amp; 1 &amp; 0 &amp; -c_y\<br>   0 &amp; 0 &amp; 0 &amp; f\<br>   0 &amp; 0 &amp; -1&#x2F;T_x &amp; (c_x-c_x^{‘})&#x2F;T_x<br>  \end{matrix}<br>\right]<br>$$</p>
+<p>$(c_x, c_y)$左相机主点坐标，$(c_x^{‘}, c_y^{‘})$右相机主点坐标，双目矫正后$c_y&#x3D;&#x3D;c_y^{‘}$成立，$f$焦距，$T_x$基线长，即两相机光心之间的距离。</p>
+<h4 id="1-4、bouguet极线矫正"><a href="#1-4、bouguet极线矫正" class="headerlink" title="1.4、bouguet极线矫正"></a>1.4、bouguet极线矫正</h4><p>为了进行深度计算与三维重建，应该在双目标定之后先进行极线矫正。</p>
+<p>校正前两个相机的光轴是一个倒V字形，如上对极几何图形所示，左右相机像平面不平行，极点在像平面上；</p>
+<p>相比，校正后两相机光轴平行，像点在左右图像上的高度一致(极线矫正目的)，是为了做立体匹配时，只需要在同一行上搜索左右像平面的匹配点，提升效率。</p>
+<p>矫正方法：将双目标定所求的基础矩阵(含RT)，分解成左右相机各旋转平移一半为Rl,Tl与Rr,Tr，分解原则为左右图像重投影畸变最小，左右的共同面积最大。</p>
+<p>旋转后，左右相机的光轴平行，两成像面平行，没有行对准。</p>
+<p>构造旋转矩阵使得基线与成像平面平行，构造方法通过右相机相对左相机的偏移矩阵T完成。</p>
+<p>为了使得左相机的极点变换到无穷远（极线水平），左右相机投影中心之间的平移向量就是左极线方向。</p>
+<h3 id="2、计算"><a href="#2、计算" class="headerlink" title="2、计算"></a>2、计算</h3><p>假设空间中一点P，其在世界坐标系下的坐标为Pw，左相机到右相机的关系为R,T，其在左右相机坐标系下的坐标可以表示为：</p>
+<p>$$<br>\begin{cases}<br>P_{l} &#x3D;  R_lP_w+T_l\<br>P_{r} &#x3D;  R_rP_w+T_r<br>\end{cases}<br>$$</p>
+<p>其中</p>
+<p>$$<br>P_r &#x3D; RP_l+T<br>$$</p>
+<p>结合以上两个公式，推得：</p>
+<p>$$<br>\begin{cases}<br>R &#x3D; R_rR_l^T\<br>T &#x3D; T_r-RT_l<br>\end{cases}<br>$$</p>
+<p>奇异值分解？</p>
+<h2 id="五、眼手标定"><a href="#五、眼手标定" class="headerlink" title="五、眼手标定"></a>五、眼手标定</h2><p>眼手标定根据相机的安装方式不同，分别求解的是相机到机械手末端轴的坐标变换关系(相机在手上)</p>
+<p>$$<br>{^T}T{_C}<br>$$<br>或相机到机械手底座的坐标变换关系(相机不在手上)</p>
+<p>$$<br>{^R}T{_C}<br>$$</p>
+<h3 id="1、相机安装在机械手上"><a href="#1、相机安装在机械手上" class="headerlink" title="1、相机安装在机械手上"></a>1、相机安装在机械手上</h3><p>此种相机安装方式(Eye in hand)，<strong>标定量为相机与机械手末端之间的关系</strong>。</p>
+<center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_in_hand.png"/>
+</center>
+
+
+<p>标定方法: 固定标定板与机械手底座不变，移动机械手至两个位置1、2，分别记录两个位置下的相机图像，机械手位置。</p>
+<p>假设空间中一物体(object)，机械手需要使用(眼在手上的相机)拍摄物体，得到物体在图片中的位置Pimg(x,y)，通过之前的单目相机标定，能够将此坐标转换到相机坐标系下的表示，即：<br>$$<br>P_{cam} &#x3D; {^C}T{<em>O} * P</em>{img}<br>$$</p>
+<p>然而，控制机械手抓取物体的动作，调整的是基于机械手底座(Robot)坐标系的xyzuvw变化，所以还需要求解相机坐标系到机械手底座坐标系的转换，即：</p>
+<p>$$<br>{^R}T{_C} &#x3D; {^R}T{_T} {^T}T{_C}<br>$$</p>
+<p>${^R}T{_T}$：机械手末端到机械手底座<br>${^T}T{_C}$：相机到机械手末端</p>
+<p>在已知机械手末端到机械手底座关系的条件下，未知量只有相机到机械手末端转换矩阵：</p>
+<p>$$<br>{^T}T{_C}<br>$$<br>移动机械手分别到位置1与位置2，<strong>以标定板到底座的固定关系(转换关系不变)，建立1、2两个位置下的恒等式。</strong></p>
+<p>令：$X &#x3D; {^T}T{_C}$<br>$$<br>{^R}T{_O} &#x3D; {^R}T1{_T}\cdot X\cdot {^C}T1{_O} &#x3D; {^R}T2{_T}\cdot X\cdot {^C}T2{_O}<br>$$</p>
+<p>以上方程式的未知数只有X一个，可以将方程化成：</p>
+<p>$$<br>{^R}T2{^{-1}_T}\cdot{  {^R}T1{_T}\cdot X \cdot {^C}T1{_O} } \cdot {^C}T1{^{-1}_O} &#x3D;{^R}T2{^{-1}_T} \cdot{  {^R}T2{_T} \cdot X \cdot {^C}T2{_O} } \cdot {^C}T1{^{-1}_O}<br>$$</p>
+<p>即：</p>
+<!-- $$
+{
+  {^R}T1{_T}\cdot X = X \cdot {^C}T2{_O}
+}
+$$ -->
+
+<p>$$<br>{^R}T2{^{-1}_T}\cdot{  {^R}T1{_T}\cdot X &#x3D; X \cdot {^C}T2{_O} } \cdot {^C}T1{^{-1}_O}<br>$$</p>
+<p>化简为：</p>
+<p>$$<br>A \cdot X &#x3D; X \cdot B<br>$$</p>
+<h3 id="2、相机不安装在机械手上"><a href="#2、相机不安装在机械手上" class="headerlink" title="2、相机不安装在机械手上"></a>2、相机不安装在机械手上</h3><p>此种相机安装方式(Eye to hand)需要将标定板固定在机械手末端，保持机械手末端(Tool)与物体(Object)的位置关系不变，<strong>标定量为相机到机械手底座之间的关系</strong>。</p>
+<center>
+<img src="https://blazarnoteimages.oss-cn-beijing.aliyuncs.com/eye_to_hand.png"/>
+</center>
+
+
+<p>方法同 <a href="###1%E7%9B%B8%E6%9C%BA%E5%AE%89%E8%A3%85%E5%9C%A8%E6%9C%BA%E6%A2%B0%E6%89%8B%E4%B8%8A">相机安装在机械手上</a>，分别移动机械手到位置1与位置2，<strong>以标定板到机械手末端的固定关系(转换关系不变)，建立1、2两个位置下的恒等式。</strong></p>
+<p>令：$X &#x3D; {^R}T{_C}$<br>$$<br>{^T}T{_O} &#x3D; {^T}T1{_R}\cdot X\cdot {^C}T1{_O} &#x3D; {^T}T2{_R}\cdot X\cdot {^C}T2{_O}<br>$$</p>
+<p>以上方程式的未知数只有X一个，可以将方程化成：</p>
+<p>$$<br>{^T}T2{^{-1}_R}\cdot </p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/calibration/">https://blazarlin.github.io/2026/08/29/calibration/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E6%A0%87%E5%AE%9A/">标定</a><a class="post-meta__tags" href="/tags/%E5%9D%90%E6%A0%87%E7%B3%BB/">坐标系</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/git_skills/" title="git—分布式版本控制工具"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">git—分布式版本控制工具</div></div><div class="info-2"><div class="info-item-1">git—分布式版本控制工具    git—分布式版本控制工具 1. 本地操作 2. 分支管理 3. 多人協作 4. 標籤管理 5. 遠程庫管理 5.1. 本地与远程库关联的方法   6. 打包 7. 车祸现场 8. 自定义git 8.1. 配置别名       1. 本地操作1.廖雪峯 git Git是目前世界上最先进的分布式版本控制系统 2.git config的–global参数，用了这个参数，表示你这台机器上所有的Git仓库都会使用这个配置 3.the function of git commit -m “xxx”?? 版本修改了什麼東西 備註 $ git log显示从最近到最远的提交日志历史 $ git reset –hard HEAD^回退到上一个版本 $ git reset –hard XX(版本號)回退到XXX版本 $ git reflog用来记录你的每一次 HEAD指向的版本就是当前版本，因此，Git允许我们在版本的历史之间穿梭，使用git reset –hard commit_id要重返未来，用git reflog查看历史，以便确定要回到未来的哪个版本 4.st...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E7%BA%BF%E7%A8%8B%E7%94%A8%E6%B3%95/" title="c++线程用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">c++线程用法</div></div><div class="info-2"><div class="info-item-1">当前最常用的几个线程库1、c++官方&lt;thread&gt;，使用的函数类std::thread2、QT的QThread类3、Windows API ::CreateThread std::threadlambda写法1234567891011121314int nInputValue1 = 10;//输入的形参1int nInputValue2 = 20;//输入的形参2// 线程函数声明std::thread testCppThread([&amp;](int nVal1,int nVal2) &#123;    // 逻辑代码    for (int i = 0; i &lt; nVal1; i++)    &#123;        std::this_thread::sleep_for(std::chrono::milliseconds(100));    &#125;    &#125;, nInputValue1, nInputValue1);testCppThread.detach();		// 后台执行，立即执行后续代码// testCppThread.jo...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%9B%B8%E6%9C%BA%E6%A0%87%E5%AE%9A%E5%A4%A7%E5%85%A8%E2%80%94%E2%80%94%E5%B9%B3%E9%9D%A2%E3%80%81%E5%8D%95%E7%9B%AE%E3%80%81%E5%8F%8C%E7%9B%AE%E3%80%81%E7%9C%BC%E6%89%8B"><span class="toc-number">1.</span> <span class="toc-text">相机标定大全——平面、单目、双目、眼手</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%9C%BA%E5%99%A8%E8%A7%86%E8%A7%89%E5%87%A0%E4%BD%95%E5%9D%90%E6%A0%87%E6%A6%82%E8%AE%BA"><span class="toc-number">1.1.</span> <span class="toc-text">一、机器视觉几何坐标概论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.1.</span> <span class="toc-text">1、世界坐标系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E6%91%84%E5%83%8F%E6%9C%BA%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.2.</span> <span class="toc-text">2、摄像机坐标系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%9B%BE%E5%83%8F%EF%BC%88%E5%83%8F%E7%B4%A0%EF%BC%89%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.3.</span> <span class="toc-text">3、图像（像素）坐标系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%E3%80%81%E5%9B%BE%E5%83%8F%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.3.1.</span> <span class="toc-text">3.1、图像坐标系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%E3%80%81%E5%83%8F%E7%B4%A0%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.3.2.</span> <span class="toc-text">3.2、像素坐标系</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B9%8B%E9%97%B4%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.1.4.</span> <span class="toc-text">4、坐标系之间的关系</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#4-1%E3%80%81%E5%9B%BE%E5%83%8F%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8E%E5%83%8F%E7%B4%A0%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.4.1.</span> <span class="toc-text">4.1、图像坐标系与像素坐标系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-2%E3%80%81%E7%9B%B8%E6%9C%BA%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8E%E5%9B%BE%E5%83%8F%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.4.2.</span> <span class="toc-text">4.2、相机坐标系与图像坐标系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-3%E3%80%81%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E7%B3%BB%E4%B8%8E%E7%9B%B8%E6%9C%BA%E5%9D%90%E6%A0%87%E7%B3%BB"><span class="toc-number">1.1.4.3.</span> <span class="toc-text">4.3、世界坐标系与相机坐标系</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-4%E3%80%81%E4%BB%8E%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E5%88%B0%E5%83%8F%E7%B4%A0%E5%9D%90%E6%A0%87"><span class="toc-number">1.1.4.4.</span> <span class="toc-text">4.4、从世界坐标到像素坐标</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%B9%B3%E9%9D%A2%E6%A0%87%E5%AE%9A%EF%BC%88Homography%E5%8F%98%E6%8D%A2%EF%BC%89"><span class="toc-number">1.2.</span> <span class="toc-text">二、平面标定（Homography变换）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">1、定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AE%A1%E7%AE%97%E6%8E%A8%E5%AF%BC"><span class="toc-number">1.2.2.</span> <span class="toc-text">2、计算推导</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E5%BA%94%E7%94%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">3、应用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1%E3%80%81%E7%AE%80%E5%8D%95%E5%B9%B3%E9%9D%A2%E7%9A%84%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.2.3.1.</span> <span class="toc-text">1、简单平面的转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2%E3%80%81%E5%9C%A8%E5%9B%9B%E8%BD%B4%E4%B8%AD%E6%B1%82%E5%8F%962D%E7%82%B9%E5%88%B03D%E7%82%B9%E7%9A%84%E8%BD%AC%E6%8D%A2%E5%85%B3%E7%B3%BB"><span class="toc-number">1.2.3.2.</span> <span class="toc-text">2、在四轴中求取2D点到3D点的转换关系</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#2-1-%E7%9B%B8%E6%9C%BA%E5%9C%A8%E6%89%8B%E4%B8%8A"><span class="toc-number">1.2.3.2.1.</span> <span class="toc-text">2.1 相机在手上</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-1-%E8%BD%AC%E6%8D%A2%E6%96%B9%E7%A8%8B"><span class="toc-number">1.2.3.2.1.1.</span> <span class="toc-text">2.1.1 转换方程</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-2-%E7%9B%B4%E6%8E%A5%E6%B3%95"><span class="toc-number">1.2.3.2.1.2.</span> <span class="toc-text">2.1.2 直接法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-1-3-%E6%97%8B%E8%BD%AC%E6%B3%95"><span class="toc-number">1.2.3.2.1.3.</span> <span class="toc-text">2.1.3 旋转法</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-2-%E7%9B%B8%E6%9C%BA%E4%B8%8D%E5%9C%A8%E6%89%8B%E4%B8%8A"><span class="toc-number">1.2.3.2.2.</span> <span class="toc-text">2.2 相机不在手上</span></a><ol class="toc-child"><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-1-%E8%BD%AC%E6%8D%A2%E6%96%B9%E7%A8%8B"><span class="toc-number">1.2.3.2.2.1.</span> <span class="toc-text">2.2.1 转换方程</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-2-%E7%9B%B4%E6%8E%A5%E6%B3%95"><span class="toc-number">1.2.3.2.2.2.</span> <span class="toc-text">2.2.2 直接法</span></a></li><li class="toc-item toc-level-6"><a class="toc-link" href="#2-2-3-%E5%9C%86%E5%BC%A7%E6%B3%95"><span class="toc-number">1.2.3.2.2.3.</span> <span class="toc-text">2.2.3 圆弧法</span></a></li></ol></li><li class="toc-item toc-level-5"><a class="toc-link" href="#2-3-%E7%9B%B4%E6%8E%A5%E5%88%A9%E7%94%A8AXXB%E8%A7%A3%E5%86%B3"><span class="toc-number">1.2.3.2.3.</span> <span class="toc-text">2.3 直接利用AXXB解决</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E6%80%BB%E7%BB%93%E6%A2%B3%E7%90%86"><span class="toc-number">1.2.3.2.4.</span> <span class="toc-text">总结梳理</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%8D%95%E7%9B%AE%E6%A0%87%E5%AE%9A"><span class="toc-number">1.3.</span> <span class="toc-text">三、单目标定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%A6%82%E4%BD%95%E8%BF%9B%E8%A1%8C%E6%A0%87%E5%AE%9A%EF%BC%9F%EF%BC%88%E7%90%86%E6%83%B3%E6%83%85%E5%86%B5%E4%B8%8B%E6%97%A0%E7%95%B8%E5%8F%98%EF%BC%89"><span class="toc-number">1.3.1.</span> <span class="toc-text">1、如何进行标定？（理想情况下无畸变）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E5%AE%9E%E9%99%85%E6%83%85%E5%86%B5%E4%B8%8B%EF%BC%88%E6%9C%89%E7%95%B8%E5%8F%98%EF%BC%89"><span class="toc-number">1.3.2.</span> <span class="toc-text">2、实际情况下（有畸变）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#2-1%E3%80%81%E5%BE%84%E5%90%91%E7%95%B8%E5%8F%98"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">2.1、径向畸变</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-2%E3%80%81%E5%88%87%E5%90%91%E7%95%B8%E5%8F%98"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">2.2、切向畸变</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-3%E3%80%81%E6%80%BB%E7%BB%93"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">2.3、总结</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3%E3%80%81%E7%96%91%E9%97%AE"><span class="toc-number">1.3.3.</span> <span class="toc-text">3、疑问</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1%E3%80%81%E6%A0%87%E5%AE%9A%E7%9A%84%E4%B8%96%E7%95%8C%E5%9D%90%E6%A0%87%E4%BB%8E%E4%BD%95%E8%80%8C%E6%9D%A5"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">3.1、标定的世界坐标从何而来</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2%E3%80%81%E4%B8%80%E5%BC%A0%E5%9B%BE%E5%83%8F%E4%B9%9F%E8%83%BD%E5%BE%97%E5%88%B0%E6%A0%87%E5%AE%9A%E7%BB%93%E6%9E%9C"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">3.2、一张图像也能得到标定结果</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4%E3%80%81%E8%87%AA%E5%8A%A8%E6%A0%87%E5%AE%9A"><span class="toc-number">1.3.4.</span> <span class="toc-text">4、自动标定</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#eye-in-hand"><span class="toc-number">1.3.4.1.</span> <span class="toc-text">eye in hand</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#eye-to-hand"><span class="toc-number">1.3.4.2.</span> <span class="toc-text">eye to hand</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%8F%8C%E7%9B%AE%E6%A0%87%E5%AE%9A"><span class="toc-number">1.4.</span> <span class="toc-text">四、双目标定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E5%9F%BA%E6%9C%AC%E6%A6%82%E5%BF%B5"><span class="toc-number">1.4.1.</span> <span class="toc-text">1、基本概念</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-0%E3%80%81%E5%AF%B9%E6%9E%81%E5%87%A0%E4%BD%95"><span class="toc-number">1.4.1.1.</span> <span class="toc-text">1.0、对极几何</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-1%E3%80%81%E6%9C%AC%E5%BE%81%E7%9F%A9%E9%98%B5-Essential-matrix"><span class="toc-number">1.4.1.2.</span> <span class="toc-text">1.1、本征矩阵(Essential matrix)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-2%E3%80%81%E5%9F%BA%E7%A1%80%E7%9F%A9%E9%98%B5-Fundamental-matrix"><span class="toc-number">1.4.1.3.</span> <span class="toc-text">1.2、基础矩阵(Fundamental matrix)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#1-3%E3%80%81%E7%9F%A9%E9%98%B5Q"><span class="toc-number">1.4.1.4.</span> <span class="toc-text">1.3、矩阵Q</span></a></li></ol></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#left-begin-matrix-X-Y-Z-W-end-matrix-right-T"><span class="toc-number">2.</span> <span class="toc-text">$$\left[ \begin{matrix}   X &amp; Y &amp; Z &amp;W  \end{matrix}\right]^T</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-4%E3%80%81bouguet%E6%9E%81%E7%BA%BF%E7%9F%AB%E6%AD%A3"><span class="toc-number">2.0.0.1.</span> <span class="toc-text">1.4、bouguet极线矫正</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E8%AE%A1%E7%AE%97"><span class="toc-number">2.0.1.</span> <span class="toc-text">2、计算</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E7%9C%BC%E6%89%8B%E6%A0%87%E5%AE%9A"><span class="toc-number">2.1.</span> <span class="toc-text">五、眼手标定</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1%E3%80%81%E7%9B%B8%E6%9C%BA%E5%AE%89%E8%A3%85%E5%9C%A8%E6%9C%BA%E6%A2%B0%E6%89%8B%E4%B8%8A"><span class="toc-number">2.1.1.</span> <span class="toc-text">1、相机安装在机械手上</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2%E3%80%81%E7%9B%B8%E6%9C%BA%E4%B8%8D%E5%AE%89%E8%A3%85%E5%9C%A8%E6%9C%BA%E6%A2%B0%E6%89%8B%E4%B8%8A"><span class="toc-number">2.1.2.</span> <span class="toc-text">2、相机不安装在机械手上</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

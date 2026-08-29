@@ -1,0 +1,257 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Blazar">
+<meta property="og:url" content="https://blazarlin.github.io/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:author" content="Blazar">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Blazar",
+  "alternateName": [
+    "blazarlin.github.io"
+  ],
+  "url": "https://blazarlin.github.io/"
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Blazar',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/redMan.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Blazar</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/">深度学习</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/TensorRT/">TensorRT</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/ONNX/">ONNX</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/C-%E9%83%A8%E7%BD%B2/">C++部署</a></span></div><div class="content">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署 一条系统性的学习路线，涵盖 ONNX 模型导出、TensorRT 优化加速、Python 推理与 C++ 生产部署全流程。   目录 阶段 0：前置知识 阶段 1：ONNX 基础 — 模型导出与调试 阶段 2：TensorRT 基础 — Python API 推理 阶段 3：TensorRT 进阶 — 构建与优化 阶段 4：C++ 部署实战 阶段 5：生产级实践与性能调优 推荐资源汇总 学习路线图（总览）   阶段 0：前置知识在开始之前，确保掌握以下基础： 必备技能   技能 要求程度 说明    Python 熟练 模型训练、ONNX 导出、TensorRT Python API   C++ 掌握 生产部署、TensorRT C++ API、内存管理   PyTorch &#x2F; TensorFlow 熟练至少一个 模型构建与训练   CUDA 基础 了解 GPU 内存模型、kernel 概念   CMake 基本使用 C++ 项目构建   Linux 命令行 熟练 多数部署环境为 Linu...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/PhaseCorrelate/">PhaseCorrelate</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%85%B3/">相位相关</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86/">图像配准</a></span></div><div class="content">PhaseCorrelate 算法解释资料来源 OpenCV 官方文档：cv::phaseCorrelate 用于检测两幅图之间的平移偏移，利用傅里叶位移定理，可用于快速图像配准和运动估计；其流程包括 Hanning 窗、DFT、互功率谱、逆 DFT、峰值和 5x5 加权质心亚像素估计。OpenCV Motion Analysis and Object Tracking OpenCV 官方文档：cv::createHanningWindow 用于生成二维 Hanning 窗系数。OpenCV createHanningWindow  一句话定义PhaseCorrelate 是一种用频域相位信息来估计两幅图像之间平移量 (dx, dy) 的算法。 它不是用肉眼在空间域里“一格一格滑动匹配”，而是把图像变到频域，通过相位差快速找出整体位移。 使用场景PhaseCorrelate 主要用于两幅图内容基本一致、但位置发生平移的情况。 常见场景：  图像配准 模板或 ROI 对齐 相机抖动补偿 连续帧位移估计 印刷图案位置修正 缺陷检测前的基准图对齐 工业视觉中产品位置轻微漂移的补偿  在...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/IDW/">IDW</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95/">插值算法</a></span></div><div class="content">IDW 算法解释资料来源 Esri ArcGIS Pro 官方文档：IDW 假设距离越近的点越相似，预测未知位置时更重视附近已测点；权重随距离增大而减小。How inverse distance weighted interpolation works Esri ArcGIS Pro 官方文档：IDW 输出值受输入样本值范围限制；power 控制周围点影响程度，默认常用值为 2；搜索半径控制参与插值的点集合。IDW Spatial Analyst Tool  一句话定义IDW 是一种用“距离越近影响越大”的规则，根据已知点估计未知位置数值的插值算法。 它的核心思想很直观：离目标点越近的样本点，越应该相信；离得越远，影响越小。 使用场景IDW 常用于从离散采样点生成连续表面。 典型场景：  地形高程插值 温度、湿度、污染浓度空间分布估计 压力、厚度、亮度等二维场重建 工业检测中稀疏测量点到整面热力图的估计 传感器阵列数据补点 图像或点云中的稀疏值填补  在工业视觉里，如果你有一批离散测量点，例如局部亮度校正点、胶量采样点、表面高度点，想估计整幅区域的连续分布，IDW 可以作为简单、...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/windows/">windows</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/">命令行</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6/">文件复制</a></span></div><div class="content">robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRORLEVEL）说明 实战部署模板   1. robocopy 完整参数速查表1.1 源 &#x2F; 目标 &#x2F; 文件筛选   参数 含义    &lt;source&gt; 源目录路径（必填）   &lt;destination&gt; 目标目录路径（必填）   &lt;file&gt; 要操作的文件名或通配符（如 *.dll、config.ini），可选   /S 复制非空子目录   /E 复制子目录，包括空的（推荐替代 /S）   /A 只复制带存档属性的文件，并保留存档属性   /M 只复制带存档属性的文件，复制完后清除存档属性（适合增量备份）   /LEV:n 只复制源...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/std-thread/">std::thread</a></span></div><div class="content">std::thread 生命周期管控与 join&#x2F;detach 时机 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景常见踩坑项。   TL;DR（一句话） std::thread 构造函数返回的那一刻，OS 线程已经存在并跑着你的 callable，具体何时被调度执行由 OS 决定。 join &#x2F; detach 不是”启动线程”，而是”决定 std::thread 对象在析构时如何处理已经在跑的 OS 线程”。 std::thread 析构时如果 joinable() 仍为 true（既没 join 也没 detach），直接 std::terminate()，整个进程挂掉。   谁管控什么生命周期（分层）std::thread 实际涉及两个独立的”对象”，必须分开看：    层级 对象 谁管控 何时结束    C++ 对象层 std::thread t（栈上 &#x2F; 堆上的 C++ 对象） C++ RAII t 离开作用域、被析构   OS 内核层 内核线程（占着 thread stack） 操作系统 call...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260713-condition_variable%E4%BD%BF%E7%94%A8%E7%AE%80%E4%BB%8B/" title="std::condition_variable 使用简介">std::condition_variable 使用简介</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:58.005Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">多线程</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/condition-variable/">condition_variable</a></span></div><div class="content">std::condition_variable 使用简介 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景下的线程间事件同步原语。   TL;DR（一句话）std::condition_variable 是 线程间”事件通知”原语，必须和 std::mutex 配合使用；核心是 wait(lock, predicate) + notify_one / notify_all；工程铁律是 wait 一律带 predicate，notify 时机先 lock 改状态、解锁、再 notify。  What：它是什么、为什么需要它 让一个或多个线程在条件不满足时阻塞休眠，被通知后再醒过来检查条件。 必须与 std::mutex 搭配：mutex 保护”条件 + 数据”，cv 负责”先放手把锁让出来去睡，被叫醒再回来抢锁”。  三件替代品都做不到的事：  消费者若用 while (!cond) &#123; sleep(1ms); &#125; —— 浪费 CPU，延迟还不可控。 sem_t 没有”条件”语义。 QWaitCondition（Qt）等价...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260721npx-skills%E5%91%BD%E4%BB%A4%E9%80%9F%E6%9F%A5/" title="npx skills 命令速查">npx skills 命令速查</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:57.880Z" title="Created 2026-08-29 10:26:57">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/skills/">skills</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/npm/">npm</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">AI编程工具</a></span></div><div class="content">npx skills 命令速查   一行速记：npx skills@latest &lt;command&gt; [options]官网: https://skills.sh/帮助: npx skills@latest --help &#x2F; npx skills@latest add --help   一、最常用命令（先记这些）安装12345678# 全局装某仓库全部 skill 到 codex，无人值守npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -g -a codex --skill &quot;*&quot; -y# 项目级装（仅当前项目）npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -a codex --skill &quot;*&quot; -y# 先看仓库里有哪些 skill，不安装npx skills@latest add &lt;owner&gt;/&lt;repo&gt; -l  查看12npx skills@latest ls -g -a codex ...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260731-Pi-Agent-%E9%AB%98%E9%98%B6%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pi Agent 高阶使用指南：四组件协同与工具链集成">Pi Agent 高阶使用指南：四组件协同与工具链集成</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:57.852Z" title="Created 2026-08-29 10:26:57">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Agent/">Agent</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">AI编程工具</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Pi-Agent/">Pi Agent</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Agent/">Agent</a></span></div><div class="content">Pi Agent 高阶使用指南：四组件协同与工具链集成 上一篇《Pi-Agent-Windows-使用指南.md》解决「装好、配上火山引擎模型、能对话」。本篇解决「把 Pi 当成一个可编程的 Agent 平台来用」：理解四个官方组件如何分层协同，并通过 Extensions &#x2F; SDK &#x2F; RPC 三条路线把 Pi 嵌入你现有的工具链（Git、tmux、Docker、SSH、CI、IDE、Slack……）。 官方仓库：https://github.com/earendil-works/pi ｜ 文档：https://pi.dev/docs/latest   目录 一、四组件架构总览 二、四组件详解与协同 三、Extensions：在进程内重塑 Pi 四、SDK：把 Pi 嵌入你自己的应用 五、RPC 模式：跨语言 &#x2F; IDE &#x2F; 子进程集成 六、安全与沙箱 七、实战配方：配合其他工具 八、高阶配置技巧 附录 A：扩展开发速查表 附录 B：官方资源与参考   一、四组件架构总览Pi 官方仓库（earendil-works/pi）是一个 mon...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260731%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E6%8B%86%E8%A7%A3%E5%88%86%E6%9E%90/" title="常用正则表达式逐段拆解分析">常用正则表达式逐段拆解分析</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:57.831Z" title="Created 2026-08-29 10:26:57">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">正则表达式</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/python/">python</a></span></div><div class="content">常用正则表达式逐段拆解分析 本文档逐段拆解 8 个常用正则表达式，所有”匹配&#x2F;不匹配”示例均经过 Python re 实测验证。适用场景：日志解析、表单校验、数据提取。配套 C++ 原始字符串 R&quot;(...)&quot; 与 Python r&#39;...&#39; 用法说明见末尾。   目录 时间 HH:MM:SS（24 小时制） IPv4 地址 中国大陆手机号 电子邮箱 日期 YYYY-MM-DD URL 身份证号（18 位） 十六进制颜色码 语法速查表 通用坑与最佳实践   1. 时间 HH:MM:SS（24 小时制）正则 1((?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d)  逐段拆解 12345678910(                          捕获组1：包住整个时间  (?:                      非捕获组：小时部分      [01]\d               00 ~ 19（首位 0 或 1 + 任意数字）      | 2[0-3]             20 ~ 23（首位 2...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pi Agent Windows 使用指南（含火山引擎模型配置）">Pi Agent Windows 使用指南（含火山引擎模型配置）</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:26:57.815Z" title="Created 2026-08-29 10:26:57">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/Agent/">Agent</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/windows/">windows</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">AI编程工具</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Pi-Agent/">Pi Agent</a></span></div><div class="content">Pi Agent Windows 使用指南（含火山引擎模型配置） 本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。Pi 官方文档：https://pi.dev ｜ npm 包：@earendil-works/pi-coding-agent   目录 一、Pi Agent 是什么 二、Windows 环境准备 三、安装 Pi 四、配置目录结构 五、配置火山引擎模型（核心） 5.1 准备工作 5.2 模型对照表 5.3 让另一个 Pi Agent 自动配置   六、日常使用 七、开启思考模式（可选） 八、常见问题排查   一、Pi Agent 是什么Pi 是一个极简的终端编程智能体框架（terminal coding agent harness）。它默认提供 read、write、edit、bash 四个工具，让大模型在你的本地完成读写文件、执行命令等开发任务。 它的特点是：  极简内核 + 强扩展：通过 Skills、Extensions、Prompt Templates、Themes 自定义工作流。 多 Pro...</div></div></div></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span><a class="page-number" href="/page/2/#content-inner">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/2/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline"><i class="fas fa-folder-open"></i><span>Categories</span></div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Agent/"><span class="card-category-list-name">Agent</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/"><span class="card-category-list-name">C++编程</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QT%E7%BC%96%E7%A8%8B/"><span class="card-category-list-name">QT编程</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"><span class="card-category-list-name">图像处理</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%80%BB%E7%BB%93%E6%95%B4%E5%90%88/"><span class="card-category-list-name">总结整合</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">深度学习</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/"><span class="card-category-list-name">编程工具</span><span class="card-category-list-count">12</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/windows/" style="font-size: 1.35em; color: rgb(62, 50, 158);">windows</a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" style="font-size: 1.25em; color: rgb(88, 50, 50);">命令行</a><a href="/tags/%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6/" style="font-size: 1.15em; color: rgb(178, 193, 87);">文件复制</a><a href="/tags/c/" style="font-size: 1.45em; color: rgb(50, 192, 117);">c++</a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.25em; color: rgb(70, 71, 191);">多线程</a><a href="/tags/condition-variable/" style="font-size: 1.15em; color: rgb(50, 121, 50);">condition_variable</a><a href="/tags/std-thread/" style="font-size: 1.15em; color: rgb(128, 153, 70);">std::thread</a><a href="/tags/skills/" style="font-size: 1.15em; color: rgb(63, 50, 103);">skills</a><a href="/tags/npm/" style="font-size: 1.15em; color: rgb(50, 183, 50);">npm</a><a href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/" style="font-size: 1.35em; color: rgb(122, 50, 51);">AI编程工具</a><a href="/tags/Pi-Agent/" style="font-size: 1.35em; color: rgb(75, 50, 193);">Pi Agent</a><a href="/tags/Agent/" style="font-size: 1.15em; color: rgb(50, 97, 152);">Agent</a><a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 1.15em; color: rgb(56, 107, 135);">正则表达式</a><a href="/tags/python/" style="font-size: 1.25em; color: rgb(50, 93, 104);">python</a><a href="/tags/GLM-4V/" style="font-size: 1.15em; color: rgb(76, 50, 50);">GLM-4V</a><a href="/tags/%E5%9B%BE%E5%83%8F%E7%90%86%E8%A7%A3/" style="font-size: 1.15em; color: rgb(134, 50, 188);">图像理解</a><a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 1.15em; color: rgb(110, 167, 117);">web前端</a><a href="/tags/IDW/" style="font-size: 1.15em; color: rgb(50, 50, 187);">IDW</a><a href="/tags/%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95/" style="font-size: 1.15em; color: rgb(181, 50, 50);">插值算法</a><a href="/tags/%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE/" style="font-size: 1.25em; color: rgb(109, 136, 101);">部署配置</a><a href="/tags/PhaseCorrelate/" style="font-size: 1.15em; color: rgb(117, 155, 187);">PhaseCorrelate</a><a href="/tags/%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%85%B3/" style="font-size: 1.15em; color: rgb(50, 93, 69);">相位相关</a><a href="/tags/%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86/" style="font-size: 1.15em; color: rgb(137, 164, 50);">图像配准</a><a href="/tags/qss/" style="font-size: 1.15em; color: rgb(85, 50, 75);">qss</a><a href="/tags/QT/" style="font-size: 1.35em; color: rgb(148, 101, 111);">QT</a><a href="/tags/%E8%B0%83%E8%AF%95/" style="font-size: 1.15em; color: rgb(128, 50, 50);">调试</a><a href="/tags/PDB/" style="font-size: 1.15em; color: rgb(71, 164, 50);">PDB</a><a href="/tags/TensorRT/" style="font-size: 1.15em; color: rgb(157, 50, 176);">TensorRT</a><a href="/tags/ONNX/" style="font-size: 1.15em; color: rgb(177, 81, 176);">ONNX</a><a href="/tags/C-%E9%83%A8%E7%BD%B2/" style="font-size: 1.15em; color: rgb(156, 173, 88);">C++部署</a><a href="/tags/Ubuntu/" style="font-size: 1.25em; color: rgb(131, 167, 110);">Ubuntu</a><a href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" style="font-size: 1.25em; color: rgb(51, 159, 87);">系统运维</a><a href="/tags/STL%E5%88%86%E6%9E%90/" style="font-size: 1.25em; color: rgb(50, 96, 187);">STL分析</a><a href="/tags/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.15em; color: rgb(53, 50, 64);">STL源码分析</a><a href="/tags/pdb/" style="font-size: 1.25em; color: rgb(95, 179, 86);">pdb</a><a href="/tags/%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/" style="font-size: 1.25em; color: rgb(198, 50, 157);">异常捕获</a><a href="/tags/%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/" style="font-size: 1.15em; color: rgb(199, 50, 74);">并行处理</a><a href="/tags/c-11/" style="font-size: 1.15em; color: rgb(166, 121, 116);">c++11</a><a href="/tags/c-14/" style="font-size: 1.15em; color: rgb(120, 57, 112);">c++14</a><a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 1.15em; color: rgb(87, 118, 50);">线程</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/08/">
+            <span class="card-archive-list-date">
+              August 2026
+            </span>
+            <span class="card-archive-list-count">36</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">36</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-08-29T03:55:16.990Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["One is All"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed && typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle(["One is All"])
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

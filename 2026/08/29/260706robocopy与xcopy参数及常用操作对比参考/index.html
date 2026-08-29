@@ -1,0 +1,1002 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>robocopy 与 xcopy 参数及常用操作对比参考 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="robocopy 与 xcopy 参数及常用操作对比参考">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRO">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:26:58.085Z">
+<meta property="article:modified_time" content="2026-08-29T02:52:12.342Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="windows">
+<meta property="article:tag" content="命令行">
+<meta property="article:tag" content="文件复制">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "robocopy 与 xcopy 参数及常用操作对比参考",
+  "url": "https://blazarlin.github.io/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:26:58.085Z",
+  "dateModified": "2026-08-29T02:52:12.342Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'robocopy 与 xcopy 参数及常用操作对比参考',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">robocopy 与 xcopy 参数及常用操作对比参考</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">robocopy 与 xcopy 参数及常用操作对比参考</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:52:12.342Z" title="Updated 2026-08-29 10:52:12">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="robocopy-与-xcopy-参数及常用操作对比参考"><a href="#robocopy-与-xcopy-参数及常用操作对比参考" class="headerlink" title="robocopy 与 xcopy 参数及常用操作对比参考"></a>robocopy 与 xcopy 参数及常用操作对比参考</h1><blockquote>
+<p>适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。<br>文档约定：所有示例路径均用 <code>\</code> 转义后书写，bat 中正常书写即可。</p>
+</blockquote>
+<hr>
+<h2 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h2><ol>
+<li><a href="#1-robocopy-%E5%AE%8C%E6%95%B4%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5%E8%A1%A8">robocopy 完整参数速查表</a></li>
+<li><a href="#2-xcopy-%E5%AE%8C%E6%95%B4%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5%E8%A1%A8">xcopy 完整参数速查表</a></li>
+<li><a href="#3-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E7%85%A7%E8%A1%A8robocopy-vs-xcopy">常用操作对照表（robocopy vs xcopy）</a></li>
+<li><a href="#4-%E8%BF%94%E5%9B%9E%E7%A0%81errorlevel%E8%AF%B4%E6%98%8E">返回码（ERRORLEVEL）说明</a></li>
+<li><a href="#5-%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2%E6%A8%A1%E6%9D%BF">实战部署模板</a></li>
+</ol>
+<hr>
+<h2 id="1-robocopy-完整参数速查表"><a href="#1-robocopy-完整参数速查表" class="headerlink" title="1. robocopy 完整参数速查表"></a>1. robocopy 完整参数速查表</h2><h3 id="1-1-源-目标-文件筛选"><a href="#1-1-源-目标-文件筛选" class="headerlink" title="1.1 源 &#x2F; 目标 &#x2F; 文件筛选"></a>1.1 源 &#x2F; 目标 &#x2F; 文件筛选</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;source&gt;</code></td>
+<td>源目录路径（必填）</td>
+</tr>
+<tr>
+<td><code>&lt;destination&gt;</code></td>
+<td>目标目录路径（必填）</td>
+</tr>
+<tr>
+<td><code>&lt;file&gt;</code></td>
+<td>要操作的文件名或通配符（如 <code>*.dll</code>、<code>config.ini</code>），可选</td>
+</tr>
+<tr>
+<td><code>/S</code></td>
+<td>复制<strong>非空</strong>子目录</td>
+</tr>
+<tr>
+<td><code>/E</code></td>
+<td>复制子目录，<strong>包括空的</strong>（推荐替代 <code>/S</code>）</td>
+</tr>
+<tr>
+<td><code>/A</code></td>
+<td>只复制带<strong>存档属性</strong>的文件，并保留存档属性</td>
+</tr>
+<tr>
+<td><code>/M</code></td>
+<td>只复制带<strong>存档属性</strong>的文件，复制完后<strong>清除</strong>存档属性（适合增量备份）</td>
+</tr>
+<tr>
+<td><code>/LEV:n</code></td>
+<td>只复制源目录树的前 <strong>n</strong> 层</td>
+</tr>
+<tr>
+<td><code>/MAXAGE:n</code></td>
+<td>排除早于 n 天&#x2F;日期的文件（如 <code>MAXAGE:7</code>）</td>
+</tr>
+<tr>
+<td><code>/MINAGE:n</code></td>
+<td>排除晚于 n 天&#x2F;日期的文件</td>
+</tr>
+<tr>
+<td><code>/MAXSIZE:n</code></td>
+<td>排除大于 n 字节的文件（如 <code>MAXSIZE:1048576</code>）</td>
+</tr>
+<tr>
+<td><code>/MINSIZE:n</code></td>
+<td>排除小于 n 字节的文件</td>
+</tr>
+<tr>
+<td><code>/XF file [file]...</code></td>
+<td><strong>排除</strong>指定名字&#x2F;通配符&#x2F;路径的文件</td>
+</tr>
+<tr>
+<td><code>/XD dir [dir]...</code></td>
+<td><strong>排除</strong>指定目录</td>
+</tr>
+<tr>
+<td><code>/XC</code></td>
+<td>排除<strong>已更改</strong>的文件</td>
+</tr>
+<tr>
+<td><code>/XN</code></td>
+<td>排除<strong>较新</strong>的文件</td>
+</tr>
+<tr>
+<td><code>/XO</code></td>
+<td>排除<strong>较旧</strong>的文件（只覆盖较旧的目标，实现增量）</td>
+</tr>
+<tr>
+<td><code>/IS</code></td>
+<td>包含<strong>完全相同</strong>的文件（默认会跳过）</td>
+</tr>
+<tr>
+<td><code>/IT</code></td>
+<td>包含<strong>被调整过的</strong>文件（时间戳相同但属性不同）</td>
+</tr>
+</tbody></table>
+<h3 id="1-2-文件属性与安全"><a href="#1-2-文件属性与安全" class="headerlink" title="1.2 文件属性与安全"></a>1.2 文件属性与安全</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/A-:RASHCNET</code></td>
+<td>去除指定属性（R&#x3D;只读 A&#x3D;存档 S&#x3D;系统 H&#x3D;隐藏 C&#x3D;压缩 N&#x3D;未索引 E&#x3D;加密 T&#x3D;临时）</td>
+</tr>
+<tr>
+<td><code>/A+:RASHCNET</code></td>
+<td>添加指定属性</td>
+</tr>
+<tr>
+<td><code>/COPY:copyflags</code></td>
+<td>指定要复制的内容：<code>D=数据 A=属性 T=时间戳 S=安全=Ntfs ACL O=所有者 U=审核信息</code>，默认 <code>DAT</code></td>
+</tr>
+<tr>
+<td><code>/COPYALL</code></td>
+<td>等价于 <code>/COPY:DATSOU</code>（复制所有信息）</td>
+</tr>
+<tr>
+<td><code>/NOCOPY</code></td>
+<td>不复制文件内容（仅操作文件列表）</td>
+</tr>
+<tr>
+<td><code>/SEC</code></td>
+<td>等价于 <code>/COPY:DATS</code>（含安全 ACL）</td>
+</tr>
+<tr>
+<td><code>/DST</code></td>
+<td>补偿 1 小时夏令时时差</td>
+</tr>
+<tr>
+<td><code>/TIMFIX</code></td>
+<td>修复目标文件的时间戳</td>
+</tr>
+<tr>
+<td><code>/PURGE</code></td>
+<td>删除目标中<strong>不存在于源</strong>的文件&#x2F;目录（和 <code>/E</code> 合用）</td>
+</tr>
+<tr>
+<td><code>/MIR</code></td>
+<td><strong>镜像</strong>：等价于 <code>/E /PURGE</code>，会删目标多余文件</td>
+</tr>
+<tr>
+<td><code>/MOV</code></td>
+<td>移动文件（复制后<strong>删除源</strong>）</td>
+</tr>
+<tr>
+<td><code>/MOVE</code></td>
+<td>移动文件 + 目录（复制后<strong>删除源</strong>）</td>
+</tr>
+</tbody></table>
+<h3 id="1-3-重试与容错"><a href="#1-3-重试与容错" class="headerlink" title="1.3 重试与容错"></a>1.3 重试与容错</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/R:n</code></td>
+<td>失败重试次数，<strong>默认 1000000</strong>（工业脚本必改 0~3）</td>
+</tr>
+<tr>
+<td><code>/W:n</code></td>
+<td>重试间隔秒数，默认 30</td>
+</tr>
+<tr>
+<td><code>/REG</code></td>
+<td>将 <code>/R:n /W:n</code> 保存到注册表作为后续默认</td>
+</tr>
+<tr>
+<td><code>/TBD</code></td>
+<td>等待共享名定义（待定）</td>
+</tr>
+</tbody></table>
+<h3 id="1-4-日志"><a href="#1-4-日志" class="headerlink" title="1.4 日志"></a>1.4 日志</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/L</code></td>
+<td><strong>仅列出</strong>要执行的操作，不真正复制（dry-run）</td>
+</tr>
+<tr>
+<td><code>/X</code></td>
+<td>报告所有<strong>额外</strong>的文件（不只限超出选择条件的）</td>
+</tr>
+<tr>
+<td><code>/V</code></td>
+<td><strong>详细</strong>输出（含被跳过的文件）</td>
+</tr>
+<tr>
+<td><code>/TS</code></td>
+<td>输出中<strong>含源文件时间戳</strong></td>
+</tr>
+<tr>
+<td><code>/FP</code></td>
+<td>输出中<strong>含完整路径</strong></td>
+</tr>
+<tr>
+<td><code>/BYTES</code></td>
+<td>以<strong>字节</strong>显示大小（默认 KB&#x2F;MB）</td>
+</tr>
+<tr>
+<td><code>/NS</code></td>
+<td>无文件大小</td>
+</tr>
+<tr>
+<td><code>/NC</code></td>
+<td>无文件类别（<code>*EXTRA</code>、<code>*Changed</code> 等标记）</td>
+</tr>
+<tr>
+<td><code>/NFL</code></td>
+<td>无文件列表（不列文件名）</td>
+</tr>
+<tr>
+<td><code>/NDL</code></td>
+<td>无目录列表（不列目录名）</td>
+</tr>
+<tr>
+<td><code>/NP</code></td>
+<td>无进度百分比</td>
+</tr>
+<tr>
+<td><code>/LOG:file</code></td>
+<td>输出到日志文件（<strong>覆盖</strong>）</td>
+</tr>
+<tr>
+<td><code>/LOG+:file</code></td>
+<td>输出到日志文件（<strong>追加</strong>）</td>
+</tr>
+<tr>
+<td><code>/UNILOG:file</code></td>
+<td>以 <strong>Unicode</strong> 输出到日志</td>
+</tr>
+<tr>
+<td><code>/UNILOG+:file</code></td>
+<td>以 Unicode <strong>追加</strong>到日志</td>
+</tr>
+<tr>
+<td><code>/TEE</code></td>
+<td>同时输出到<strong>屏幕和日志</strong></td>
+</tr>
+</tbody></table>
+<h3 id="1-5-性能"><a href="#1-5-性能" class="headerlink" title="1.5 性能"></a>1.5 性能</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/J</code></td>
+<td>使用<strong>未缓冲 I&#x2F;O</strong>（适合大文件，企业版&#x2F;Server 系统才有）</td>
+</tr>
+<tr>
+<td><code>/Z</code></td>
+<td><strong>可重启模式</strong>（断点续传，网络拷贝用）</td>
+</tr>
+<tr>
+<td><code>/MT[:n]</code></td>
+<td><strong>多线程</strong>，n 默认 8，最大 128；线程越多对磁盘压力越大</td>
+</tr>
+<tr>
+<td><code>/IPG:n</code></td>
+<td>包间间隙 ms（<strong>限速</strong>，n 为毫秒间隔）</td>
+</tr>
+<tr>
+<td><code>/COMPRESS</code></td>
+<td>网络传输时启用 SMB 压缩（仅 Win11 24H2 &#x2F; Server 2022+）</td>
+</tr>
+</tbody></table>
+<h3 id="1-6-输出显示（静默组合）"><a href="#1-6-输出显示（静默组合）" class="headerlink" title="1.6 输出显示（静默组合）"></a>1.6 输出显示（静默组合）</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/NJH</code></td>
+<td>无作业头（开头那段 源&#x2F;目标&#x2F;时间）</td>
+</tr>
+<tr>
+<td><code>/NJS</code></td>
+<td>无作业摘要（结尾那段 统计）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>/NJH /NJS /NDL /NFL /NP /NC</code> 是工业部署最常见的”完全静默”组合。</p>
+</blockquote>
+<h3 id="1-7-调度（备份相关）"><a href="#1-7-调度（备份相关）" class="headerlink" title="1.7 调度（备份相关）"></a>1.7 调度（备份相关）</h3><table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/RH:hhmm-hhmm</code></td>
+<td>指定<strong>运行时间窗口</strong>（24h 制），如 <code>/RH:0930-1700</code></td>
+</tr>
+<tr>
+<td><code>/PF</code></td>
+<td>基于<strong>运行频率</strong>而非总时间（每小时检查一次）</td>
+</tr>
+<tr>
+<td><code>/MON:n</code></td>
+<td>检测到 n 个变更后再次运行</td>
+</tr>
+<tr>
+<td><code>/MOT:m</code></td>
+<td>m 分钟后若检测到变更则再次运行</td>
+</tr>
+</tbody></table>
+<hr>
+<h2 id="2-xcopy-完整参数速查表"><a href="#2-xcopy-完整参数速查表" class="headerlink" title="2. xcopy 完整参数速查表"></a>2. xcopy 完整参数速查表</h2><blockquote>
+<p>xcopy 参数远少于 robocopy，能力较弱但兼容性最好。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/A</code></td>
+<td>只复制带<strong>存档属性</strong>的文件，保留属性</td>
+</tr>
+<tr>
+<td><code>/M</code></td>
+<td>只复制带<strong>存档属性</strong>的文件，复制后清除属性</td>
+</tr>
+<tr>
+<td><code>/D[:date]</code></td>
+<td>只复制<strong>指定日期或之后</strong>修改的源文件（增量）</td>
+</tr>
+<tr>
+<td><code>/P</code></td>
+<td>每个源文件前<strong>提示确认</strong>（脚本里通常不要用）</td>
+</tr>
+<tr>
+<td><code>/S</code></td>
+<td>复制<strong>非空</strong>子目录</td>
+</tr>
+<tr>
+<td><code>/E</code></td>
+<td>复制<strong>所有</strong>子目录，包括空的</td>
+</tr>
+<tr>
+<td><code>/V</code></td>
+<td>校验每个新文件（写入后回读）</td>
+</tr>
+<tr>
+<td><code>/W</code></td>
+<td>复制前等待按键（基本没人用）</td>
+</tr>
+<tr>
+<td><code>/C</code></td>
+<td>出错也<strong>继续</strong>复制</td>
+</tr>
+<tr>
+<td><code>/I</code></td>
+<td><strong>假定目标是目录</strong>（避免脚本里被询问）</td>
+</tr>
+<tr>
+<td><code>/Q</code></td>
+<td><strong>静默</strong>：复制时不显示文件名</td>
+</tr>
+<tr>
+<td><code>/F</code></td>
+<td>复制时显示<strong>完整源和目标文件名</strong></td>
+</tr>
+<tr>
+<td><code>/L</code></td>
+<td><strong>仅列出</strong>要复制的文件，不真正复制</td>
+</tr>
+<tr>
+<td><code>/G</code></td>
+<td>允许复制<strong>加密文件</strong>到不支持加密的目标</td>
+</tr>
+<tr>
+<td><code>/H</code></td>
+<td>复制<strong>隐藏和系统文件</strong></td>
+</tr>
+<tr>
+<td><code>/R</code></td>
+<td><strong>覆盖只读文件</strong>（默认会拒绝覆盖）</td>
+</tr>
+<tr>
+<td><code>/T</code></td>
+<td>创建<strong>目录结构</strong>但不复制文件</td>
+</tr>
+<tr>
+<td><code>/U</code></td>
+<td>只复制<strong>目标中已存在</strong>的文件</td>
+</tr>
+<tr>
+<td><code>/K</code></td>
+<td>复制后<strong>保留原始属性</strong>（如只读）</td>
+</tr>
+<tr>
+<td><code>/N</code></td>
+<td>用短文件名复制（兼容老 FAT）</td>
+</tr>
+<tr>
+<td><code>/O</code></td>
+<td>复制<strong>文件所有权和 ACL</strong>（需管理员）</td>
+</tr>
+<tr>
+<td><code>/X</code></td>
+<td>复制<strong>文件审核设置</strong>（需管理员）</td>
+</tr>
+<tr>
+<td><code>/Y</code></td>
+<td><strong>覆盖前不询问</strong>（脚本里必加）</td>
+</tr>
+<tr>
+<td><code>/-Y</code></td>
+<td>覆盖前<strong>询问</strong>（默认行为）</td>
+</tr>
+<tr>
+<td><code>/Z</code></td>
+<td><strong>可重启模式</strong>（网络断点续传）</td>
+</tr>
+<tr>
+<td><code>/EXCLUDE:file[+file]</code></td>
+<td>排除指定文件（每行一个排除模式，如 <code>obj\bin</code>）</td>
+</tr>
+<tr>
+<td><code>/?</code></td>
+<td>显示帮助</td>
+</tr>
+<tr>
+<td><code>/COMPRESS</code></td>
+<td>网络传输时启用 SMB 压缩（同 robocopy）</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ xcopy 没有 <code>MAXAGE / MINAGE / 多线程 / 镜像</code> 这些能力，需要靠 robocopy 或 PowerShell。</p>
+</blockquote>
+<hr>
+<h2 id="3-常用操作对照表（robocopy-vs-xcopy）"><a href="#3-常用操作对照表（robocopy-vs-xcopy）" class="headerlink" title="3. 常用操作对照表（robocopy vs xcopy）"></a>3. 常用操作对照表（robocopy vs xcopy）</h2><blockquote>
+<p>同一种操作，先列 <strong>robocopy 写法</strong>，再列 <strong>xcopy 写法</strong>，方便对照。</p>
+</blockquote>
+<h3 id="3-1-拷贝单个文件"><a href="#3-1-拷贝单个文件" class="headerlink" title="3.1 拷贝单个文件"></a>3.1 拷贝单个文件</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;G:\Dst&quot; &quot;config.ini&quot;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>必须给一个目录作源，再指定文件名。<strong>不能直接两个文件路径对拷</strong>。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\config.ini&quot; &quot;G:\Dst\config.ini&quot; /Y</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>xcopy 支持<strong>直接两个文件路径</strong>对拷。</p>
+</blockquote>
+<hr>
+<h3 id="3-2-拷贝整个文件夹（含子目录）"><a href="#3-2-拷贝整个文件夹（含子目录）" class="headerlink" title="3.2 拷贝整个文件夹（含子目录）"></a>3.2 拷贝整个文件夹（含子目录）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src\Models&quot; &quot;E:\Backup\Models&quot; /E</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/E</code> 包含子目录与空目录。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\Models&quot; &quot;E:\Backup\Models&quot; /E /I /Y</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/E</code> 含空子目录；<code>/I</code> 当目标不存在时假定为目录，避免被询问。</p>
+</blockquote>
+<hr>
+<h3 id="3-3-仅复制目录结构（不要文件）"><a href="#3-3-仅复制目录结构（不要文件）" class="headerlink" title="3.3 仅复制目录结构（不要文件）"></a>3.3 仅复制目录结构（不要文件）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;G:\Dst&quot; /E /NOCOPY</span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src&quot; &quot;G:\Dst&quot; /E /T /I /Y</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-4-仅复制比目标更新的文件（增量同步）"><a href="#3-4-仅复制比目标更新的文件（增量同步）" class="headerlink" title="3.4 仅复制比目标更新的文件（增量同步）"></a>3.4 仅复制比目标更新的文件（增量同步）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /XO</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/XO</code> 排除较旧文件，源不更新则不复制。<strong>最常用的同步写法</strong>。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /D:<span class="variable">%date:~0,4%</span>-<span class="variable">%date:~5,2%</span>-<span class="variable">%date:~8,2%</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>xcopy 的 <code>/D</code> 需要指定日期，无法直接”比目标新”，常用 <code>/D:0</code> 表示仅复制”昨天及以后”。<code>%date%</code> 展开后传给 <code>/D</code> 是常见做法。</p>
+<p>工业里更稳的写法是用 PowerShell：</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy <span class="string">&quot;G:\Src&quot;</span> <span class="string">&quot;E:\Dst&quot;</span> /E /XO</span><br></pre></td></tr></table></figure></blockquote>
+<hr>
+<h3 id="3-5-强制覆盖不询问"><a href="#3-5-强制覆盖不询问" class="headerlink" title="3.5 强制覆盖不询问"></a>3.5 强制覆盖不询问</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /IS /IT</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认 robocopy 就<strong>不会询问</strong>是否覆盖（不像 xcopy）。<br><code>/IS /IT</code> 强制覆盖”相同”和”调整过”的文件（连大小&#x2F;时间戳都不看）。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /R</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/Y</code> 不询问覆盖；<code>/R</code> 同时允许覆盖只读文件。</p>
+</blockquote>
+<hr>
+<h3 id="3-6-静默执行（不显示任何信息）"><a href="#3-6-静默执行（不显示任何信息）" class="headerlink" title="3.6 静默执行（不显示任何信息）"></a>3.6 静默执行（不显示任何信息）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /NJH /NJS /NDL /NFL /NP /NC &gt;<span class="built_in">nul</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>屏幕完全静默；<code>&gt;nul 2&gt;&amp;1</code> 把 stdout &#x2F; stderr 都丢掉。<br>调试时去掉 <code>/NFL /NP</code> 就能看到文件名与进度。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /Q &gt;<span class="built_in">nul</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/Q</code> 静默；<code>&gt;nul 2&gt;&amp;1</code> 丢弃剩余提示。<code>/Q</code> 仍可能打印结尾摘要。</p>
+</blockquote>
+<hr>
+<h3 id="3-7-只输出到日志文件（不显示屏幕）"><a href="#3-7-只输出到日志文件（不显示屏幕）" class="headerlink" title="3.7 只输出到日志文件（不显示屏幕）"></a>3.7 只输出到日志文件（不显示屏幕）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /R:<span class="number">0</span> /W:<span class="number">1</span> /LOG+:C:\Logs\sync.log /TS /FP</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/LOG+</code> 追加；<code>/TS</code> 日志带时间戳；<code>/FP</code> 日志带完整路径。<br>想屏幕 + 日志同时输出，加 <code>/TEE</code>。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y &gt; C:\Logs\sync.log <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>xcopy 本身无日志选项，只能用 shell 重定向。</p>
+</blockquote>
+<hr>
+<h3 id="3-8-失败不重试-失败重试-N-次"><a href="#3-8-失败不重试-失败重试-N-次" class="headerlink" title="3.8 失败不重试 &#x2F; 失败重试 N 次"></a>3.8 失败不重试 &#x2F; 失败重试 N 次</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:: 不重试</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /R:<span class="number">0</span> /W:<span class="number">1</span></span><br><span class="line"></span><br><span class="line">:: 重试 <span class="number">3</span> 次，每次间隔 <span class="number">5</span> 秒</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /R:<span class="number">3</span> /W:<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>⚠️ <strong>robocopy 默认 <code>/R:1000000 / W:30</code></strong>，<strong>工业脚本必改</strong>。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">:: <span class="built_in">xcopy</span> 失败时直接进下一个文件，不重试</span><br><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /C</span><br><span class="line"></span><br><span class="line">:: <span class="built_in">xcopy</span> 没有内置重试，失败只显示 F:\xxx</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>xcopy 没有重试参数，只能靠 <code>/C</code>（出错继续）。需要重试逻辑请用 <code>for</code> + 自定义 bat，或直接上 robocopy。</p>
+</blockquote>
+<hr>
+<h3 id="3-9-镜像同步（含删除目标多余文件）"><a href="#3-9-镜像同步（含删除目标多余文件）" class="headerlink" title="3.9 镜像同步（含删除目标多余文件）"></a>3.9 镜像同步（含删除目标多余文件）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /MIR /R:<span class="number">0</span> /W:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/MIR</code> &#x3D; <code>/E + /PURGE</code>，<strong>会把目标里源没有的文件&#x2F;目录删掉</strong>。<br>⚠️ 慎用，先用 <code>/L</code> dry-run 一次确认。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">:: <span class="built_in">xcopy</span> 没有镜像，需要两步</span><br><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y</span><br><span class="line">:: 删多余文件... <span class="built_in">xcopy</span> 没这个能力，得另写脚本</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>工业镜像同步请直接用 robocopy。</p>
+</blockquote>
+<hr>
+<h3 id="3-10-多线程拷贝（加速大目录）"><a href="#3-10-多线程拷贝（加速大目录）" class="headerlink" title="3.10 多线程拷贝（加速大目录）"></a>3.10 多线程拷贝（加速大目录）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /MT:<span class="number">16</span> /R:<span class="number">0</span> /W:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/MT:n</code> 启用 n 线程，默认 8，最大 128。<br>⚠️ 线程多 ≠ 一定快：磁盘 SSD&#x2F;HDD、文件大小、并发读写都会影响收益。机械盘建议 2~4 线程。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM xcopy 不支持多线程</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>这是 xcopy 时代落幕的根本原因之一。</p>
+</blockquote>
+<hr>
+<h3 id="3-11-限制带宽（防压垮网络）"><a href="#3-11-限制带宽（防压垮网络）" class="headerlink" title="3.11 限制带宽（防压垮网络）"></a>3.11 限制带宽（防压垮网络）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;\\fileserver\share&quot; &quot;E:\Dst&quot; /E /IPG:<span class="number">10</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/IPG:10</code> 表示包间间隙 10ms，<strong>越大越慢</strong>。1ms ≈ 80% 带宽；5ms ≈ 30%。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM xcopy 没有带宽限制</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-12-跳过特定扩展名-文件"><a href="#3-12-跳过特定扩展名-文件" class="headerlink" title="3.12 跳过特定扩展名 &#x2F; 文件"></a>3.12 跳过特定扩展名 &#x2F; 文件</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /XF *.tmp *.log *.bak</span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /EXCLUDE:exclude.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>exclude.txt</code> 每行一个排除模式，例如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.tmp</span><br><span class="line">.log</span><br><span class="line">.bak</span><br></pre></td></tr></table></figure></blockquote>
+<hr>
+<h3 id="3-13-跳过特定目录"><a href="#3-13-跳过特定目录" class="headerlink" title="3.13 跳过特定目录"></a>3.13 跳过特定目录</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /XD &quot;.git&quot; &quot;node_modules&quot; &quot;bin&quot; &quot;obj&quot;</span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM xcopy 不支持，需要在 exclude.txt 里写路径模式</span></span><br><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /EXCLUDE:exclude.txt</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>exclude.txt 里写：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">\.git\</span><br><span class="line">\node_modules\</span><br><span class="line">\bin\</span><br><span class="line">\obj\</span><br></pre></td></tr></table></figure></blockquote>
+<hr>
+<h3 id="3-14-复制隐藏文件-系统文件"><a href="#3-14-复制隐藏文件-系统文件" class="headerlink" title="3.14 复制隐藏文件 &#x2F; 系统文件"></a>3.14 复制隐藏文件 &#x2F; 系统文件</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /A+:H</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认 robocopy <strong>不复制隐藏&#x2F;系统文件</strong>，需要 <code>/A+:H</code> 显式加。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /H</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/H</code> 复制隐藏和系统文件。</p>
+</blockquote>
+<hr>
+<h3 id="3-15-复制并保留时间戳-ACL"><a href="#3-15-复制并保留时间戳-ACL" class="headerlink" title="3.15 复制并保留时间戳 &#x2F; ACL"></a>3.15 复制并保留时间戳 &#x2F; ACL</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">:: 仅时间戳与属性（默认）</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /<span class="built_in">COPY</span>:DAT</span><br><span class="line"></span><br><span class="line">:: 含 NTFS ACL</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /<span class="built_in">COPY</span>:DATS /SEC</span><br><span class="line"></span><br><span class="line">:: 含所有者与审核信息（需管理员）</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /COPYALL</span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /O /X</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/O</code> 含所有权 + ACL，<code>/X</code> 含审核信息；都需管理员权限。<br>xcopy 默认保留时间戳，但 ACL 要靠 <code>/O</code>。</p>
+</blockquote>
+<hr>
+<h3 id="3-16-拷贝后删除源（移动文件）"><a href="#3-16-拷贝后删除源（移动文件）" class="headerlink" title="3.16 拷贝后删除源（移动文件）"></a>3.16 拷贝后删除源（移动文件）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:: 移动文件（保留目录结构）</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /MOV /R:<span class="number">0</span> /W:<span class="number">1</span></span><br><span class="line"></span><br><span class="line">:: 移动文件 + 空目录</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /<span class="built_in">MOVE</span> /R:<span class="number">0</span> /W:<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">REM xcopy 不支持移动；删源要自己写 del / rd</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>移动文件场景请用 robocopy 或 PowerShell <code>Move-Item</code>。</p>
+</blockquote>
+<hr>
+<h3 id="3-17-Dry-run（仅列出，不真复制）"><a href="#3-17-Dry-run（仅列出，不真复制）" class="headerlink" title="3.17 Dry-run（仅列出，不真复制）"></a>3.17 Dry-run（仅列出，不真复制）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /L /V</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/L</code> 仅列出；常配合 <code>/V</code> 看哪些会被跳过。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /L</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-18-大文件-断点续传"><a href="#3-18-大文件-断点续传" class="headerlink" title="3.18 大文件 + 断点续传"></a>3.18 大文件 + 断点续传</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;\\share\big.iso&quot; &quot;E:\Dst&quot; /Z /IPG:<span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/Z</code> 可重启模式，<strong>网络中断可续传</strong>；<code>/IPG:5</code> 限速保护共享。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;\\share\big.iso&quot; &quot;E:\Dst\&quot; /Z /Y</span><br></pre></td></tr></table></figure>
+
+<hr>
+<h3 id="3-19-仅复制特定类型（按扩展名筛选）"><a href="#3-19-仅复制特定类型（按扩展名筛选）" class="headerlink" title="3.19 仅复制特定类型（按扩展名筛选）"></a>3.19 仅复制特定类型（按扩展名筛选）</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">:: 只复制 .dll 和 .ini</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; *.dll *.ini /S</span><br><span class="line"></span><br><span class="line">:: 只复制 .log</span><br><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; *.log /S /MAXAGE:<span class="number">7</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">:: 只复制 dll</span><br><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.dll&quot; &quot;E:\Dst\&quot; /S /I /Y</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>xcopy 只能用通配符在源路径上写，robocopy 可以 <code>&lt;files&gt;</code> 位置写多个通配符。</p>
+</blockquote>
+<hr>
+<h3 id="3-20-处理被占用文件-出错继续"><a href="#3-20-处理被占用文件-出错继续" class="headerlink" title="3.20 处理被占用文件 &#x2F; 出错继续"></a>3.20 处理被占用文件 &#x2F; 出错继续</h3><p><strong>robocopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">robocopy &quot;G:\Src&quot; &quot;E:\Dst&quot; /E /R:<span class="number">2</span> /W:<span class="number">3</span></span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认失败重试 100 万次会卡死。改为 2 次 &#x2F; 间隔 3 秒，<strong>最多卡 6 秒</strong>。</p>
+</blockquote>
+<p><strong>xcopy</strong></p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">xcopy</span> &quot;G:\Src\*.*&quot; &quot;E:\Dst\&quot; /E /I /Y /C</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p><code>/C</code> 出错继续，遇到占用文件会<strong>跳过并打印 F:\xxx</strong>，不中断。</p>
+</blockquote>
+<hr>
+<h2 id="4-返回码（ERRORLEVEL）说明"><a href="#4-返回码（ERRORLEVEL）说明" class="headerlink" title="4. 返回码（ERRORLEVEL）说明"></a>4. 返回码（ERRORLEVEL）说明</h2><h3 id="4-1-robocopy-返回码"><a href="#4-1-robocopy-返回码" class="headerlink" title="4.1 robocopy 返回码"></a>4.1 robocopy 返回码</h3><table>
+<thead>
+<tr>
+<th>ERRORLEVEL</th>
+<th>含义</th>
+<th>是否当失败</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>无文件被复制（源与目标一致）</td>
+<td>否</td>
+</tr>
+<tr>
+<td>1</td>
+<td>一个或多个文件被成功复制</td>
+<td>否</td>
+</tr>
+<tr>
+<td>2</td>
+<td>检测到一些额外文件（目标中源没有的）</td>
+<td>看场景</td>
+</tr>
+<tr>
+<td>3</td>
+<td>1 + 2 都发生</td>
+<td>看场景</td>
+</tr>
+<tr>
+<td>4~7</td>
+<td>部分错误（权限、共享冲突等）</td>
+<td><strong>看场景</strong></td>
+</tr>
+<tr>
+<td>≥8</td>
+<td>严重失败</td>
+<td><strong>是</strong></td>
+</tr>
+</tbody></table>
+<p><strong>推荐判断</strong>：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="variable">%ERRORLEVEL%</span> <span class="keyword">GEQ</span> <span class="number">8</span> (</span><br><span class="line">    <span class="built_in">echo</span> [ERROR] robocopy 失败</span><br><span class="line">    <span class="keyword">exit</span> /b <span class="number">1</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<h3 id="4-2-xcopy-返回码"><a href="#4-2-xcopy-返回码" class="headerlink" title="4.2 xcopy 返回码"></a>4.2 xcopy 返回码</h3><table>
+<thead>
+<tr>
+<th>ERRORLEVEL</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0</td>
+<td>成功复制，无错误</td>
+</tr>
+<tr>
+<td>1</td>
+<td>没找到要复制的文件</td>
+</tr>
+<tr>
+<td>2</td>
+<td>用户按 Ctrl+C 终止</td>
+</tr>
+<tr>
+<td>3</td>
+<td>至少一次错误（脚本里基本等同失败）</td>
+</tr>
+<tr>
+<td>4</td>
+<td>写入目标时磁盘空间不足</td>
+</tr>
+<tr>
+<td>5</td>
+<td>磁盘写入错误</td>
+</tr>
+</tbody></table>
+<p><strong>判断</strong>：</p>
+<figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="variable">%ERRORLEVEL%</span> <span class="keyword">NEQ</span> <span class="number">0</span> <span class="keyword">exit</span> /b <span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<hr>
+<h2 id="5-实战部署模板"><a href="#5-实战部署模板" class="headerlink" title="5. 实战部署模板"></a>5. 实战部署模板</h2><h3 id="5-1-robocopy-生产部署模板（推荐）"><a href="#5-1-robocopy-生产部署模板（推荐）" class="headerlink" title="5.1 robocopy 生产部署模板（推荐）"></a>5.1 robocopy 生产部署模板（推荐）</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">setlocal</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> SRC=\\fileserver\config\<span class="variable">%COMPUTERNAME%</span></span><br><span class="line"><span class="built_in">set</span> DST=C:\App\config</span><br><span class="line"><span class="built_in">set</span> LOG=C:\Logs\sync_<span class="variable">%date:~0,4%</span><span class="variable">%date:~5,2%</span><span class="variable">%date:~8,2%</span>.log</span><br><span class="line"></span><br><span class="line">:: /E        含子目录 + 空目录</span><br><span class="line">:: /XO       增量（只覆盖较旧目标）</span><br><span class="line">:: /R:<span class="number">0</span> /W:<span class="number">1</span> 失败不重试，立即跳过</span><br><span class="line">:: /MT:<span class="number">8</span>     <span class="number">8</span> 线程</span><br><span class="line">:: /IPG:<span class="number">5</span>    限速（包间 <span class="number">5</span>ms，保护共享）</span><br><span class="line">:: /NFL /NP  屏幕静默（不加可看进度）</span><br><span class="line">:: /LOG+     写日志，追加</span><br><span class="line">:: /TS /FP   日志带时间戳 + 完整路径</span><br><span class="line">robocopy &quot;<span class="variable">%SRC%</span>&quot; &quot;<span class="variable">%DST%</span>&quot; ^</span><br><span class="line">    /E /XO /R:<span class="number">0</span> /W:<span class="number">1</span> /MT:<span class="number">8</span> /IPG:<span class="number">5</span> ^</span><br><span class="line">    /NJH /NJS /NFL /NP /NC /NDL ^</span><br><span class="line">    /LOG+:&quot;<span class="variable">%LOG%</span>&quot; /TS /FP /BYTES</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%ERRORLEVEL%</span> <span class="keyword">GEQ</span> <span class="number">8</span> (</span><br><span class="line">    <span class="built_in">echo</span> [ERROR] config 同步失败 code=<span class="variable">%ERRORLEVEL%</span> &gt;&gt; &quot;<span class="variable">%LOG%</span>&quot;</span><br><span class="line">    <span class="keyword">exit</span> /b <span class="number">1</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">exit</span> /b <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-2-xcopy-简化模板（兼容性优先）"><a href="#5-2-xcopy-简化模板（兼容性优先）" class="headerlink" title="5.2 xcopy 简化模板（兼容性优先）"></a>5.2 xcopy 简化模板（兼容性优先）</h3><figure class="highlight bat"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">@<span class="built_in">echo</span> off</span><br><span class="line"><span class="built_in">setlocal</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">set</span> SRC=C:\Src\Models</span><br><span class="line"><span class="built_in">set</span> DST=E:\Backup\Models</span><br><span class="line"></span><br><span class="line"><span class="built_in">xcopy</span> &quot;<span class="variable">%SRC%</span>\*.*&quot; &quot;<span class="variable">%DST%</span>\&quot; /E /I /Y /H /R /C /Q &gt;<span class="built_in">nul</span> <span class="number">2</span>&gt;&amp;<span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> <span class="variable">%ERRORLEVEL%</span> <span class="keyword">NEQ</span> <span class="number">0</span> (</span><br><span class="line">    <span class="built_in">echo</span> [ERROR] <span class="built_in">xcopy</span> 失败 code=<span class="variable">%ERRORLEVEL%</span></span><br><span class="line">    <span class="keyword">exit</span> /b <span class="number">1</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">exit</span> /b <span class="number">0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-3-选型建议"><a href="#5-3-选型建议" class="headerlink" title="5.3 选型建议"></a>5.3 选型建议</h3><table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>老旧系统（Win XP）、运维脚本最低兼容</td>
+<td>xcopy</td>
+</tr>
+<tr>
+<td>Windows 7 及以上、生产部署、定期同步</td>
+<td><strong>robocopy</strong></td>
+</tr>
+<tr>
+<td>镜像、增量、限速、多线程</td>
+<td><strong>robocopy</strong></td>
+</tr>
+<tr>
+<td>移动文件、带权限复制</td>
+<td><strong>robocopy</strong></td>
+</tr>
+<tr>
+<td>简单一次性复制两三个文件</td>
+<td>xcopy</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p>文档版本：v1.0<br>适用对象：工业视觉工程师 &#x2F; 运维工程师<br>参考资料：Microsoft Docs（robocopy &#x2F; xcopy）</p>
+</blockquote>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/">https://blazarlin.github.io/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/windows/">windows</a><a class="post-meta__tags" href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/">命令行</a><a class="post-meta__tags" href="/tags/%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6/">文件复制</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">IDW 算法解释</div></div><div class="info-2"><div class="info-item-1">IDW 算法解释资料来源 Esri ArcGIS Pro 官方文档：IDW 假设距离越近的点越相似，预测未知位置时更重视附近已测点；权重随距离增大而减小。How inverse distance weighted interpolation works Esri ArcGIS Pro 官方文档：IDW 输出值受输入样本值范围限制；power 控制周围点影响程度，默认常用值为 2；搜索半径控制参与插值的点集合。IDW Spatial Analyst Tool  一句话定义IDW 是一种用“距离越近影响越大”的规则，根据已知点估计未知位置数值的插值算法。 它的核心思想很直观：离目标点越近的样本点，越应该相信；离得越远，影响越小。 使用场景IDW 常用于从离散采样点生成连续表面。 典型场景：  地形高程插值 温度、湿度、污染浓度空间分布估计 压力、厚度、亮度等二维场重建 工业检测中稀疏测量点到整面热力图的估计 传感器阵列数据补点 图像或点云中的稀疏值填补  在工业视觉里，如果你有一批离散测量点，例如局部亮度校正点、胶量采样点、表面高度点，想估计整幅区域的连续分布，IDW 可以作为简单、...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">std::thread 生命周期管控与 join/detach 时机</div></div><div class="info-2"><div class="info-item-1">std::thread 生命周期管控与 join&#x2F;detach 时机 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景常见踩坑项。   TL;DR（一句话） std::thread 构造函数返回的那一刻，OS 线程已经存在并跑着你的 callable，具体何时被调度执行由 OS 决定。 join &#x2F; detach 不是”启动线程”，而是”决定 std::thread 对象在析构时如何处理已经在跑的 OS 线程”。 std::thread 析构时如果 joinable() 仍为 true（既没 join 也没 detach），直接 std::terminate()，整个进程挂掉。   谁管控什么生命周期（分层）std::thread 实际涉及两个独立的”对象”，必须分开看：    层级 对象 谁管控 何时结束    C++ 对象层 std::thread t（栈上 &#x2F; 堆上的 C++ 对象） C++ RAII t 离开作用域、被析构   OS 内核层 内核线程（占着 thread stack） 操作系统 call...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/windows%E8%84%9A%E6%9C%AC%E5%91%BD%E4%BB%A4/" title="Windows脚本命令"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Windows脚本命令</div></div><div class="info-2"><div class="info-item-1">Windows脚本命令文件夹管理 cd 显示当前目录名或改变当前目录。 md 创建目录。 rd 删除一个目录。 dir 显示目录中的文件和子目录列表。 tree 以图形显示驱动器或路径的文件夹结构。 path 为可执行文件显示或设置一个搜索路径。 xcopy 复制文件和目录树。  文件管理 type 显示文本文件的内容。 copy 将一份或多份文件复制到另一个位置。 del 删除一个或数个文件。 move 移动文件并重命名文件和目录。(Windows XP Home Edition中没有) ren 重命名文件。 replace 替换文件。 attrib 显示或更改文件属性。 find 搜索字符串。 fc 比较两个文件或两个文件集并显示它们之间的不同  网络命令 ping 进行网络连接测试、名称解析 ftp 文件传输 net 网络命令集及用户管理 telnet 远程登陆 ipconfig显示、修改TCP&#x2F;IP设置 msg 给用户发送消息 arp 显示、修改局域网的IP地址-物理地址映射列表  系统管理 at 安排在特定日期和时间运行命令和程序 shutdown立即或定时关...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260731-Pi-Agent-Windows-%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/" title="Pi Agent Windows 使用指南（含火山引擎模型配置）"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">Pi Agent Windows 使用指南（含火山引擎模型配置）</div></div><div class="info-2"><div class="info-item-1">Pi Agent Windows 使用指南（含火山引擎模型配置） 本指南面向 Windows 用户，从零开始安装 Pi Agent，并完成火山引擎（方舟 Ark）编程智能体模型的配置。Pi 官方文档：https://pi.dev ｜ npm 包：@earendil-works/pi-coding-agent   目录 一、Pi Agent 是什么 二、Windows 环境准备 三、安装 Pi 四、配置目录结构 五、配置火山引擎模型（核心） 5.1 准备工作 5.2 模型对照表 5.3 让另一个 Pi Agent 自动配置   六、日常使用 七、开启思考模式（可选） 八、常见问题排查   一、Pi Agent 是什么Pi 是一个极简的终端编程智能体框架（terminal coding agent harness）。它默认提供 read、write、edit、bash 四个工具，让大模型在你的本地完成读写文件、执行命令等开发任务。 它的特点是：  极简内核 + 强扩展：通过 Skills、Extensions、Prompt Templates、Themes 自定义工作流。 多 Pro...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#robocopy-%E4%B8%8E-xcopy-%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83"><span class="toc-number">1.</span> <span class="toc-text">robocopy 与 xcopy 参数及常用操作对比参考</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95"><span class="toc-number">1.1.</span> <span class="toc-text">目录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#1-robocopy-%E5%AE%8C%E6%95%B4%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.2.</span> <span class="toc-text">1. robocopy 完整参数速查表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-%E6%BA%90-%E7%9B%AE%E6%A0%87-%E6%96%87%E4%BB%B6%E7%AD%9B%E9%80%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.1 源 &#x2F; 目标 &#x2F; 文件筛选</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-2-%E6%96%87%E4%BB%B6%E5%B1%9E%E6%80%A7%E4%B8%8E%E5%AE%89%E5%85%A8"><span class="toc-number">1.2.2.</span> <span class="toc-text">1.2 文件属性与安全</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3-%E9%87%8D%E8%AF%95%E4%B8%8E%E5%AE%B9%E9%94%99"><span class="toc-number">1.2.3.</span> <span class="toc-text">1.3 重试与容错</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-4-%E6%97%A5%E5%BF%97"><span class="toc-number">1.2.4.</span> <span class="toc-text">1.4 日志</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-5-%E6%80%A7%E8%83%BD"><span class="toc-number">1.2.5.</span> <span class="toc-text">1.5 性能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-6-%E8%BE%93%E5%87%BA%E6%98%BE%E7%A4%BA%EF%BC%88%E9%9D%99%E9%BB%98%E7%BB%84%E5%90%88%EF%BC%89"><span class="toc-number">1.2.6.</span> <span class="toc-text">1.6 输出显示（静默组合）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-7-%E8%B0%83%E5%BA%A6%EF%BC%88%E5%A4%87%E4%BB%BD%E7%9B%B8%E5%85%B3%EF%BC%89"><span class="toc-number">1.2.7.</span> <span class="toc-text">1.7 调度（备份相关）</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-xcopy-%E5%AE%8C%E6%95%B4%E5%8F%82%E6%95%B0%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.3.</span> <span class="toc-text">2. xcopy 完整参数速查表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E7%85%A7%E8%A1%A8%EF%BC%88robocopy-vs-xcopy%EF%BC%89"><span class="toc-number">1.4.</span> <span class="toc-text">3. 常用操作对照表（robocopy vs xcopy）</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E6%8B%B7%E8%B4%9D%E5%8D%95%E4%B8%AA%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.1.</span> <span class="toc-text">3.1 拷贝单个文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%8B%B7%E8%B4%9D%E6%95%B4%E4%B8%AA%E6%96%87%E4%BB%B6%E5%A4%B9%EF%BC%88%E5%90%AB%E5%AD%90%E7%9B%AE%E5%BD%95%EF%BC%89"><span class="toc-number">1.4.2.</span> <span class="toc-text">3.2 拷贝整个文件夹（含子目录）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E4%BB%85%E5%A4%8D%E5%88%B6%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%EF%BC%88%E4%B8%8D%E8%A6%81%E6%96%87%E4%BB%B6%EF%BC%89"><span class="toc-number">1.4.3.</span> <span class="toc-text">3.3 仅复制目录结构（不要文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-4-%E4%BB%85%E5%A4%8D%E5%88%B6%E6%AF%94%E7%9B%AE%E6%A0%87%E6%9B%B4%E6%96%B0%E7%9A%84%E6%96%87%E4%BB%B6%EF%BC%88%E5%A2%9E%E9%87%8F%E5%90%8C%E6%AD%A5%EF%BC%89"><span class="toc-number">1.4.4.</span> <span class="toc-text">3.4 仅复制比目标更新的文件（增量同步）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-5-%E5%BC%BA%E5%88%B6%E8%A6%86%E7%9B%96%E4%B8%8D%E8%AF%A2%E9%97%AE"><span class="toc-number">1.4.5.</span> <span class="toc-text">3.5 强制覆盖不询问</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-6-%E9%9D%99%E9%BB%98%E6%89%A7%E8%A1%8C%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E4%BB%BB%E4%BD%95%E4%BF%A1%E6%81%AF%EF%BC%89"><span class="toc-number">1.4.6.</span> <span class="toc-text">3.6 静默执行（不显示任何信息）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-7-%E5%8F%AA%E8%BE%93%E5%87%BA%E5%88%B0%E6%97%A5%E5%BF%97%E6%96%87%E4%BB%B6%EF%BC%88%E4%B8%8D%E6%98%BE%E7%A4%BA%E5%B1%8F%E5%B9%95%EF%BC%89"><span class="toc-number">1.4.7.</span> <span class="toc-text">3.7 只输出到日志文件（不显示屏幕）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-8-%E5%A4%B1%E8%B4%A5%E4%B8%8D%E9%87%8D%E8%AF%95-%E5%A4%B1%E8%B4%A5%E9%87%8D%E8%AF%95-N-%E6%AC%A1"><span class="toc-number">1.4.8.</span> <span class="toc-text">3.8 失败不重试 &#x2F; 失败重试 N 次</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-9-%E9%95%9C%E5%83%8F%E5%90%8C%E6%AD%A5%EF%BC%88%E5%90%AB%E5%88%A0%E9%99%A4%E7%9B%AE%E6%A0%87%E5%A4%9A%E4%BD%99%E6%96%87%E4%BB%B6%EF%BC%89"><span class="toc-number">1.4.9.</span> <span class="toc-text">3.9 镜像同步（含删除目标多余文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-10-%E5%A4%9A%E7%BA%BF%E7%A8%8B%E6%8B%B7%E8%B4%9D%EF%BC%88%E5%8A%A0%E9%80%9F%E5%A4%A7%E7%9B%AE%E5%BD%95%EF%BC%89"><span class="toc-number">1.4.10.</span> <span class="toc-text">3.10 多线程拷贝（加速大目录）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-11-%E9%99%90%E5%88%B6%E5%B8%A6%E5%AE%BD%EF%BC%88%E9%98%B2%E5%8E%8B%E5%9E%AE%E7%BD%91%E7%BB%9C%EF%BC%89"><span class="toc-number">1.4.11.</span> <span class="toc-text">3.11 限制带宽（防压垮网络）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-12-%E8%B7%B3%E8%BF%87%E7%89%B9%E5%AE%9A%E6%89%A9%E5%B1%95%E5%90%8D-%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.12.</span> <span class="toc-text">3.12 跳过特定扩展名 &#x2F; 文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-13-%E8%B7%B3%E8%BF%87%E7%89%B9%E5%AE%9A%E7%9B%AE%E5%BD%95"><span class="toc-number">1.4.13.</span> <span class="toc-text">3.13 跳过特定目录</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-14-%E5%A4%8D%E5%88%B6%E9%9A%90%E8%97%8F%E6%96%87%E4%BB%B6-%E7%B3%BB%E7%BB%9F%E6%96%87%E4%BB%B6"><span class="toc-number">1.4.14.</span> <span class="toc-text">3.14 复制隐藏文件 &#x2F; 系统文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-15-%E5%A4%8D%E5%88%B6%E5%B9%B6%E4%BF%9D%E7%95%99%E6%97%B6%E9%97%B4%E6%88%B3-ACL"><span class="toc-number">1.4.15.</span> <span class="toc-text">3.15 复制并保留时间戳 &#x2F; ACL</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-16-%E6%8B%B7%E8%B4%9D%E5%90%8E%E5%88%A0%E9%99%A4%E6%BA%90%EF%BC%88%E7%A7%BB%E5%8A%A8%E6%96%87%E4%BB%B6%EF%BC%89"><span class="toc-number">1.4.16.</span> <span class="toc-text">3.16 拷贝后删除源（移动文件）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-17-Dry-run%EF%BC%88%E4%BB%85%E5%88%97%E5%87%BA%EF%BC%8C%E4%B8%8D%E7%9C%9F%E5%A4%8D%E5%88%B6%EF%BC%89"><span class="toc-number">1.4.17.</span> <span class="toc-text">3.17 Dry-run（仅列出，不真复制）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-18-%E5%A4%A7%E6%96%87%E4%BB%B6-%E6%96%AD%E7%82%B9%E7%BB%AD%E4%BC%A0"><span class="toc-number">1.4.18.</span> <span class="toc-text">3.18 大文件 + 断点续传</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-19-%E4%BB%85%E5%A4%8D%E5%88%B6%E7%89%B9%E5%AE%9A%E7%B1%BB%E5%9E%8B%EF%BC%88%E6%8C%89%E6%89%A9%E5%B1%95%E5%90%8D%E7%AD%9B%E9%80%89%EF%BC%89"><span class="toc-number">1.4.19.</span> <span class="toc-text">3.19 仅复制特定类型（按扩展名筛选）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-20-%E5%A4%84%E7%90%86%E8%A2%AB%E5%8D%A0%E7%94%A8%E6%96%87%E4%BB%B6-%E5%87%BA%E9%94%99%E7%BB%A7%E7%BB%AD"><span class="toc-number">1.4.20.</span> <span class="toc-text">3.20 处理被占用文件 &#x2F; 出错继续</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E8%BF%94%E5%9B%9E%E7%A0%81%EF%BC%88ERRORLEVEL%EF%BC%89%E8%AF%B4%E6%98%8E"><span class="toc-number">1.5.</span> <span class="toc-text">4. 返回码（ERRORLEVEL）说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#4-1-robocopy-%E8%BF%94%E5%9B%9E%E7%A0%81"><span class="toc-number">1.5.1.</span> <span class="toc-text">4.1 robocopy 返回码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-2-xcopy-%E8%BF%94%E5%9B%9E%E7%A0%81"><span class="toc-number">1.5.2.</span> <span class="toc-text">4.2 xcopy 返回码</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#5-%E5%AE%9E%E6%88%98%E9%83%A8%E7%BD%B2%E6%A8%A1%E6%9D%BF"><span class="toc-number">1.6.</span> <span class="toc-text">5. 实战部署模板</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1-robocopy-%E7%94%9F%E4%BA%A7%E9%83%A8%E7%BD%B2%E6%A8%A1%E6%9D%BF%EF%BC%88%E6%8E%A8%E8%8D%90%EF%BC%89"><span class="toc-number">1.6.1.</span> <span class="toc-text">5.1 robocopy 生产部署模板（推荐）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-xcopy-%E7%AE%80%E5%8C%96%E6%A8%A1%E6%9D%BF%EF%BC%88%E5%85%BC%E5%AE%B9%E6%80%A7%E4%BC%98%E5%85%88%EF%BC%89"><span class="toc-number">1.6.2.</span> <span class="toc-text">5.2 xcopy 简化模板（兼容性优先）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-3-%E9%80%89%E5%9E%8B%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.6.3.</span> <span class="toc-text">5.3 选型建议</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

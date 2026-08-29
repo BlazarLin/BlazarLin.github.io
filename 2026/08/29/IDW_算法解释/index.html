@@ -1,0 +1,384 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>IDW 算法解释 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="IDW 算法解释资料来源 Esri ArcGIS Pro 官方文档：IDW 假设距离越近的点越相似，预测未知位置时更重视附近已测点；权重随距离增大而减小。How inverse distance weighted interpolation works Esri ArcGIS Pro 官方文档：IDW 输出值受输入样本值范围限制；power 控制周围点影响程度，默认常用值为 2；搜索半径控制参与插">
+<meta property="og:type" content="article">
+<meta property="og:title" content="IDW 算法解释">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="IDW 算法解释资料来源 Esri ArcGIS Pro 官方文档：IDW 假设距离越近的点越相似，预测未知位置时更重视附近已测点；权重随距离增大而减小。How inverse distance weighted interpolation works Esri ArcGIS Pro 官方文档：IDW 输出值受输入样本值范围限制；power 控制周围点影响程度，默认常用值为 2；搜索半径控制参与插">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:26:58.146Z">
+<meta property="article:modified_time" content="2026-08-29T02:52:12.350Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="IDW">
+<meta property="article:tag" content="插值算法">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "IDW 算法解释",
+  "url": "https://blazarlin.github.io/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:26:58.146Z",
+  "dateModified": "2026-08-29T02:52:12.350Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'IDW 算法解释',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">IDW 算法解释</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">IDW 算法解释</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:52:12.350Z" title="Updated 2026-08-29 10:52:12">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h1 id="IDW-算法解释"><a href="#IDW-算法解释" class="headerlink" title="IDW 算法解释"></a>IDW 算法解释</h1><h2 id="资料来源"><a href="#资料来源" class="headerlink" title="资料来源"></a>资料来源</h2><ul>
+<li>Esri ArcGIS Pro 官方文档：IDW 假设距离越近的点越相似，预测未知位置时更重视附近已测点；权重随距离增大而减小。<a target="_blank" rel="noopener" href="https://doc.esri.com/en/arcgis-pro/latest/help/analysis/geostatistical-analyst/how-inverse-distance-weighted-interpolation-works.html">How inverse distance weighted interpolation works</a></li>
+<li>Esri ArcGIS Pro 官方文档：IDW 输出值受输入样本值范围限制；<code>power</code> 控制周围点影响程度，默认常用值为 2；搜索半径控制参与插值的点集合。<a target="_blank" rel="noopener" href="https://doc.esri.com/en/arcgis-pro/latest/tool-reference/spatial-analyst/idw.html">IDW Spatial Analyst Tool</a></li>
+</ul>
+<h2 id="一句话定义"><a href="#一句话定义" class="headerlink" title="一句话定义"></a>一句话定义</h2><p>IDW 是一种用“距离越近影响越大”的规则，根据已知点估计未知位置数值的插值算法。</p>
+<p>它的核心思想很直观：离目标点越近的样本点，越应该相信；离得越远，影响越小。</p>
+<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><p>IDW 常用于从离散采样点生成连续表面。</p>
+<p>典型场景：</p>
+<ul>
+<li>地形高程插值</li>
+<li>温度、湿度、污染浓度空间分布估计</li>
+<li>压力、厚度、亮度等二维场重建</li>
+<li>工业检测中稀疏测量点到整面热力图的估计</li>
+<li>传感器阵列数据补点</li>
+<li>图像或点云中的稀疏值填补</li>
+</ul>
+<p>在工业视觉里，如果你有一批离散测量点，例如局部亮度校正点、胶量采样点、表面高度点，想估计整幅区域的连续分布，IDW 可以作为简单、确定、易实现的方案。</p>
+<h2 id="为什么使用它"><a href="#为什么使用它" class="headerlink" title="为什么使用它"></a>为什么使用它</h2><p>最简单的方法是最近邻：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未知点的值 = 离它最近的那个样本点的值</span><br></pre></td></tr></table></figure>
+
+<p>问题是最近邻会产生突变，结果像一块块拼图，不够平滑。</p>
+<p>另一种方法是全局平均：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">未知点的值 = 所有样本点平均值</span><br></pre></td></tr></table></figure>
+
+<p>问题是它完全忽略空间位置，局部变化会被抹平。</p>
+<p>IDW 在两者之间折中：</p>
+<ul>
+<li>近点影响大。</li>
+<li>远点影响小。</li>
+<li>输出是加权平均，因此结果相对平滑。</li>
+<li>实现简单，不需要训练模型。</li>
+<li>行为确定，便于工程排查。</li>
+</ul>
+<h2 id="核心原理"><a href="#核心原理" class="headerlink" title="核心原理"></a>核心原理</h2><p>设已知样本点为：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(x1, y1, v1)</span><br><span class="line">(x2, y2, v2)</span><br><span class="line">...</span><br><span class="line">(xn, yn, vn)</span><br></pre></td></tr></table></figure>
+
+<p>现在要估计未知位置：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(x, y)</span><br></pre></td></tr></table></figure>
+
+<p>IDW 会先计算未知位置到每个样本点的距离：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">di = distance((x, y), (xi, yi))</span><br></pre></td></tr></table></figure>
+
+<p>再给每个点一个权重：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wi = 1 / di^p</span><br></pre></td></tr></table></figure>
+
+<p>最后做加权平均：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">V(x, y) = sum(wi * vi) / sum(wi)</span><br></pre></td></tr></table></figure>
+
+<p>其中 <code>p</code> 是 power 参数。</p>
+<p><code>p</code> 越大，距离的惩罚越强，近点权重越大，远点影响越小。</p>
+<h2 id="概念链条"><a href="#概念链条" class="headerlink" title="概念链条"></a>概念链条</h2><h3 id="插值"><a href="#插值" class="headerlink" title="插值"></a>插值</h3><p>插值是根据已知点估计未知点。</p>
+<p>例如你测了几个位置的温度，但没有测中间位置，就需要用插值估计中间温度。</p>
+<h3 id="距离"><a href="#距离" class="headerlink" title="距离"></a>距离</h3><p>IDW 的基本假设是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">空间距离越近，数值越可能相似。</span><br></pre></td></tr></table></figure>
+
+<p>最常用的是欧氏距离：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">d = sqrt((x - xi)^2 + (y - yi)^2)</span><br></pre></td></tr></table></figure>
+
+<h3 id="权重"><a href="#权重" class="headerlink" title="权重"></a>权重</h3><p>权重表示一个样本点对未知点的影响程度。</p>
+<p>IDW 的权重是距离的反比：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wi = 1 / di^p</span><br></pre></td></tr></table></figure>
+
+<p>距离越小，权重越大。</p>
+<h3 id="power-参数"><a href="#power-参数" class="headerlink" title="power 参数"></a>power 参数</h3><p><code>p</code> 控制权重衰减速度。</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p = 1：远点还有较明显影响，结果更平滑</span><br><span class="line">p = 2：常用折中值，叫反距离平方加权</span><br><span class="line">p 很大：几乎只看最近点，结果更接近最近邻</span><br></pre></td></tr></table></figure>
+
+<p>Esri 官方文档也说明，默认常用 <code>p = 2</code>，但没有理论依据证明它总是最优，应结合交叉验证或输出效果检查。</p>
+<h3 id="搜索邻域"><a href="#搜索邻域" class="headerlink" title="搜索邻域"></a>搜索邻域</h3><p>实际工程中不会每次都用所有样本点。</p>
+<p>常见做法：</p>
+<ul>
+<li>固定半径：只用一定距离内的点。</li>
+<li>固定数量：只用最近的 K 个点。</li>
+<li>分扇区：避免样本点都集中在一个方向。</li>
+<li>加 barrier：例如断层、墙、边界，阻止跨边界插值。</li>
+</ul>
+<p>搜索邻域直接影响速度和结果形状。</p>
+<h2 id="配图说明"><a href="#配图说明" class="headerlink" title="配图说明"></a>配图说明</h2><h3 id="处理流程图"><a href="#处理流程图" class="headerlink" title="处理流程图"></a>处理流程图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[输入已知采样点] --&gt; B[选择待预测位置]</span><br><span class="line">    B --&gt; C[搜索邻域点]</span><br><span class="line">    C --&gt; D[计算距离 di]</span><br><span class="line">    D --&gt; E[计算权重 wi=1/di^p]</span><br><span class="line">    E --&gt; F[加权平均]</span><br><span class="line">    F --&gt; G[输出预测值]</span><br></pre></td></tr></table></figure>
+
+<h3 id="直觉图"><a href="#直觉图" class="headerlink" title="直觉图"></a>直觉图</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart TD</span><br><span class="line">    A[未知位置] --&gt; B[附近样本点]</span><br><span class="line">    A --&gt; C[远处样本点]</span><br><span class="line">    B --&gt; D[权重大]</span><br><span class="line">    C --&gt; E[权重小]</span><br><span class="line">    D --&gt; F[预测值主要受近点影响]</span><br><span class="line">    E --&gt; F</span><br></pre></td></tr></table></figure>
+
+<h2 id="输出结果如何理解"><a href="#输出结果如何理解" class="headerlink" title="输出结果如何理解"></a>输出结果如何理解</h2><p>IDW 输出的是一个预测值。</p>
+<p>如果用于栅格插值，则每个栅格像素都会得到一个浮点值。</p>
+<p>因为 IDW 是加权平均，所以输出有一个重要特性：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">预测值通常不会超过参与插值样本点的最大值，也不会低于最小值。</span><br></pre></td></tr></table></figure>
+
+<p>这意味着：</p>
+<ul>
+<li>它不会凭空生成比采样点更高的峰值。</li>
+<li>它也不会生成比采样点更低的谷值。</li>
+<li>如果真实场中存在未采到的极值，IDW 无法恢复出来。</li>
+</ul>
+<p>这是优点，也是限制。</p>
+<h2 id="失败条件"><a href="#失败条件" class="headerlink" title="失败条件"></a>失败条件</h2><p>IDW 容易在以下情况下出问题：</p>
+<ul>
+<li>样本点太稀疏，无法表达真实变化。</li>
+<li>样本点分布极不均匀，某些区域点密集、某些区域点缺失。</li>
+<li>存在离群点，离群点会在周围形成异常影响。</li>
+<li>真实现象有方向性，但使用了各向同性距离。</li>
+<li>存在物理边界，例如墙、断层、遮挡，但没有加入 barrier。</li>
+<li>数据不是局部连续的，例如突变边缘或分区现象。</li>
+<li><code>p</code> 选得不合适：<ul>
+<li>太小会过度平滑。</li>
+<li>太大会出现块状或靶心效应。</li>
+</ul>
+</li>
+</ul>
+<p>Esri 官方文档明确指出，IDW 对聚类和离群点敏感，并且不提供预测标准误差，因此使用它时需要谨慎证明合理性。</p>
+<h2 id="工程实现注意点"><a href="#工程实现注意点" class="headerlink" title="工程实现注意点"></a>工程实现注意点</h2><h3 id="复杂度"><a href="#复杂度" class="headerlink" title="复杂度"></a>复杂度</h3><p>如果每个预测点都和所有样本点计算距离，复杂度大约是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">O(M * N)</span><br></pre></td></tr></table></figure>
+
+<p>其中：</p>
+<ul>
+<li><code>M</code> 是待预测点数量。</li>
+<li><code>N</code> 是样本点数量。</li>
+</ul>
+<p>大图或大栅格下，这个复杂度可能很高。</p>
+<p>优化方法：</p>
+<ul>
+<li>使用 KDTree &#x2F; cKDTree 查找最近 K 个点。</li>
+<li>限制搜索半径。</li>
+<li>分块处理栅格。</li>
+<li>对固定采样点预构建空间索引。</li>
+<li>多线程处理不同输出块。</li>
+</ul>
+<h3 id="C-实现思路"><a href="#C-实现思路" class="headerlink" title="C++ 实现思路"></a>C++ 实现思路</h3><p>核心伪代码：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">double</span> <span class="title">idwPredict</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> std::vector&lt;PointValue&gt;&amp; samples,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">double</span> x,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">double</span> y,</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">double</span> power)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="type">double</span> weightedSum = <span class="number">0.0</span>;</span><br><span class="line">    <span class="type">double</span> weightSum = <span class="number">0.0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">const</span> <span class="keyword">auto</span>&amp; s : samples) &#123;</span><br><span class="line">        <span class="type">const</span> <span class="type">double</span> dx = x - s.x;</span><br><span class="line">        <span class="type">const</span> <span class="type">double</span> dy = y - s.y;</span><br><span class="line">        <span class="type">const</span> <span class="type">double</span> d2 = dx * dx + dy * dy;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (d2 &lt; <span class="number">1e-12</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span> s.value; <span class="comment">// 正好落在采样点上</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="type">const</span> <span class="type">double</span> d = std::<span class="built_in">sqrt</span>(d2);</span><br><span class="line">        <span class="type">const</span> <span class="type">double</span> w = <span class="number">1.0</span> / std::<span class="built_in">pow</span>(d, power);</span><br><span class="line"></span><br><span class="line">        weightedSum += w * s.value;</span><br><span class="line">        weightSum += w;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> weightedSum / weightSum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>实时场景中，不建议对每个输出点遍历全部样本点。应使用空间索引找邻域点。</p>
+<h3 id="参数建议"><a href="#参数建议" class="headerlink" title="参数建议"></a>参数建议</h3><p><code>power</code>：</p>
+<ul>
+<li>常见初始值：<code>2</code></li>
+<li>更平滑：降低到 <code>1</code> 或 <code>1.5</code></li>
+<li>更强调局部：提高到 <code>2.5</code> 或 <code>3</code></li>
+</ul>
+<p>邻域点数量：</p>
+<ul>
+<li>太少：结果不稳定，容易块状。</li>
+<li>太多：结果过度平滑，计算变慢。</li>
+<li>工程上可从 <code>8~16</code> 个邻点开始试。</li>
+</ul>
+<p>搜索半径：</p>
+<ul>
+<li>半径太小：可能出现无数据区域。</li>
+<li>半径太大：远点影响过多，结果变平。</li>
+</ul>
+<h2 id="与工业视觉的关系"><a href="#与工业视觉的关系" class="headerlink" title="与工业视觉的关系"></a>与工业视觉的关系</h2><p>IDW 不是典型图像缺陷检测算法，但它可以辅助生成连续场：</p>
+<ul>
+<li>用稀疏采样点估计整幅图光照背景。</li>
+<li>用少量标定点生成平面校正图。</li>
+<li>对传感器稀疏测量结果做空间补点。</li>
+<li>对产品表面高度或厚度测量点生成热力图。</li>
+</ul>
+<p>但要注意：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如果缺陷是突变型边缘，IDW 会把它抹平。</span><br><span class="line">如果真实场存在方向性纹理或物理边界，普通 IDW 会跨边界扩散。</span><br></pre></td></tr></table></figure>
+
+<p>因此 IDW 更适合连续缓变场，不适合恢复突变结构。</p>
+<h2 id="已验证事实、工程判断与推断"><a href="#已验证事实、工程判断与推断" class="headerlink" title="已验证事实、工程判断与推断"></a>已验证事实、工程判断与推断</h2><p><strong>已验证事实</strong></p>
+<ul>
+<li>Esri 官方文档说明 IDW 假设近处点更相似，近点权重大，远点权重随距离减小。</li>
+<li>Esri 官方文档说明 power 参数控制距离衰减，<code>p=2</code> 是常用默认值但不保证总是最优。</li>
+<li>Esri 官方文档说明 IDW 输出值受参与插值样本值范围限制，并对聚类和离群点敏感。</li>
+</ul>
+<p><strong>工程经验判断</strong></p>
+<ul>
+<li>实时或大规模插值应使用 KDTree&#x2F;cKDTree 或网格索引降低邻域搜索成本。</li>
+<li>工业视觉中 IDW 适合估计缓变背景或校正场，不适合处理突变缺陷边缘。</li>
+<li>参数应通过交叉验证、残差图或现场样本回放确定。</li>
+</ul>
+<p><strong>推断</strong></p>
+<ul>
+<li>如果你的采样点来自亮度标定或高度标定，IDW 可以作为简单、稳定、可解释的第一版方案。</li>
+<li>如果材料纹理存在方向性或边界隔断，应考虑各向异性距离、分区插值或更高阶模型。</li>
+</ul>
+<h2 id="初学者总结"><a href="#初学者总结" class="headerlink" title="初学者总结"></a>初学者总结</h2><p>IDW 的心智模型是：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">未知点的值，由周围已知点投票决定。</span><br><span class="line">离得越近，票权越大。</span><br><span class="line">离得越远，票权越小。</span><br></pre></td></tr></table></figure>
+
+<p>以后遇到“只有少量采样点，但想估计整个区域的连续值”的问题，可以先想到 IDW。</p>
+<p>但它的前提是：这个值在空间上是连续缓变的。如果真实变化有突变、边界或方向性，普通 IDW 可能会给出看起来平滑但实际错误的结果。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/">https://blazarlin.github.io/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/IDW/">IDW</a><a class="post-meta__tags" href="/tags/%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95/">插值算法</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">PhaseCorrelate 算法解释</div></div><div class="info-2"><div class="info-item-1">PhaseCorrelate 算法解释资料来源 OpenCV 官方文档：cv::phaseCorrelate 用于检测两幅图之间的平移偏移，利用傅里叶位移定理，可用于快速图像配准和运动估计；其流程包括 Hanning 窗、DFT、互功率谱、逆 DFT、峰值和 5x5 加权质心亚像素估计。OpenCV Motion Analysis and Object Tracking OpenCV 官方文档：cv::createHanningWindow 用于生成二维 Hanning 窗系数。OpenCV createHanningWindow  一句话定义PhaseCorrelate 是一种用频域相位信息来估计两幅图像之间平移量 (dx, dy) 的算法。 它不是用肉眼在空间域里“一格一格滑动匹配”，而是把图像变到频域，通过相位差快速找出整体位移。 使用场景PhaseCorrelate 主要用于两幅图内容基本一致、但位置发生平移的情况。 常见场景：  图像配准 模板或 ROI 对齐 相机抖动补偿 连续帧位移估计 印刷图案位置修正 缺陷检测前的基准图对齐 工业视觉中产品位置轻微漂移的补偿  在...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">robocopy 与 xcopy 参数及常用操作对比参考</div></div><div class="info-2"><div class="info-item-1">robocopy 与 xcopy 参数及常用操作对比参考 适用平台：Windows（Win7 及以上推荐使用 robocopy；xcopy 兼容性更广，从 Win95 起即有，但功能弱）。文档约定：所有示例路径均用 \ 转义后书写，bat 中正常书写即可。   目录 robocopy 完整参数速查表 xcopy 完整参数速查表 常用操作对照表（robocopy vs xcopy） 返回码（ERRORLEVEL）说明 实战部署模板   1. robocopy 完整参数速查表1.1 源 &#x2F; 目标 &#x2F; 文件筛选   参数 含义    &lt;source&gt; 源目录路径（必填）   &lt;destination&gt; 目标目录路径（必填）   &lt;file&gt; 要操作的文件名或通配符（如 *.dll、config.ini），可选   /S 复制非空子目录   /E 复制子目录，包括空的（推荐替代 /S）   /A 只复制带存档属性的文件，并保留存档属性   /M 只复制带存档属性的文件，复制完后清除存档属性（适合增量备份）   /LEV:n 只复制源...</div></div></div></a></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#IDW-%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A"><span class="toc-number">1.</span> <span class="toc-text">IDW 算法解释</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%B5%84%E6%96%99%E6%9D%A5%E6%BA%90"><span class="toc-number">1.1.</span> <span class="toc-text">资料来源</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%8F%A5%E8%AF%9D%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.</span> <span class="toc-text">一句话定义</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%9C%BA%E6%99%AF"><span class="toc-number">1.3.</span> <span class="toc-text">使用场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E4%BD%BF%E7%94%A8%E5%AE%83"><span class="toc-number">1.4.</span> <span class="toc-text">为什么使用它</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A0%B8%E5%BF%83%E5%8E%9F%E7%90%86"><span class="toc-number">1.5.</span> <span class="toc-text">核心原理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%A6%82%E5%BF%B5%E9%93%BE%E6%9D%A1"><span class="toc-number">1.6.</span> <span class="toc-text">概念链条</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%80%BC"><span class="toc-number">1.6.1.</span> <span class="toc-text">插值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B7%9D%E7%A6%BB"><span class="toc-number">1.6.2.</span> <span class="toc-text">距离</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9D%83%E9%87%8D"><span class="toc-number">1.6.3.</span> <span class="toc-text">权重</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#power-%E5%8F%82%E6%95%B0"><span class="toc-number">1.6.4.</span> <span class="toc-text">power 参数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%90%9C%E7%B4%A2%E9%82%BB%E5%9F%9F"><span class="toc-number">1.6.5.</span> <span class="toc-text">搜索邻域</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E5%9B%BE%E8%AF%B4%E6%98%8E"><span class="toc-number">1.7.</span> <span class="toc-text">配图说明</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="toc-number">1.7.1.</span> <span class="toc-text">处理流程图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%9B%B4%E8%A7%89%E5%9B%BE"><span class="toc-number">1.7.2.</span> <span class="toc-text">直觉图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BE%93%E5%87%BA%E7%BB%93%E6%9E%9C%E5%A6%82%E4%BD%95%E7%90%86%E8%A7%A3"><span class="toc-number">1.8.</span> <span class="toc-text">输出结果如何理解</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A4%B1%E8%B4%A5%E6%9D%A1%E4%BB%B6"><span class="toc-number">1.9.</span> <span class="toc-text">失败条件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%A5%E7%A8%8B%E5%AE%9E%E7%8E%B0%E6%B3%A8%E6%84%8F%E7%82%B9"><span class="toc-number">1.10.</span> <span class="toc-text">工程实现注意点</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="toc-number">1.10.1.</span> <span class="toc-text">复杂度</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#C-%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="toc-number">1.10.2.</span> <span class="toc-text">C++ 实现思路</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%8F%82%E6%95%B0%E5%BB%BA%E8%AE%AE"><span class="toc-number">1.10.3.</span> <span class="toc-text">参数建议</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8E%E5%B7%A5%E4%B8%9A%E8%A7%86%E8%A7%89%E7%9A%84%E5%85%B3%E7%B3%BB"><span class="toc-number">1.11.</span> <span class="toc-text">与工业视觉的关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B7%B2%E9%AA%8C%E8%AF%81%E4%BA%8B%E5%AE%9E%E3%80%81%E5%B7%A5%E7%A8%8B%E5%88%A4%E6%96%AD%E4%B8%8E%E6%8E%A8%E6%96%AD"><span class="toc-number">1.12.</span> <span class="toc-text">已验证事实、工程判断与推断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%88%9D%E5%AD%A6%E8%80%85%E6%80%BB%E7%BB%93"><span class="toc-number">1.13.</span> <span class="toc-text">初学者总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

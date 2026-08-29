@@ -1,0 +1,249 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta property="og:type" content="website">
+<meta property="og:title" content="Blazar">
+<meta property="og:url" content="https://blazarlin.github.io/page/3/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:author" content="Blazar">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json"></script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/page/3/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Blazar',
+  isHighlightShrink: false,
+  isToc: false,
+  pageType: 'home'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="page" id="body-wrap"><header class="full_page" id="page-header" style="background-image: url(/img/redMan.jpg);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="site-info"><h1 id="site-title">Blazar</h1><div id="site-subtitle"><span id="subtitle"></span></div><div id="site_social_icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div id="scroll-down"><i class="fas fa-angle-down scroll-down-effects"></i></div></header><main class="layout" id="content-inner"><div class="recent-posts nc" id="recent-posts"><div class="recent-post-items"><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/imgprocess/" title="图像处理小记">图像处理小记</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.248Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/">图像处理</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/opencv/">opencv</a></span></div><div class="content">图像处理小记github:opencvgithub:opencv_contrib个人实验代码 分割、识别、缺陷等几个大方向阈值法有固定阈值与自适应阈值，固定阈值即给定一个像素分界线，像素值大于分界的为positive，像素值小的为negative；自适应阈值在当前像素的block size(n*n(奇数))内选择当前block的局部阈值，将中心像素与局部阈值作比较。 太粗暴简单，哪怕是自适应的局部阈值法，一样难逃无法分割类内方差较大的目标的宿命。它完全没有利用好像素的空间信息，导致分割结果极其容易受噪声干扰，经常出现断裂的边缘，需要后处理。 常用接口: 12cv2.thresholdcv2.adaptiveThreshold  闭运算：先腐蚀再膨胀，解决轮廓某部分突变 开运算：先膨胀后腐蚀，消除裂开的轮廓 图像预处理-形态学图像预处理-滤波对以下滤波方法分析：均值mean，中值median，高斯gauss，双边bilateral、二项binomial 所使用的噪声类型：白噪声、椒盐噪声、均值噪声、高斯噪声 (椒盐噪声：一定信噪比下的随机像素值，“椒”代表胡椒，像素值为0黑色，“盐...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E6%96%B0%E7%89%B9%E6%80%A7/" title="c++新特性">c++新特性</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.246Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c-11/">c++11</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c-14/">c++14</a></span></div><div class="content">此文非原创内容搬运自，：学习笔记：C++ 11新特性.md c++新特性C++11引入了auto和decltype关键字，使用它们可以在编译期就推导出变量或者表达式的类型，方便开发者编码的同时也简化了代码。 autoauto可以让编译器在编译器就推导出变量的类型，看代码： 123auto a = 10; // 10是int型，可以自动推导出a是intint i = 10;auto b = i; // b是int型auto d = 2.0; // d是double型  这就是auto的基本用法，可以通过&#x3D;右边的类型推导出变量的类型。 auto推导规则直接看代码 代码1： 1234int i = 10;auto a = i, &amp;b = i, *c = &amp;i; // a是int，b是i的引用，c是i的指针，auto就相当于intauto d = 0, f = 1.0; // error，0和1.0类型不同，对于编译器有二义性，没法推导auto e; // error，使用auto必须马上初始化，否则无法推导类型  代码2： 123456789101112131...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" title="c++智能指针">c++智能指针</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.246Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/STL%E5%88%86%E6%9E%90/">STL分析</a></span></div><div class="content">c++智能指针std::shared_ptr std::weak_ptr std::unique_ptr 一、shared_ptr最常用的只能指针类，具有自动delete对象，引用计数等功能。 头文件 1#include &lt;memory&gt; 构造方法 123456// 较优auto smart_ptr = std::make_shared&lt;int&gt;();// 不推荐auto p1 = new int;std::shared_ptr&lt;int&gt; smart_ptr2(p1);  返回裸指针 12auto smart_ptr = std::make_shared&lt;int&gt;();auto originPtr = smart_ptr.get();  shared_ptr模板类常用成员方法   成员方法名 功 能    operator&#x3D;() 重载赋值号，使得同一类型的 shared_ptr 智能指针可以相互赋值。   operator*() 重载 * 号，获取当前 shared_ptr 智能指针对象指向的数据。   operator-...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E7%A8%8B%E5%BA%8F%E5%8F%91%E5%B8%83%E6%B5%81%E7%A8%8B(VS&amp;QT)/" title="c++程序发布流程(VS&amp;QT)">c++程序发布流程(VS&amp;QT)</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.246Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE/">部署配置</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/QT/">QT</a></span></div><div class="content">一、QT环境  打开终端Qt 5.11.1 64-bit for Desktop (MSVC 2017)或系统的cmd 切换到程序运行盘符:E，cd到要打包exe的目录下 执行命令 windeployqt XXX.exe，则会生成QT环境；  在程序运行目录下 二、其他环境  打开终端适用于 VS 2017 的 x64 本机工具命令提示 切换到程序目录，执行命令dumpbin /IMPORTS XXX.exe&gt;output.txt导出依赖； 使用everything将查找到的*.dll拷贝到程序目录  </div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E7%BA%BF%E7%A8%8B%E7%94%A8%E6%B3%95/" title="c++线程用法">c++线程用法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.246Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%BA%BF%E7%A8%8B/">线程</a></span></div><div class="content">当前最常用的几个线程库1、c++官方&lt;thread&gt;，使用的函数类std::thread2、QT的QThread类3、Windows API ::CreateThread std::threadlambda写法1234567891011121314int nInputValue1 = 10;//输入的形参1int nInputValue2 = 20;//输入的形参2// 线程函数声明std::thread testCppThread([&amp;](int nVal1,int nVal2) &#123;    // 逻辑代码    for (int i = 0; i &lt; nVal1; i++)    &#123;        std::this_thread::sleep_for(std::chrono::milliseconds(100));    &#125;    &#125;, nInputValue1, nInputValue1);testCppThread.detach();		// 后台执行，立即执行后续代码// testCppThread.jo...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E5%B9%B6%E8%A1%8C%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="c++并行使用手册">c++并行使用手册</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.245Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/">并行处理</a></span></div><div class="content">opencv并行使用cv::parallel_for_函数对目标函数进行并行加速 官方函数原型 12345inline void parallel_for_(const Range&amp; range, std::function&lt;void(const Range&amp;)&gt; functor, double nstripes=-1.)&#123;    parallel_for_(range, ParallelLoopBodyLambdaWrapper(functor), nstripes);&#125;#endif  使用案例：求取0-1000的和与最大值 123456789101112131415161718std::atomic&lt;int&gt; _nSumValue = 0;std::atomic&lt;int&gt; _nMax = 0;cv::parallel_for_(cv::Range(0, 1000), [&amp;](const cv::Range&amp; range) &#123;    for (int i = range.start...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/" title="c++异常捕获">c++异常捕获</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.245Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/pdb/">pdb</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/">异常捕获</a></span></div><div class="content">一、try 与__try的区别Release方式下如果选择了编译器代码优化选项，则VC编译器会去搜索try块中的代码， 如果没有找到throw代码， 他就会认为try catch结构是多余的， 给优化掉。 这样造成在Release模式下，上述代码中的异常不能被捕获，从而迫使程序弹出错误提示框退出。 https://stackoverflow.com/questions/7049502/c-try-and-try-catch-finally 二、捕获方法1. 全局捕获A12// 单独用这种方法能捕获到异常，但是程序仍然自行退出!!::SetUnhandledExceptionFilter(unKnownExceptionFilterWrapper);  qt会提示Qt has caught an exception thrown from an event handler. Throwingexceptions from an event handler is not supported in Qt.You must not let any exception whatsoever...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/Ubuntu%E7%B3%BB%E7%BB%9F%E6%93%8D%E4%BD%9C/" title="Ubuntu系统操作">Ubuntu系统操作</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.243Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Ubuntu/">Ubuntu</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/">系统运维</a></span></div><div class="content">Ubuntu系统操作制作镜像软件rufus-4.9p.exe 下载地址：https://rufus.ie/downloads/ 说明书：https://rufus.ie/zh/ 镜像地址 https://mirrors.aliyun.com/ubuntu-releases/22.04/ https://mirrors.aliyun.com/ubuntu-releases/24.04.2/?spm=a2c6h.25603864.0.0.2b8c4ddad1dR3Q 分区建议单系统无需设置，若已经存在win系统，需要在另一个磁盘上安装ubuntu，则需要该步骤 简易模式 参考：  实际空间分配，单独安装在一个独立的2T硬盘上    区块 类型 容量    &#x2F;boot Exj4 逻辑分区 1024MB   &#x2F;tmp Exj4 逻辑分区 4096MB   &#x2F; Exj4 主分区 102400MB(100GB)   &#x2F;home Exj4 逻辑分区 819200MB(800GB)   失败记录 自定义分区配置只有efi分区无boot分区时，在安装时报错：...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/WIN&amp;Ubuntu%E5%8F%8C%E7%B3%BB%E7%BB%9F%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="WIN&amp;Ubuntu双系统使用手册">WIN&amp;Ubuntu双系统使用手册</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.243Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/">编程工具</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/Ubuntu/">Ubuntu</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/">系统运维</a></span></div><div class="content">WIN&amp;Ubuntu双系统使用手册一、需要资源 U盘一个（提前备份数据） Ubuntu 20.04 LTS 镜像 Rufus–1008.05kb 启动工具 下载地址：链接: 下载链接 密码: om26    二、window设置1、分区确认硬盘上有空闲区域  若无，则使用一下方法压缩出已有硬盘的空间  压缩硬盘空间   分出一个空的区域给ubuntu系统做存储。   在桌面上，点击计算机图标（右键）–&gt; 管理 –&gt; 找到磁盘管理，之后找一个比较大的硬盘分区点击一下      比如我点了“学习资料”，右键选择压缩卷。      输入需要压缩的空间，就能得到一个对应的空余空间用来当做ubuntu系统盘。   2、启动盘制作打开Rufus制作工具  主要是选择好对应的iso镜像，开始制作启动盘。 如果电脑使用U盘启动无法识别该U盘，设置分区类型MBR改到GPT。 三、ubuntu安装1、进入Bios设置U盘启动 2、进入后选择ubuntu 安装要注意一个点：安装类型选择其他选项。 选择安装类型，这里我们自定义安装，选择其他选项。如果不想折腾也可以简单选择第一个选项。...</div></div></div><div class="recent-post-item"><div class="recent-post-info no-cover"><a class="article-title" href="/2026/08/29/c++forward%E7%94%A8%E6%B3%95/" title="c++forward用法">c++forward用法</a><div class="article-meta-wrap"><span class="post-meta-date"><i class="far fa-calendar-alt"></i><span class="article-meta-label">Created</span><time datetime="2026-08-29T02:19:37.243Z" title="Created 2026-08-29 10:19:37">2026-08-29</time></span><span class="article-meta"><span class="article-meta-separator">|</span><i class="fas fa-inbox"></i><a class="article-meta__categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span><span class="article-meta tags"><span class="article-meta-separator">|</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/c/">c++</a><span class="article-meta-link">•</span><i class="fas fa-tag"></i><a class="article-meta__tags" href="/tags/STL%E5%88%86%E6%9E%90/">STL分析</a></span></div><div class="content">原理：完美转发 std::forward不是独自运作的，完美转发 &#x3D; std::forward + 万能引用 + 引用折叠。三者合一才能实现完美转发的效果。  基本作用将一个参数的左右值特性原封不动地转发给其他函数。 案例分析逐步分析以下demo函数输出的结果 123456789101112131415161718192021namespace XForward&#123;	void func(int&amp; x) &#123;		qInfo() &lt;&lt; &quot;lvalue &quot; &lt;&lt; x ;	&#125;	void func(int&amp;&amp; x) &#123;		qInfo() &lt;&lt; &quot;rvalue &quot; &lt;&lt; x ;	&#125;	template&lt;typename T&gt;	void wrapper(T&amp;&amp; arg) &#123;		func(arg);	//arg此时已经是个左值了,永远调用左值版本的func		func(std::forward&...</div></div></div></div><nav id="pagination"><div class="pagination"><a class="extend prev" rel="prev" href="/page/2/#content-inner"><i class="fas fa-chevron-left fa-fw"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/#content-inner">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/#content-inner">4</a><a class="extend next" rel="next" href="/page/4/#content-inner"><i class="fas fa-chevron-right fa-fw"></i></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div><div class="card-widget card-categories"><div class="item-headline"><i class="fas fa-folder-open"></i><span>Categories</span></div>
+          <ul class="card-category-list" id="aside-cat-list">
+            <li class="card-category-list-item "><a class="card-category-list-link" href="/categories/Agent/"><span class="card-category-list-name">Agent</span><span class="card-category-list-count">3</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/C-%E7%BC%96%E7%A8%8B/"><span class="card-category-list-name">C++编程</span><span class="card-category-list-count">9</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/QT%E7%BC%96%E7%A8%8B/"><span class="card-category-list-name">QT编程</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E5%9B%BE%E5%83%8F%E5%A4%84%E7%90%86/"><span class="card-category-list-name">图像处理</span><span class="card-category-list-count">6</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%80%BB%E7%BB%93%E6%95%B4%E5%90%88/"><span class="card-category-list-name">总结整合</span><span class="card-category-list-count">1</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0/"><span class="card-category-list-name">深度学习</span><span class="card-category-list-count">2</span></a></li><li class="card-category-list-item "><a class="card-category-list-link" href="/categories/%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/"><span class="card-category-list-name">编程工具</span><span class="card-category-list-count">12</span></a></li>
+          </ul></div><div class="card-widget card-tags"><div class="item-headline"><i class="fas fa-tags"></i><span>Tags</span></div><div class="card-tag-cloud"><a href="/tags/windows/" style="font-size: 1.35em; color: rgb(62, 50, 158);">windows</a><a href="/tags/%E5%91%BD%E4%BB%A4%E8%A1%8C/" style="font-size: 1.25em; color: rgb(88, 50, 50);">命令行</a><a href="/tags/%E6%96%87%E4%BB%B6%E5%A4%8D%E5%88%B6/" style="font-size: 1.15em; color: rgb(178, 193, 87);">文件复制</a><a href="/tags/c/" style="font-size: 1.45em; color: rgb(50, 192, 117);">c++</a><a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/" style="font-size: 1.25em; color: rgb(70, 71, 191);">多线程</a><a href="/tags/condition-variable/" style="font-size: 1.15em; color: rgb(50, 121, 50);">condition_variable</a><a href="/tags/std-thread/" style="font-size: 1.15em; color: rgb(128, 153, 70);">std::thread</a><a href="/tags/skills/" style="font-size: 1.15em; color: rgb(63, 50, 103);">skills</a><a href="/tags/npm/" style="font-size: 1.15em; color: rgb(50, 183, 50);">npm</a><a href="/tags/AI%E7%BC%96%E7%A8%8B%E5%B7%A5%E5%85%B7/" style="font-size: 1.35em; color: rgb(122, 50, 51);">AI编程工具</a><a href="/tags/Pi-Agent/" style="font-size: 1.35em; color: rgb(75, 50, 193);">Pi Agent</a><a href="/tags/Agent/" style="font-size: 1.15em; color: rgb(50, 97, 152);">Agent</a><a href="/tags/%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/" style="font-size: 1.15em; color: rgb(56, 107, 135);">正则表达式</a><a href="/tags/python/" style="font-size: 1.25em; color: rgb(50, 93, 104);">python</a><a href="/tags/GLM-4V/" style="font-size: 1.15em; color: rgb(76, 50, 50);">GLM-4V</a><a href="/tags/%E5%9B%BE%E5%83%8F%E7%90%86%E8%A7%A3/" style="font-size: 1.15em; color: rgb(134, 50, 188);">图像理解</a><a href="/tags/web%E5%89%8D%E7%AB%AF/" style="font-size: 1.15em; color: rgb(110, 167, 117);">web前端</a><a href="/tags/IDW/" style="font-size: 1.15em; color: rgb(50, 50, 187);">IDW</a><a href="/tags/%E6%8F%92%E5%80%BC%E7%AE%97%E6%B3%95/" style="font-size: 1.15em; color: rgb(181, 50, 50);">插值算法</a><a href="/tags/%E9%83%A8%E7%BD%B2%E9%85%8D%E7%BD%AE/" style="font-size: 1.25em; color: rgb(109, 136, 101);">部署配置</a><a href="/tags/PhaseCorrelate/" style="font-size: 1.15em; color: rgb(117, 155, 187);">PhaseCorrelate</a><a href="/tags/%E7%9B%B8%E4%BD%8D%E7%9B%B8%E5%85%B3/" style="font-size: 1.15em; color: rgb(50, 93, 69);">相位相关</a><a href="/tags/%E5%9B%BE%E5%83%8F%E9%85%8D%E5%87%86/" style="font-size: 1.15em; color: rgb(137, 164, 50);">图像配准</a><a href="/tags/qss/" style="font-size: 1.15em; color: rgb(85, 50, 75);">qss</a><a href="/tags/QT/" style="font-size: 1.35em; color: rgb(148, 101, 111);">QT</a><a href="/tags/%E8%B0%83%E8%AF%95/" style="font-size: 1.15em; color: rgb(128, 50, 50);">调试</a><a href="/tags/PDB/" style="font-size: 1.15em; color: rgb(71, 164, 50);">PDB</a><a href="/tags/TensorRT/" style="font-size: 1.15em; color: rgb(157, 50, 176);">TensorRT</a><a href="/tags/ONNX/" style="font-size: 1.15em; color: rgb(177, 81, 176);">ONNX</a><a href="/tags/C-%E9%83%A8%E7%BD%B2/" style="font-size: 1.15em; color: rgb(156, 173, 88);">C++部署</a><a href="/tags/Ubuntu/" style="font-size: 1.25em; color: rgb(131, 167, 110);">Ubuntu</a><a href="/tags/%E7%B3%BB%E7%BB%9F%E8%BF%90%E7%BB%B4/" style="font-size: 1.25em; color: rgb(51, 159, 87);">系统运维</a><a href="/tags/STL%E5%88%86%E6%9E%90/" style="font-size: 1.25em; color: rgb(50, 96, 187);">STL分析</a><a href="/tags/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/" style="font-size: 1.15em; color: rgb(53, 50, 64);">STL源码分析</a><a href="/tags/pdb/" style="font-size: 1.25em; color: rgb(95, 179, 86);">pdb</a><a href="/tags/%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/" style="font-size: 1.25em; color: rgb(198, 50, 157);">异常捕获</a><a href="/tags/%E5%B9%B6%E8%A1%8C%E5%A4%84%E7%90%86/" style="font-size: 1.15em; color: rgb(199, 50, 74);">并行处理</a><a href="/tags/c-11/" style="font-size: 1.15em; color: rgb(166, 121, 116);">c++11</a><a href="/tags/c-14/" style="font-size: 1.15em; color: rgb(120, 57, 112);">c++14</a><a href="/tags/%E7%BA%BF%E7%A8%8B/" style="font-size: 1.15em; color: rgb(87, 118, 50);">线程</a></div></div><div class="card-widget card-archives">
+    <div class="item-headline"><i class="fas fa-archive"></i><span>Archives</span></div>
+  
+    <ul class="card-archive-list">
+      
+        <li class="card-archive-list-item">
+          <a class="card-archive-list-link" href="/archives/2026/08/">
+            <span class="card-archive-list-date">
+              August 2026
+            </span>
+            <span class="card-archive-list-count">36</span>
+          </a>
+        </li>
+      
+    </ul>
+  </div><div class="card-widget card-webinfo"><div class="item-headline"><i class="fas fa-chart-line"></i><span>Website Info</span></div><div class="webinfo"><div class="webinfo-item"><div class="item-name">Article Count :</div><div class="item-count">36</div></div><div class="webinfo-item"><div class="item-name">Unique Visitors :</div><div class="item-count" id="busuanzi_value_site_uv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Page Views :</div><div class="item-count" id="busuanzi_value_site_pv"><i class="fa-solid fa-spinner fa-spin"></i></div></div><div class="webinfo-item"><div class="item-name">Last Update :</div><div class="item-count" id="last-push-date" data-lastPushDate="2026-08-29T03:55:16.990Z"><i class="fa-solid fa-spinner fa-spin"></i></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"><script>window.typedJSFn = {
+  init: str => {
+    window.typed = new Typed('#subtitle', Object.assign({
+      strings: str,
+      startDelay: 300,
+      typeSpeed: 150,
+      loop: true,
+      backSpeed: 50,
+    }, null))
+  },
+  run: subtitleType => {
+    if (true) {
+      if (typeof Typed === 'function') {
+        subtitleType()
+      } else {
+        btf.getScript('https://cdn.jsdelivr.net/npm/typed.js/dist/typed.umd.min.js').then(subtitleType)
+      }
+    } else {
+      subtitleType()
+    }
+  },
+  processSubtitle: (content, extraContents = []) => {
+    if (true) {
+      const sub = ["One is All"].slice()
+
+      if (extraContents.length > 0) {
+        sub.unshift(...extraContents)
+      }
+
+      if (typeof content === 'string') {
+        sub.unshift(content)
+      } else if (Array.isArray(content)) {
+        sub.unshift(...content)
+      }
+
+      sub.length > 0 && typedJSFn.init(sub)
+    } else {
+      document.getElementById('subtitle').textContent = typeof content === 'string' ? content :
+        (Array.isArray(content) && content.length > 0 ? content[0] : '')
+    }
+  }
+}
+btf.addGlobalFn('pjaxSendOnce', () => { typed && typed.destroy() }, 'typedDestroy')
+</script><script>function subtitleType () {
+  typedJSFn.processSubtitle(["One is All"])
+}
+typedJSFn.run(subtitleType)</script></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>

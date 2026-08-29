@@ -1,0 +1,236 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>c++move用法 | Blazar</title><meta name="author" content="Blazar"><meta name="copyright" content="Blazar"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="1、区分左值与右值的区别左值与右值的根本区别在于是否允许取地址&amp;运算符获得对应的内存地址。变量可以取地址，所以是左值，但是常量和临时对象等不可以取地址，所以是右值。 左值是表达式结束后依然存在的持久对象(代表一个在内存中占有确定位置的对象)。右值是表达式结束时不再存在的临时对象(不在内存中占有确定位置的表达式）。 所有的具名变量或者对象都是左值，而右值不具名。 对表达式取地址，如果能，则为">
+<meta property="og:type" content="article">
+<meta property="og:title" content="c++move用法">
+<meta property="og:url" content="https://blazarlin.github.io/2026/08/29/c++move%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="Blazar">
+<meta property="og:description" content="1、区分左值与右值的区别左值与右值的根本区别在于是否允许取地址&amp;运算符获得对应的内存地址。变量可以取地址，所以是左值，但是常量和临时对象等不可以取地址，所以是右值。 左值是表达式结束后依然存在的持久对象(代表一个在内存中占有确定位置的对象)。右值是表达式结束时不再存在的临时对象(不在内存中占有确定位置的表达式）。 所有的具名变量或者对象都是左值，而右值不具名。 对表达式取地址，如果能，则为">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://blazarlin.github.io/img/head.jpg">
+<meta property="article:published_time" content="2026-08-29T02:19:37.243Z">
+<meta property="article:modified_time" content="2026-08-29T02:19:37.243Z">
+<meta property="article:author" content="Blazar">
+<meta property="article:tag" content="c++">
+<meta property="article:tag" content="STL源码分析">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://blazarlin.github.io/img/head.jpg"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "c++move用法",
+  "url": "https://blazarlin.github.io/2026/08/29/c++move%E7%94%A8%E6%B3%95/",
+  "image": "https://blazarlin.github.io/img/head.jpg",
+  "datePublished": "2026-08-29T02:19:37.243Z",
+  "dateModified": "2026-08-29T02:19:37.243Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "Blazar",
+      "url": "https://BlazarLin.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/owl.png"><link rel="canonical" href="https://blazarlin.github.io/2026/08/29/c++move%E7%94%A8%E6%B3%95/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        const data = { value }
+
+        if (ttl != null) {
+          data.expiry = Date.now() + ttl * 86400000
+        }
+
+        localStorage.setItem(key, JSON.stringify(data))
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false,"highlightFullpage":false,"highlightMacStyle":false},
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Failed',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'c++move用法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="Blazar" type="application/atom+xml">
+</head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><span class="site-name">Blazar</span></a><a class="nav-page-title" href="/"><span class="site-name">c++move用法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  Back to Home</span></span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fa fa-heartbeat"></i><span> 清单</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/Gallery/"><i class="fa-fw fas fa-images"></i><span> 照片</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">c++move用法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2026-08-29T02:19:37.243Z" title="Created 2026-08-29 10:19:37">2026-08-29</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2026-08-29T02:19:37.243Z" title="Updated 2026-08-29 10:19:37">2026-08-29</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/C-%E7%BC%96%E7%A8%8B/">C++编程</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title=""><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><h2 id="1、区分左值与右值的区别"><a href="#1、区分左值与右值的区别" class="headerlink" title="1、区分左值与右值的区别"></a>1、区分左值与右值的区别</h2><p>左值与右值的根本区别在于是否允许取地址&amp;运算符获得对应的内存地址。<br>变量可以取地址，所以是左值，但是常量和临时对象等不可以取地址，所以是右值。</p>
+<p>左值是表达式结束后依然存在的持久对象(代表一个在内存中占有确定位置的对象)。<br>右值是表达式结束时不再存在的临时对象(不在内存中占有确定位置的表达式）。</p>
+<p>所有的具名变量或者对象都是左值，而右值不具名。</p>
+<p>对表达式取地址，如果能，则为左值，否则为右值。</p>
+<p>常见的右值：“abc”,123等都是右值。</p>
+<p>右值引用，可以延长右值的生命周期</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span>&amp;&amp; i = <span class="number">123</span>;</span><br><span class="line"><span class="type">int</span>&amp;&amp; j = std::<span class="built_in">move</span>(i);</span><br><span class="line"><span class="type">int</span>&amp;&amp; k = i;<span class="comment">//编译不过，这里i是一个左值，右值引用只能引用右值</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2、Move"><a href="#2、Move" class="headerlink" title="2、Move"></a>2、Move</h2><h3 id="用法1-转移所有权"><a href="#用法1-转移所有权" class="headerlink" title="用法1 转移所有权"></a>用法1 转移所有权</h3><p>​		将快要销毁的对象转移给其他变量，这样可以继续使用这个对象，而不必再创建一个一样的对象，省去了创建新的一样内容的对象，也就提高了性能。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// move example</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;utility&gt;</span>      <span class="comment">// std::move</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;iostream&gt;</span>     <span class="comment">// std::cout</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;vector&gt;</span>       <span class="comment">// std::vector</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string&gt;</span>       <span class="comment">// std::string</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">  std::string foo = <span class="string">&quot;foo-string&quot;</span>;</span><br><span class="line">  std::string bar = <span class="string">&quot;bar-string&quot;</span>;</span><br><span class="line">  std::vector&lt;std::string&gt; myvector;</span><br><span class="line"></span><br><span class="line">  myvector.<span class="built_in">push_back</span> (foo);                    <span class="comment">// copies</span></span><br><span class="line">  myvector.<span class="built_in">push_back</span> (std::<span class="built_in">move</span>(bar));         <span class="comment">// moves(移动语义，避免拷贝，从而提升程序性能)</span></span><br><span class="line"></span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;myvector contains:&quot;</span>;</span><br><span class="line">  <span class="keyword">for</span> (std::string&amp; x:myvector) std::cout &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; x;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="用法2-改变所有者"><a href="#用法2-改变所有者" class="headerlink" title="用法2 改变所有者"></a>用法2 改变所有者</h3><p>​		对象的管理问题：编程语言的move是改变物体(值）的所有权，而物体（值）在内存中没有变动过(存储在堆里那部分数据没有变动，在栈上的数据被拷贝了)。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Array</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="built_in">Array</span>() &#123;&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 深拷贝构造</span></span><br><span class="line">	<span class="built_in">Array</span>(<span class="type">const</span> Array &amp; temp_array) &#123;</span><br><span class="line">		size_ = temp_array.size_;</span><br><span class="line">		data_ = <span class="keyword">new</span> <span class="type">unsigned</span> <span class="type">char</span>[size_];</span><br><span class="line">		std::<span class="built_in">memcpy</span>(data_, temp_array.data_, size_);</span><br><span class="line">		<span class="comment">/*for (int i = 0; i &lt; size_; i++) &#123;</span></span><br><span class="line"><span class="comment">			data_[i] = temp_array.data_[i];</span></span><br><span class="line"><span class="comment">		&#125;*/</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 深拷贝赋值</span></span><br><span class="line">	Array&amp; <span class="keyword">operator</span>=(<span class="type">const</span> Array&amp; temp_array) &#123;</span><br><span class="line">		<span class="keyword">delete</span>[] data_;</span><br><span class="line">		size_ = temp_array.size_;</span><br><span class="line">		data_ = <span class="keyword">new</span> <span class="type">unsigned</span> <span class="type">char</span>[size_];</span><br><span class="line">		std::<span class="built_in">memcpy</span>(data_, temp_array.data_, size_);</span><br><span class="line">		<span class="comment">/*for (int i = 0; i &lt; size_; i++) &#123;</span></span><br><span class="line"><span class="comment">			data_[i] = temp_array.data_[i];</span></span><br><span class="line"><span class="comment">		&#125;*/</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 优雅 </span></span><br><span class="line">    <span class="comment">// std::move(a) 进此函数 避免拷贝</span></span><br><span class="line">	<span class="built_in">Array</span>(Array&amp;&amp; temp_array) &#123;</span><br><span class="line">		data_ = temp_array.data_;</span><br><span class="line">		size_ = temp_array.size_;</span><br><span class="line">		<span class="comment">// 为防止temp_array析构时delete data，提前置空其data_      </span></span><br><span class="line">		temp_array.data_ = <span class="literal">nullptr</span>;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">	<span class="type">unsigned</span> <span class="type">char</span>* data_;</span><br><span class="line">	<span class="type">int</span> size_;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">cv::Mat matImage = cv::<span class="built_in">imread</span>(<span class="string">&quot;230814images/Image_20230814163826944.bmp&quot;</span>, cv::IMREAD_COLOR);</span><br><span class="line">Array a;</span><br><span class="line">a.data_ = matImage.data;</span><br><span class="line">a.size_ = matImage.rows * matImage.cols * matImage.<span class="built_in">channels</span>();</span><br><span class="line"><span class="type">int</span> size2 = matImage.rows * matImage.step;</span><br><span class="line"></span><br><span class="line">Array c = a;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 左值a，用std::move转化为右值</span></span><br><span class="line"><span class="function">Array <span class="title">b</span><span class="params">(std::move(a))</span></span>;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="用法3-高效变量赋值"><a href="#用法3-高效变量赋值" class="headerlink" title="用法3 高效变量赋值"></a>用法3 高效变量赋值</h3><p>将vector B赋值给另一个vector A，如果是拷贝赋值，那么显然要对B中的每一个元素执行一个copy操作到A，如果是移动赋值的话，只需要将指向B的指针拷贝到A中即可，若vector内元素复杂，数量大，则凸显出的性能优化则更加明显。</p>
+<p>下面对比拷贝赋值与移动语义的耗时</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> nTestTimes = <span class="number">100</span>;</span><br><span class="line"><span class="type">double</span> dAllTimes = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nTestTimes; i++)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">vb</span><span class="params">(<span class="number">100</span>, <span class="number">2</span>)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">auto</span> start1 = std::chrono::steady_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="comment">// 此处用move就不会对vb中已有元素重新进行拷贝构造然后再放到va中</span></span><br><span class="line">    std::vector&lt;<span class="type">int</span>&gt; va = std::<span class="built_in">move</span>(vb);</span><br><span class="line">    <span class="comment">//std::vector&lt;int&gt; va = vb;</span></span><br><span class="line">    <span class="keyword">auto</span> end1 = std::chrono::steady_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> fTimeInfer = std::chrono::<span class="built_in">duration</span>&lt;<span class="type">double</span>, std::milli&gt;(end1 - start1).<span class="built_in">count</span>();</span><br><span class="line">    dAllTimes += fTimeInfer;</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">double</span> dOneTime = dAllTimes / nTestTimes;</span><br><span class="line">std::cout &lt;&lt; <span class="string">&quot;allTime:&quot;</span> &lt;&lt; dAllTimes &lt;&lt; <span class="string">&quot;oneTime:&quot;</span> &lt;&lt; dOneTime &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line"><span class="comment">// &gt;&gt;&gt; allTime:0.2631，oneTime:0.002631 移动语义</span></span><br><span class="line"><span class="comment">// &gt;&gt;&gt; allTime:0.5511，oneTime:0.005511 拷贝</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>可以看出，时间使用移动语义相比拷贝时间少了一半。</p>
+<h2 id="3、万能引用"><a href="#3、万能引用" class="headerlink" title="3、万能引用"></a>3、万能引用</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// 测试1</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">funcTest</span><span class="params">(T&amp; param)</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; param &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// 测试2</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">funcTest2</span><span class="params">(T&amp; param)</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;传入的是左值&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">funcTest2</span><span class="params">(T&amp;&amp; param)</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;传入的是右值&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">/// 测试3</span></span><br><span class="line"><span class="function"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> T&gt;</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">funcTest3</span><span class="params">(T&amp;&amp; param)</span> </span>&#123;</span><br><span class="line">	std::cout &lt;&lt; param &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;Hello World!\n&quot;</span>;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 万能引用</span></span><br><span class="line">	<span class="keyword">if</span> (<span class="number">1</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="comment">// 常规左值引用</span></span><br><span class="line">		<span class="type">int</span> num = <span class="number">2023</span>;</span><br><span class="line">		<span class="built_in">funcTest</span>(num);<span class="comment">// 正确</span></span><br><span class="line">		<span class="comment">// funcTest(2023);// 错误，因为参数为左值引用，却传入一个右值</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 左值模板函数与右值模板函数</span></span><br><span class="line">		<span class="built_in">funcTest2</span>(num);</span><br><span class="line">		<span class="built_in">funcTest2</span>(<span class="number">2023</span>);</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 万能引用</span></span><br><span class="line">		<span class="built_in">funcTest3</span>(num);</span><br><span class="line">		<span class="built_in">funcTest3</span>(<span class="number">2023</span>);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>测试1定义了左值引用的模板函数，使用常量2023作为形参输入就导致报警；测试2定义了2个模板函数；测试3使用万能引用，针对输入变量类型自动推理出左值或右值，需要注意：<strong>只有发生类型推导的时候，T&amp;&amp;才表示万能引用（如模板函数传参就会经过类型推导的过程）</strong></p>
+<h2 id="4、拓展"><a href="#4、拓展" class="headerlink" title="4、拓展"></a>4、拓展</h2><p>完美转发<code>std::forward</code><br>引用折叠</p>
+<p>参考：<br><a target="_blank" rel="noopener" href="https://juejin.cn/post/7192171206030819385">https://juejin.cn/post/7192171206030819385</a><br><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/utility/move">https://en.cppreference.com/w/cpp/utility/move</a><br><a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1901799">https://cloud.tencent.com/developer/article/1901799</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html">https://www.cnblogs.com/shadow-lr/p/Introduce_Std-move.html</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/94588204">https://zhuanlan.zhihu.com/p/94588204</a></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://BlazarLin.github.io">Blazar</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://blazarlin.github.io/2026/08/29/c++move%E7%94%A8%E6%B3%95/">https://blazarlin.github.io/2026/08/29/c++move%E7%94%A8%E6%B3%95/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles on this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless otherwise stated.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/c/">c++</a><a class="post-meta__tags" href="/tags/STL%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">STL源码分析</a></div><div class="post-share"><div class="social-share" data-image="/img/head.jpg" data-sites="facebook,x,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><div class="post-reward"><div class="reward-button"><i class="fas fa-qrcode"></i>Sponsor</div><div class="reward-main"><ul class="reward-all"><li class="reward-item"><a href="/img/wechat.png" target="_blank"><img class="post-qr-code-img" src="/img/wechat.png" alt="wechat"/></a><div class="post-qr-code-desc">wechat</div></li><li class="reward-item"><a href="/img/alipay.png" target="_blank"><img class="post-qr-code-img" src="/img/alipay.png" alt="alipay"/></a><div class="post-qr-code-desc">alipay</div></li></ul></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/2026/08/29/c++%E4%BD%BF%E7%94%A8pdb%E4%BF%A1%E6%81%AF%E5%A4%8D%E7%8E%B0%E5%B4%A9%E6%BA%83%E4%BD%8D%E7%BD%AE/" title="c++使用pdb信息复现崩溃位置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info"><div class="info-1"><div class="info-item-1">Previous</div><div class="info-item-2">c++使用pdb信息复现崩溃位置</div></div><div class="info-2"><div class="info-item-1">c++使用pdb信息复现崩溃位置条件：发布程序时保留对应版本的pdb文件 复现步骤： 1、拷贝崩溃产生的dmp文件  2、使用vs2017打开dmp，这里能够大致看到崩溃信息  3、在设置符号调试内，勾选Microsoft符号调试器与软甲同版本的pdb文件列表，且要加载排除模块外的所有模块，配置好后点击确认  4、创建崩溃程序的同路径同版本程序，在右侧操作栏，点击使用仅限本机进行调试； 工程建立新分支回退到崩溃程序的相同版本(若不进行此操作，复现的崩溃位置不正确)； (首次加载符号需要从微软自动下载pdb文件，科学上网加快速度)等待后就可以看到崩溃位置源码与堆栈信息； </div></div></div></a><a class="pagination-related" href="/2026/08/29/c++forward%E7%94%A8%E6%B3%95/" title="c++forward用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-right"><div class="info-1"><div class="info-item-1">Next</div><div class="info-item-2">c++forward用法</div></div><div class="info-2"><div class="info-item-1">原理：完美转发 std::forward不是独自运作的，完美转发 &#x3D; std::forward + 万能引用 + 引用折叠。三者合一才能实现完美转发的效果。  基本作用将一个参数的左右值特性原封不动地转发给其他函数。 案例分析逐步分析以下demo函数输出的结果 123456789101112131415161718192021namespace XForward&#123;	void func(int&amp; x) &#123;		qInfo() &lt;&lt; &quot;lvalue &quot; &lt;&lt; x ;	&#125;	void func(int&amp;&amp; x) &#123;		qInfo() &lt;&lt; &quot;rvalue &quot; &lt;&lt; x ;	&#125;	template&lt;typename T&gt;	void wrapper(T&amp;&amp; arg) &#123;		func(arg);	//arg此时已经是个左值了,永远调用左值版本的func		func(std::forward&...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/2026/08/29/c++%E4%BD%BF%E7%94%A8pdb%E4%BF%A1%E6%81%AF%E5%A4%8D%E7%8E%B0%E5%B4%A9%E6%BA%83%E4%BD%8D%E7%BD%AE/" title="c++使用pdb信息复现崩溃位置"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++使用pdb信息复现崩溃位置</div></div><div class="info-2"><div class="info-item-1">c++使用pdb信息复现崩溃位置条件：发布程序时保留对应版本的pdb文件 复现步骤： 1、拷贝崩溃产生的dmp文件  2、使用vs2017打开dmp，这里能够大致看到崩溃信息  3、在设置符号调试内，勾选Microsoft符号调试器与软甲同版本的pdb文件列表，且要加载排除模块外的所有模块，配置好后点击确认  4、创建崩溃程序的同路径同版本程序，在右侧操作栏，点击使用仅限本机进行调试； 工程建立新分支回退到崩溃程序的相同版本(若不进行此操作，复现的崩溃位置不正确)； (首次加载符号需要从微软自动下载pdb文件，科学上网加快速度)等待后就可以看到崩溃位置源码与堆栈信息； </div></div></div></a><a class="pagination-related" href="/2026/08/29/%E5%9B%BE%E5%83%8F%E7%89%B9%E5%BE%81%E5%8C%B9%E9%85%8D/" title="图像特征匹配"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">图像特征匹配</div></div><div class="info-2"><div class="info-item-1">模板匹配、特征点匹配、相位法 一、模板匹配 二、 特征点匹配 特征点检测：SIFT、ORB、SURF  SIFT（尺度不变）：精度高，计算量大。 ORB（二进制）：速度快，适合实时应用。 SURF（加速版SIFT）：平衡速度与精度。  匹配方法：暴力匹配、FLANN  暴力匹配（Brute-Force）：逐对比较，精度高但速度慢。 FLANN（近似最近邻）：适合大规模数据，需根据描述子类型调整参数（如KD树用于浮点，LSH用于二进制）。  SIFT描述子是基于梯度的方向直方图，而ORB用的是二进制描述子，比如BRIEF。二进制描述子的优势是计算速度快，因为比较的是二进制位的差异，可以用汉明距离来衡量相似性。而像SIFT这样的浮点型描述子，则用欧氏距离。这可能影响匹配的速度和准确性。 三、相位法 两幅图像在空域的平移对应频域的相位差，通过计算两幅傅里叶图像的互功率谱（Cross Power Spectrum），相位差会表现为一个脉冲峰值，其位置即为位移量。 输入2张刚性平移的图像： 输出偏移坐标：(-0.27,4.89) WIKI解释：https://en.wikipedia.or...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E7%BA%BF%E7%A8%8B%E7%94%A8%E6%B3%95/" title="c++线程用法"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++线程用法</div></div><div class="info-2"><div class="info-item-1">当前最常用的几个线程库1、c++官方&lt;thread&gt;，使用的函数类std::thread2、QT的QThread类3、Windows API ::CreateThread std::threadlambda写法1234567891011121314int nInputValue1 = 10;//输入的形参1int nInputValue2 = 20;//输入的形参2// 线程函数声明std::thread testCppThread([&amp;](int nVal1,int nVal2) &#123;    // 逻辑代码    for (int i = 0; i &lt; nVal1; i++)    &#123;        std::this_thread::sleep_for(std::chrono::milliseconds(100));    &#125;    &#125;, nInputValue1, nInputValue1);testCppThread.detach();		// 后台执行，立即执行后续代码// testCppThread.jo...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E5%B9%B6%E8%A1%8C%E4%BD%BF%E7%94%A8%E6%89%8B%E5%86%8C/" title="c++并行使用手册"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++并行使用手册</div></div><div class="info-2"><div class="info-item-1">opencv并行使用cv::parallel_for_函数对目标函数进行并行加速 官方函数原型 12345inline void parallel_for_(const Range&amp; range, std::function&lt;void(const Range&amp;)&gt; functor, double nstripes=-1.)&#123;    parallel_for_(range, ParallelLoopBodyLambdaWrapper(functor), nstripes);&#125;#endif  使用案例：求取0-1000的和与最大值 123456789101112131415161718std::atomic&lt;int&gt; _nSumValue = 0;std::atomic&lt;int&gt; _nMax = 0;cv::parallel_for_(cv::Range(0, 1000), [&amp;](const cv::Range&amp; range) &#123;    for (int i = range.start...</div></div></div></a><a class="pagination-related" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join&#x2F;detach 时机"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">std::thread 生命周期管控与 join&#x2F;detach 时机</div></div><div class="info-2"><div class="info-item-1">std::thread 生命周期管控与 join&#x2F;detach 时机 适用范围：C++17 &#x2F; C++20，工业视觉 &#x2F; 实时图像处理场景常见踩坑项。   TL;DR（一句话） std::thread 构造函数返回的那一刻，OS 线程已经存在并跑着你的 callable，具体何时被调度执行由 OS 决定。 join &#x2F; detach 不是”启动线程”，而是”决定 std::thread 对象在析构时如何处理已经在跑的 OS 线程”。 std::thread 析构时如果 joinable() 仍为 true（既没 join 也没 detach），直接 std::terminate()，整个进程挂掉。   谁管控什么生命周期（分层）std::thread 实际涉及两个独立的”对象”，必须分开看：    层级 对象 谁管控 何时结束    C++ 对象层 std::thread t（栈上 &#x2F; 堆上的 C++ 对象） C++ RAII t 离开作用域、被析构   OS 内核层 内核线程（占着 thread stack） 操作系统 call...</div></div></div></a><a class="pagination-related" href="/2026/08/29/c++%E5%BC%82%E5%B8%B8%E6%8D%95%E8%8E%B7/" title="c++异常捕获"><div class="cover" style="background: var(--default-bg-color)"></div><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-29</div><div class="info-item-2">c++异常捕获</div></div><div class="info-2"><div class="info-item-1">一、try 与__try的区别Release方式下如果选择了编译器代码优化选项，则VC编译器会去搜索try块中的代码， 如果没有找到throw代码， 他就会认为try catch结构是多余的， 给优化掉。 这样造成在Release模式下，上述代码中的异常不能被捕获，从而迫使程序弹出错误提示框退出。 https://stackoverflow.com/questions/7049502/c-try-and-try-catch-finally 二、捕获方法1. 全局捕获A12// 单独用这种方法能捕获到异常，但是程序仍然自行退出!!::SetUnhandledExceptionFilter(unKnownExceptionFilterWrapper);  qt会提示Qt has caught an exception thrown from an event handler. Throwingexceptions from an event handler is not supported in Qt.You must not let any exception whatsoever...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/head.jpg" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">Blazar</div><div class="author-info-description"></div><div class="site-data"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">36</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">50</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">7</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/JockerLin"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/JockerLin" target="_blank" title="Github"><i class="fab fa-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:blazarlin@gmail.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">A good memory is better than a bad pen than a pencil</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1%E3%80%81%E5%8C%BA%E5%88%86%E5%B7%A6%E5%80%BC%E4%B8%8E%E5%8F%B3%E5%80%BC%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-number">1.</span> <span class="toc-text">1、区分左值与右值的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2%E3%80%81Move"><span class="toc-number">2.</span> <span class="toc-text">2、Move</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%B3%951-%E8%BD%AC%E7%A7%BB%E6%89%80%E6%9C%89%E6%9D%83"><span class="toc-number">2.1.</span> <span class="toc-text">用法1 转移所有权</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%B3%952-%E6%94%B9%E5%8F%98%E6%89%80%E6%9C%89%E8%80%85"><span class="toc-number">2.2.</span> <span class="toc-text">用法2 改变所有者</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%94%A8%E6%B3%953-%E9%AB%98%E6%95%88%E5%8F%98%E9%87%8F%E8%B5%8B%E5%80%BC"><span class="toc-number">2.3.</span> <span class="toc-text">用法3 高效变量赋值</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3%E3%80%81%E4%B8%87%E8%83%BD%E5%BC%95%E7%94%A8"><span class="toc-number">3.</span> <span class="toc-text">3、万能引用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4%E3%80%81%E6%8B%93%E5%B1%95"><span class="toc-number">4.</span> <span class="toc-text">4、拓展</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Posts</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/TensorRT-ONNX-Learning-Path/" title="TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署">TensorRT + ONNX 学习路径：从 Python 推理到 C++ 部署</a><time datetime="2026-08-29T02:26:58.180Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/PhaseCorrelate_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="PhaseCorrelate 算法解释">PhaseCorrelate 算法解释</a><time datetime="2026-08-29T02:26:58.155Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/IDW_%E7%AE%97%E6%B3%95%E8%A7%A3%E9%87%8A/" title="IDW 算法解释">IDW 算法解释</a><time datetime="2026-08-29T02:26:58.146Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260706robocopy%E4%B8%8Excopy%E5%8F%82%E6%95%B0%E5%8F%8A%E5%B8%B8%E7%94%A8%E6%93%8D%E4%BD%9C%E5%AF%B9%E6%AF%94%E5%8F%82%E8%80%83/" title="robocopy 与 xcopy 参数及常用操作对比参考">robocopy 与 xcopy 参数及常用操作对比参考</a><time datetime="2026-08-29T02:26:58.085Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/29/260713-stdthread%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F%E7%AE%A1%E6%8E%A7/" title="std::thread 生命周期管控与 join/detach 时机">std::thread 生命周期管控与 join/detach 时机</a><time datetime="2026-08-29T02:26:58.020Z" title="Created 2026-08-29 10:26:58">2026-08-29</time></div></div></div></div></div></div></main><footer id="footer"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2020 - 2026 By Blazar</span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Reading Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light and Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle Between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Settings"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back to Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><script defer="defer" id="fluttering_ribbon" mobile="false" src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/dist/canvas-fluttering-ribbon.min.js"></script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
